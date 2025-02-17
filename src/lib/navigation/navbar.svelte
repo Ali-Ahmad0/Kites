@@ -35,6 +35,10 @@
         margin-right: 1rem;
     }
 
+    button {
+        cursor: pointer;
+    }
+
     .navbar-links button {
         transition: color 0.3s ease 0s;
     }
@@ -65,8 +69,6 @@
 
         background-color: var(--color-blue-primary);
         color: var(--color-text-button);
-        cursor: pointer;
-        
         transition: background-color 0.3s ease, color 0.3s ease !important; 
     }
 
