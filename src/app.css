@@ -11,6 +11,7 @@
 
     --color-text-primary: #ffffff;
     --color-text-secondary: #8a9599;
+    --color-text-button: #ffffff;
 }
 
 .light {
@@ -21,7 +22,8 @@
     --color-blue-secondary: #4db5ff;
 
     --color-text-primary: #09090b;
-    --color-text-secondary: #161618;
+    --color-text-secondary: #565658;
+    --color-text-button: #ffffff;
 }
 
 body {
