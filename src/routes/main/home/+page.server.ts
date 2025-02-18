@@ -1,7 +1,7 @@
-import { kites } from "$db/kites";
+import { collection } from "$db/collection";
 
 export const load = async () => {
-    const kiteList = await kites.find({}).toArray();
+    const kiteList = await collection('Test').find({}).toArray();
     console.log(kiteList);
 
     const serializableKites = kiteList.map((kite) => ({
