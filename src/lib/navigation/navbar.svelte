@@ -22,11 +22,6 @@
         align-items: center;
      
         padding: 0 10%;
-        
-        position: fixed; 
-        left: 0;
-        top: 0;  
-        right: 0; 
     }
 
     h2 {

@@ -1,9 +1,13 @@
 <!-- <script lang="ts">
-    export let data;
+    const { data } = $props();
 </script>
 
 <ul>
-    {#each data.kites as kite}
-        <li>{kite.name}</li>
-    {/each}
+    {#await data.kites}
+        <li></li>  
+    {:then kitesData} 
+        {#each kitesData as kite}
+            <li>{kite.name}</li>
+        {/each}
+    {/await}
 </ul> -->
