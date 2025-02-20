@@ -3,8 +3,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --color-dark-primary: #09090b;
-    --color-dark-secondary: #161618;
+    --color-background-primary: #09090b;
+    --color-background-secondary: #161618;
     
     --color-blue-primary: #3b82f8;
     --color-blue-secondary: #4db5ff;
@@ -15,8 +15,8 @@
 }
 
 .light {
-    --color-dark-primary: #ffffff;
-    --color-dark-secondary: #8a9599;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #8a9599;
     
     --color-blue-primary: #3b82f8;
     --color-blue-secondary: #4db5ff;
@@ -28,6 +28,11 @@
 
 body {
     font-family: "Poppins", sans-serif;
-    background-color: var(--color-dark-primary);
+    background-color: var(--color-background-primary);
     color: var(--color-text-primary);
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
 }

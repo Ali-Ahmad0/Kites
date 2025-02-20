@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     export let data;
 </script>
 
@@ -6,4 +6,4 @@
     {#each data.kites as kite}
         <li>{kite.name}</li>
     {/each}
-</ul>
+</ul> -->

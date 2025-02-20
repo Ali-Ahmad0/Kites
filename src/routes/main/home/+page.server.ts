@@ -1,8 +1,8 @@
 import { collection } from "$db/collection";
 
+// Database testing
 export const load = async () => {
     const kiteList = await collection('Test').find({}).toArray();
-    console.log(kiteList);
 
     const serializableKites = kiteList.map((kite) => ({
         _id: kite._id.toString(),

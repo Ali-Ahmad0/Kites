@@ -1,7 +1,7 @@
 let isDarkMode : boolean = true;
 
 // Switch between light and dark mode
-export function toggleTheme() : void {
+export function toggle_theme() : void {
     // Change theme
     if (isDarkMode) {
         document.documentElement.classList.add("light");
