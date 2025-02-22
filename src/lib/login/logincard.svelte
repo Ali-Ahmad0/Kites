@@ -15,10 +15,25 @@
                 <button class="confirm" type="button">Sign In</button>
                 <button class="google" type="button">Sign In with Google</button>
             </form>
-            <p>Don't have an account? <button class="other">Sign Up</button></p>
+            <p>Don't have an account? <a href="/login/signup" class="other">Sign Up</a></p>
 
         {:else}
             <h1>Sign Up</h1>
+            <form>
+                <label for="name">Name:</label>
+                <input type="name" id="name" name="name" placeholder="John Smith" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="enter a strong password" required>
+                <label for="confirm password">Confirm Password:</label>
+                <input type="password" id="confirm password" name="confirm password" placeholder="re-enter your password" required>
+
+                <button class="confirm" type="button">Sign Up</button>
+
+                <p>Already have an account? <a href="/login/signin" class="other">Sign In</a></p>                
+
+            </form>
         
         {/if}
     </div>
