@@ -4,7 +4,6 @@
 	import { goto } from "$app/navigation";
     import type { ActionResult } from "@sveltejs/kit";
 
-
 	let { signin = true, data = {}, form = {} } = $props();
     
     async function submit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
@@ -25,6 +24,11 @@
         if (result.type === 'success') {
             await invalidateAll();
             goto("/main/home");
+        }
+
+        else {
+            // @ts-ignore
+            alert(result.data.message);
         }
 
         applyAction(result);
