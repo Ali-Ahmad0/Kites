@@ -1,16 +1,8 @@
 <script lang="ts">
-    import bcrypt from "bcryptjs";
     export let signin = true;
     export let form;
 
-    async function hash_password(password : string) {
-       
-        const salt = await bcrypt.genSalt(10);
-        const hashed_password = await bcrypt.hash(password, salt);
-        return hashed_password;
-    }
-
-    async function submit_signin(event:Event) {
+    async function submit_signin(event: Event) {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const password = form.querySelector('#password') as HTMLInputElement;
@@ -24,7 +16,7 @@
         form.submit();
     }
 
-    async function submit_signup(event:Event) {
+    async function submit_signup(event: Event) {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const password = form.querySelector('#password') as HTMLInputElement;
@@ -41,10 +33,7 @@
             alert("Passwords do not match.");
             return;
         }
-
-        // submit data with hashed password
-        const hashed_password = await hash_password(password.value);
-        password.value = hashed_password;
+        
         form.submit();
     }
 
