@@ -1,39 +1,85 @@
 <script lang="ts">
+    import bcrypt from "bcryptjs";
     export let signin = true;
+    export let form;
+
+    async function hash_password(password : string) {
+       
+        const salt = await bcrypt.genSalt(10);
+        const hashed_password = await bcrypt.hash(password, salt);
+        return hashed_password;
+    }
+
+    async function submit_signin(event:Event) {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const password = form.querySelector('#password') as HTMLInputElement;
+        
+        // check password length
+        if (password.value.length < 8) {
+            alert("Password less than 8 characters.");
+            return;
+        } 
+
+        form.submit();
+    }
+
+    async function submit_signup(event:Event) {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const password = form.querySelector('#password') as HTMLInputElement;
+        const confirm_password = form.querySelector('#confirm_password') as HTMLInputElement;
+        
+         // check password length
+        if (password.value.length < 8) {
+            alert("Password less than 8 characters.");
+            return;
+        } 
+
+        // match passwords
+        if (password.value != confirm_password.value) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // submit data with hashed password
+        const hashed_password = await hash_password(password.value);
+        password.value = hashed_password;
+        form.submit();
+    }
+
 </script>
 
 <div class="content">
     <div class="card">
         {#if signin}
             <h1>Sign In</h1>
-            <form>
+            <form method="POST" action="?/login" on:submit={submit_signin}>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
+                <input type="email" id="email" name="email" placeholder="example@gmail.com" value={form?.email ?? ''} required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
 
-                <button class="confirm" type="button">Sign In</button>
-                <button class="google" type="button">Sign In with Google</button>
+                <button class="confirm">Sign In</button>
+                <button class="google" formaction="?/google">Sign In with Google</button>
             </form>
             <p>Don't have an account? <a href="/login/signup" class="other">Sign Up</a></p>
 
         {:else}
             <h1>Sign Up</h1>
-            <form>
-                <label for="name">Name:</label>
-                <input type="name" id="name" name="name" placeholder="John Smith" required>
+            <form method="POST" action="?/signup" on:submit={submit_signup}>
+                <label for="name">Username:</label>
+                <input type="name" id="name" name="name" placeholder="John Smith" value={form?.username ?? ''} required>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
+                <input type="email" id="email" name="email" placeholder="example@gmail.com" value={form?.email ?? ''} required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder="enter a strong password" required>
                 <label for="confirm password">Confirm Password:</label>
-                <input type="password" id="confirm password" name="confirm password" placeholder="re-enter your password" required>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="re-enter your password" required>
 
-                <button class="confirm" type="button">Sign Up</button>
-
-                <p>Already have an account? <a href="/login/signin" class="other">Sign In</a></p>                
-
+                <button class="confirm">Sign Up</button>
             </form>
+            <p>Already have an account? <a href="/login/signin" class="other">Sign In</a></p>                
         
         {/if}
     </div>
