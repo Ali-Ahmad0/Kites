@@ -1,7 +1,5 @@
 <script lang="ts">
-    
     export let signin = true;
-    export let form : any;
 
     async function submit_signin(event: Event) {
         event.preventDefault();
@@ -20,20 +18,20 @@
             body: form_data
         });
 
+        // Check for successful sign in
         if (response.status === 200) {
             window.location.href = '/main/home'
         } else {
-            alert('incorrect password');
-            form = await response.json();
+            alert('Unable to sign in');
         }
 
     }
 
     async function submit_signup(event: Event) {
         event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const password = form.querySelector('#password') as HTMLInputElement;
-        const confirm_password = form.querySelector('#confirm_password') as HTMLInputElement;
+        const form_element = event.target as HTMLFormElement;
+        const password = form_element.querySelector('#password') as HTMLInputElement;
+        const confirm_password = form_element.querySelector('#confirm_password') as HTMLInputElement;
         
          // check password length
         if (password.value.length < 8) {
@@ -46,8 +44,18 @@
             alert("Passwords do not match.");
             return;
         }
-        
-        form.submit();
+
+        const form_data = new FormData(form_element);
+        const response = await fetch(form_element.action , {
+            method: 'POST',
+            body: form_data
+        });        
+
+        if (response.status === 200) {
+            window.location.href = '/main/home'
+        } else {
+            alert('Unable to sign up');
+        }
     }
 
 </script>
@@ -57,10 +65,8 @@
         {#if signin}
             <h1>Sign In</h1>
             <form method="POST" action="?/login" on:submit={submit_signin}>
-                {#if form?.missing}<p class="error">The email field is required</p>{/if}
-	            {#if form?.incorrect}<p class="error">Invalid credentials!</p>{/if}
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="example@gmail.com" value={form?.email ?? ''} required>
+                <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
 
@@ -72,13 +78,10 @@
         {:else}
             <h1>Sign Up</h1>
             <form method="POST" action="?/signup" on:submit={submit_signup}>
-
-                {#if form?.missing}<p class="error">The email field is required</p>{/if}
-	            {#if form?.incorrect}<p class="error">Invalid credentials!</p>{/if}
                 <label for="name">Username:</label>
-                <input type="name" id="name" name="name" placeholder="John Smith" value={form?.username ?? ''} required>
+                <input type="name" id="name" name="name" placeholder="John Smith" required>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="example@gmail.com" value={form?.email ?? ''} required>
+                <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder="enter a strong password" required>
                 <label for="confirm password">Confirm Password:</label>
