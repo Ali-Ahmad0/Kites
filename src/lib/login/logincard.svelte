@@ -1,70 +1,41 @@
 <script lang="ts">
-    export let signin = true;
+	import { applyAction, deserialize, enhance } from "$app/forms";
+	import { invalidateAll } from "$app/navigation";
+	import { goto } from "$app/navigation";
+    import type { ActionResult } from "@sveltejs/kit";
 
-    async function submit_signin(event: Event) {
+
+	let { signin = true, data = {}, form = {} } = $props();
+    
+    async function submit(event: SubmitEvent & { currentTarget: EventTarget & HTMLFormElement }) {
         event.preventDefault();
-        const form_element = event.target as HTMLFormElement;
-        const password = form_element.querySelector('#password') as HTMLInputElement;
         
-        // check password length
-        if (password.value.length < 8) {
-            alert("Password less than 8 characters.");
-            return;
-        } 
+        // Generate form data
+        const formData = new FormData(event.currentTarget)
 
-        const form_data = new FormData(form_element);
-        const response = await fetch(form_element.action , {
+        // Post data and get response
+        const response = await fetch(event.currentTarget.action, {
             method: 'POST',
-            body: form_data
+            body: formData
         });
 
-        // Check for successful sign in
-        if (response.status === 200) {
-            window.location.href = '/main/home'
-        } else {
-            alert('Unable to sign in');
+         // Check for success in response
+        const result : ActionResult = deserialize(await response.text());
+                            
+        if (result.type === 'success') {
+            await invalidateAll();
+            goto("/main/home");
         }
 
-    }
-
-    async function submit_signup(event: Event) {
-        event.preventDefault();
-        const form_element = event.target as HTMLFormElement;
-        const password = form_element.querySelector('#password') as HTMLInputElement;
-        const confirm_password = form_element.querySelector('#confirm_password') as HTMLInputElement;
-        
-         // check password length
-        if (password.value.length < 8) {
-            alert("Password less than 8 characters.");
-            return;
-        } 
-
-        // match passwords
-        if (password.value != confirm_password.value) {
-            alert("Passwords do not match.");
-            return;
-        }
-
-        const form_data = new FormData(form_element);
-        const response = await fetch(form_element.action , {
-            method: 'POST',
-            body: form_data
-        });        
-
-        if (response.status === 200) {
-            window.location.href = '/main/home'
-        } else {
-            alert('Unable to sign up');
-        }
-    }
-
+        applyAction(result);
+    }    
 </script>
 
 <div class="content">
     <div class="card">
         {#if signin}
             <h1>Sign In</h1>
-            <form method="POST" action="?/login" on:submit={submit_signin}>
+            <form use:enhance method="POST" action="?/login" onsubmit={submit}>
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
                 <label for="password">Password:</label>
@@ -74,10 +45,9 @@
                 <button class="google" formaction="?/google">Sign In with Google</button>
             </form>
             <p>Don't have an account? <a href="/login/signup" class="other">Sign Up</a></p>
-
         {:else}
             <h1>Sign Up</h1>
-            <form method="POST" action="?/signup" on:submit={submit_signup}>
+            <form use:enhance method="POST" action="?/signup" onsubmit={submit}>
                 <label for="name">Username:</label>
                 <input type="name" id="name" name="name" placeholder="John Smith" required>
                 <label for="email">Email:</label>
@@ -90,7 +60,6 @@
                 <button class="confirm">Sign Up</button>
             </form>
             <p>Already have an account? <a href="/login/signin" class="other">Sign In</a></p>                
-        
         {/if}
     </div>
 </div>
