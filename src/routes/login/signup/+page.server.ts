@@ -1,6 +1,6 @@
 import  type { Actions } from './$types';
 import { get_collection } from '$db/collection';
-import { fail } from '@sveltejs/kit';
+import { error as svelteError, fail } from "@sveltejs/kit";
 import { hash } from '$lib'
 
 
@@ -17,18 +17,18 @@ export const actions = {
 
         // Check if all fields are filled
         if (!email) {
-			return fail(400, { email, missing: true });
+			throw svelteError(400, "Email is required.");
 		}
         
         // Check if user already exists
-        const user_by_email = await collection.findOne({email: email});
+        const user_by_email = await collection.findOne({email});
         if (user_by_email != null) {
-            return fail(400, { email, incorrect: true });
+            throw svelteError(400, "Email already exists.");
         }
 
-        const user_by_name = await collection.findOne({username: username});
+        const user_by_name = await collection.findOne({username});
         if(user_by_name != null) {
-            return fail(400, { username, incorrect: true });
+            throw svelteError(400, "Username is occupied. Please change.");
         }
 
         // Hash the password and insert new user

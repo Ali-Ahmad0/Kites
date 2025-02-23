@@ -1,11 +1,12 @@
 <script lang="ts">
+    
     export let signin = true;
-    export let form;
+    export let form : any;
 
     async function submit_signin(event: Event) {
         event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const password = form.querySelector('#password') as HTMLInputElement;
+        const form_element = event.target as HTMLFormElement;
+        const password = form_element.querySelector('#password') as HTMLInputElement;
         
         // check password length
         if (password.value.length < 8) {
@@ -13,7 +14,19 @@
             return;
         } 
 
-        form.submit();
+        const form_data = new FormData(form_element);
+        const response = await fetch(form_element.action , {
+            method: 'POST',
+            body: form_data
+        });
+
+        if (response.status === 200) {
+            window.location.href = '/main/home'
+        } else {
+            alert('incorrect password');
+            form = await response.json();
+        }
+
     }
 
     async function submit_signup(event: Event) {
@@ -44,6 +57,8 @@
         {#if signin}
             <h1>Sign In</h1>
             <form method="POST" action="?/login" on:submit={submit_signin}>
+                {#if form?.missing}<p class="error">The email field is required</p>{/if}
+	            {#if form?.incorrect}<p class="error">Invalid credentials!</p>{/if}
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="example@gmail.com" value={form?.email ?? ''} required>
                 <label for="password">Password:</label>
@@ -57,6 +72,9 @@
         {:else}
             <h1>Sign Up</h1>
             <form method="POST" action="?/signup" on:submit={submit_signup}>
+
+                {#if form?.missing}<p class="error">The email field is required</p>{/if}
+	            {#if form?.incorrect}<p class="error">Invalid credentials!</p>{/if}
                 <label for="name">Username:</label>
                 <input type="name" id="name" name="name" placeholder="John Smith" value={form?.username ?? ''} required>
                 <label for="email">Email:</label>
