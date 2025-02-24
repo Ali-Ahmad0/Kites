@@ -1,6 +1,6 @@
 import type { Actions } from './$types';
 import { get_collection } from '$db/collection';
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { hash } from '$lib';
 
 export const actions = {
@@ -12,6 +12,7 @@ export const actions = {
             const password = data.get('password') as string;
             const confirm = data.get('confirm_password') as string;
 
+            // Validate password
             if (password.length < 8) {
                 return fail(400, { 
                     success: false,
@@ -21,6 +22,7 @@ export const actions = {
                 });
             }
 
+            // Compare passwords
             if (password !== confirm) {
                 return fail(400, {
                     success: false,
@@ -31,6 +33,7 @@ export const actions = {
                 });
             }
             
+            // Check if all fields are entered
             if (!username) { 
                 return fail(400, {
                     success: false, 
@@ -57,6 +60,8 @@ export const actions = {
             }
 
             const collection = get_collection('Users');
+
+            // Check if email is available
             const user_by_email = await collection.findOne({ email });
             if (user_by_email != null) {
                 return fail(400, { 
@@ -66,6 +71,7 @@ export const actions = {
                 });
             }
             
+            // Check if username is available
             const user_by_name = await collection.findOne({ username });
             if (user_by_name != null) {
                 return fail(400, { 
@@ -75,10 +81,11 @@ export const actions = {
                 });
             }
 
+            // Store new user in database
             const hashed_password = await hash(password);
             collection.insertOne({ username, email, password: hashed_password });
             
-            return { success: true, message: "Signed up successfully" };
+            return { success: true, message: "Signup successful" };
         } catch (error) {
             return fail(500, { success: false, message: "Internal server error" });
         }

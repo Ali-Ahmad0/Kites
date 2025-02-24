@@ -1,7 +1,7 @@
 import { get_collection } from "$db/collection";
 import type { Actions } from "./$types";
 import bcrypt from "bcryptjs";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 
 export const actions: Actions = {
     login: async ({ request }) => {
@@ -10,6 +10,7 @@ export const actions: Actions = {
             const email = data.get("email") as string;
             const password = data.get("password") as string;
 
+            // Validate password
             if (password.length < 8) {
                 return fail(400, { 
                     success: false,                        
@@ -17,7 +18,8 @@ export const actions: Actions = {
                     email: { value: email }
                 });
             }
-
+            
+            // Check if all fields are entered
             if (!email) {
                 return fail(400, { 
                     success: false,
@@ -36,6 +38,7 @@ export const actions: Actions = {
             const collection = get_collection("Users");
             const user = await collection.findOne({ email });
 
+            // Check if user exists
             if (!user) {
                 return fail(400, { 
                     success: false,
@@ -43,6 +46,7 @@ export const actions: Actions = {
                 });
             }
 
+            // Check for correct password
             const match = await bcrypt.compare(password, user.password);
             if (!match) {
                 return fail(400, {
@@ -51,9 +55,8 @@ export const actions: Actions = {
                     email: { value: email }
                 });
             }
-  
-            return { success: true, message: "Login successful!" };
-
+            
+            return { success: true, message: "Login successful" };
         } catch (error) {
             return fail(500, { success: false, message: "Internal server error" });
         }

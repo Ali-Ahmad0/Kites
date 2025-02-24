@@ -1,13 +1,23 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     let { signin, form } = $props();
+
 </script>
 
 <div class="content">
     <div class="card">
         {#if signin}
             <h1>Sign In</h1>
-            <form use:enhance method="POST" action="?/login">
+            <form use:enhance={( {} ) => {
+                    return async ({ result, update }) => {
+                        // Redirect to homepage
+                        if (result.status === 200) {
+                            window.location.href = "/main/home";
+                        }
+
+                        await update();
+                    };
+                }} method="POST" action="?/login">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
                 {#if form?.email?.invalid}
@@ -20,11 +30,20 @@
                 {/if}
                 <button class="confirm">Sign In</button>
                 <button class="google" formaction="?/google">Sign In with Google</button>
-            </form>
+        </form>
             <p>Don't have an account? <a href="/login/signup" class="other">Sign Up</a></p>
         {:else}
             <h1>Sign Up</h1>
-            <form use:enhance method="POST" action="?/signup">
+            <form use:enhance={( {} ) => {
+                    return async ({ result, update }) => {
+                        // Redirect to homepage
+                        if (result.status === 200) {
+                            window.location.href = "/main/home";
+                        }
+
+                        await update();
+                    };
+                }} method="POST" action="?/signup">
                 <label for="name">Username:</label>
                 <input type="name" id="name" name="name" placeholder="John Smith" required>
                 {#if form?.username?.invalid}
@@ -188,7 +207,7 @@
     }
 
     .error {
-        color: red;
+        color: #f73b3b;
         font-size: 0.75rem;
     }
 </style>
