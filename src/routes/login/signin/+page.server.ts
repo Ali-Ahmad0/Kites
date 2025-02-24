@@ -4,63 +4,51 @@ import bcrypt from "bcryptjs";
 import { fail } from "@sveltejs/kit";
 
 export const actions: Actions = {
-    login: async ({ cookies, request }) => {
+    login: async ({ request }) => {
         try {
-            // Get form data
             const data = await request.formData();
             const email = data.get("email") as string;
             const password = data.get("password") as string;
 
-            // Validate password
             if (password.length < 8) {
-                return fail(
-                    400, { 
-                        success: false,                        
-                        password, invalid: true, 
-                        message: "Pasword must be at least 8 characters" 
+                return fail(400, { 
+                    success: false,                        
+                    password: { invalid: true, message: "Password must be at least 8 characters" },
+                    email: { value: email }
                 });
             }
 
-            // Check if required fields are filled
             if (!email) {
-                return fail(
-                    400, { 
-                        success: false,
-                        email, missing: true, 
-                        message: "Email is required"
+                return fail(400, { 
+                    success: false,
+                    email: { missing: true, message: "Email is required" }
                 });
             }
 
             if (!password) {
-                return fail(
-                    400, { 
-                        success: false,                        
-                        password, missing: true,
-                        message: "Password is required"
+                return fail(400, { 
+                    success: false,                        
+                    password: { missing: true, message: "Password is required" },
+                    email: { value: email }
                 });
             }
 
             const collection = get_collection("Users");
             const user = await collection.findOne({ email });
 
-            // Check if user does not exist
             if (!user) {
-                return fail(
-                    400, { 
-                        success: false,
-                        email, invalid: true,
-                        message: "User does not exist"
+                return fail(400, { 
+                    success: false,
+                    email: { invalid: true, message: "User does not exist" }
                 });
             }
 
-            // Compare the entered password with the stored hashed password
             const match = await bcrypt.compare(password, user.password);
             if (!match) {
-                return fail(
-                    400, {
-                        success: false,
-                        password, invalid: true, 
-                        message: "Invalid password"
+                return fail(400, {
+                    success: false,
+                    password: { invalid: true, message: "Invalid password" },
+                    email: { value: email }
                 });
             }
   
@@ -71,7 +59,6 @@ export const actions: Actions = {
         }
     },
 
-    // Signup with Google (Placeholder)
     google: async (event) => {
         // Google signup logic here
     },

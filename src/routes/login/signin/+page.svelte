@@ -1,5 +1,8 @@
 <script lang="ts">
     import { LoginCard } from "$lib";
+	import type { PageProps } from "./$types";
+
+    let { form } : PageProps = $props();
 </script>
 
-<LoginCard signin={true} /> 
+<LoginCard signin={true} form={form} /> 
