@@ -30,8 +30,9 @@
                 {/if}
                 <button class="confirm">Sign In</button>
                 <button class="google" formaction="?/google">Sign In with Google</button>
-        </form>
+            </form>
             <p>Don't have an account? <a href="/login/signup" class="other">Sign Up</a></p>
+        
         {:else}
             <h1>Sign Up</h1>
             <form use:enhance={( {} ) => {
