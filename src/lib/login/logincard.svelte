@@ -101,7 +101,7 @@
         max-width: 400px;
         min-width: 250px;
         height: fit-content;
-        background-color: var(--color-background-secondary);
+        background-color: var(--color-background-primary);
         border-radius: 1rem;
     }
 
@@ -170,7 +170,7 @@
     }
 
     .google {
-        background-color: var(--color-background-secondary);
+        background-color: var(--color-background-primary);
         color: var(--color-text-secondary);
     }
 
@@ -195,7 +195,7 @@
         font-size: 0.85rem;
         margin-top: 1rem;
         color: var(--color-text-secondary);
-        background-color: var(--color-background-secondary);
+        background-color: var(--color-background-primary);
         border: none;
     }
 
