@@ -13,19 +13,36 @@
         </ul>
     </nav>
     <button onclick="{() => goto("/login/signin")}" class="login-button">Log In</button>
+    <br>
 </header>
 
 <style>
+    
     header {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-     
-        padding: 0 10%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 4rem;
+    padding: 0 10%;
+    position: relative; 
+    z-index: 1; 
+
     }
 
+    header::after {
+        content: "";
+        position: absolute;
+        bottom: 0; 
+        left: 0;
+        width: 100%;
+        height: 1px; 
+        background: rgba(255, 255, 255, 0.5);        
+    }
+
+
     h2 {
-        margin-right: auto;
+        margin-right:auto;
     }
 
     .navbar-links {
@@ -82,5 +99,10 @@
     .login-button:hover {
         background-color: var(--color-blue-secondary);
         color: var(--color-text-button);
+    }
+
+    br{
+        color: var(--color-text-primary) ;
+        height: min-content;
     }
 </style>
