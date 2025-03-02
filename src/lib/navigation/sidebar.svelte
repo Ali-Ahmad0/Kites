@@ -53,6 +53,8 @@
 
 	h4 {
 		color: var(--color-text-secondary);
+        background-color: var(--color-background-primary);
+        transition: color 0.3s ease 0s;
 	}
 
 	.section {
