@@ -1,5 +1,12 @@
 <script>
 	import { sidebar_collapsed } from "$lib";
+
+	function check_window_size() {
+		sidebar_collapsed.update(() => window.innerWidth < 1024);
+	}
+
+	window.addEventListener('resize', check_window_size);
+	window.addEventListener('load', check_window_size);
 </script>
 
 <div class="sidebar" class:collapsed={$sidebar_collapsed}>
