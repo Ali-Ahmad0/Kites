@@ -3,9 +3,11 @@
 declare global {
 	namespace App {
 		interface Locals {
-			user?: {
-				id: string;
-			};
+			user: {
+				id: string 
+			} | null;
+			
+			authenticated: boolean;
 		}
 	}
 }

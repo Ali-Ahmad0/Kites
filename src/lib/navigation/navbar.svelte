@@ -1,11 +1,16 @@
 <script lang="ts">
     import { sidebar_collapsed, toggle_theme } from "$lib";
     import { goto } from "$app/navigation";
+	import { page } from "$app/state";
 
     function toggle_sidebar() {
         sidebar_collapsed.update((value) => !value);
     }
 
+    async function logout() {
+        await fetch('/api/logout', { method: 'POST' });
+        window.location.href = '/';
+    }
 </script>
 
 <header>
@@ -20,7 +25,11 @@
             <li><button onclick="{toggle_theme}">Toggle Theme</button></li>
         </ul>
     </nav>
+    {#if page.data.authenticated}
+    <button onclick="{logout}" class="login-button">Log Out</button>
+    {:else}
     <button onclick="{() => goto("/login/signin")}" class="login-button">Log In</button>
+    {/if}
 </header>
 
 <style> 

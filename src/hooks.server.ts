@@ -6,9 +6,12 @@ import type { Handle } from "@sveltejs/kit";
 // Connect to the database
 db_connect().then(() : void => {
     console.log("[KITES | INFO]: Connected to database succesfully!");
-}).catch(e => {console.error("[KITES | ERROR]: Unable to connect to database")})
+}).catch(e => {console.error("[KITES | ERROR]: Unable to connect to database: " + e)})
 
 export const handle: Handle = async ({ event, resolve }) => {
+    // Initialize events.locals
+    event.locals = { user: null, authenticated: false };
+
     // Extract session_id from cookies
     const session_id = event.cookies.get("session");
 
@@ -19,6 +22,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         // If session exists, add user_id to locals
         if (session) {
             event.locals.user = { id: session.user_id };
+            event.locals.authenticated = true;
         } else {
             // Delete session if it is invalid
             event.cookies.delete("session", { path: "/" });
