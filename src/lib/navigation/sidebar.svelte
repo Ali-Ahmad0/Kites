@@ -89,11 +89,12 @@
 		
 		text-align: left;
 
-		transition: background-color 0.3s ease;
+		transition: none;
 	}
 
 	.sidebar button:hover {
 		background-color: var(--color-background-secondary);
+		transition: background-color 0.3s ease;
 	}
 
 	.sidebar.collapsed button, .sidebar.collapsed h4 {

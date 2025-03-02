@@ -59,10 +59,6 @@
     }
 
     .navbar-links button {
-        transition: color 0.3s ease 0s;
-    }
-
-    .navbar-links button {
         background-color: var(--color-background-primary);
         color: var(--color-text-primary);
         
@@ -77,7 +73,7 @@
         color: var(--color-text-secondary);
         background-color: var(--color-background-primary);
 
-        transition: color 0.3s ease 0s;
+        transition: color 0.3s ease;
     }
 
     .login-button {
