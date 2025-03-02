@@ -1,92 +1,88 @@
 <script>
-
-	let sidebarCollapsed = false;
-	
-	function toggleSidebar() {
-		sidebarCollapsed = !sidebarCollapsed;
-	}
-
+	import { sidebar_collapsed } from "$lib";
 </script>
 
-<div class="sidebar" class:collapsed={sidebarCollapsed}>
-	<button on:click={toggleSidebar} >
-		☰
-	</button>
+<div class="sidebar" class:collapsed={$sidebar_collapsed}>
 	<div class="menu-links">
-		<a href="#">Home</a>
-		<a href="#">Art</a>
-		<a href="#">Nature</a>
-		<a href="#">Philosophy</a>
-		<a href="#">Music</a>
-		<a href="#">Blogs</a>
-		<a href="#">Forum</a>
-		<a href="#">About Us</a>
-		<a href="#">Contact Us</a>
-		<a href="#">Privacy Policy</a>
+		<div class="section">
+			<button>Home Page</button>
+			<button>My Account</button>
+		</div>
+		<div class="section">
+			<h4>Topics</h4>
+			<button>Art</button>
+			<button>Philosophy</button>
+			<button>Nature</button>
+			<button>Science</button>
+		</div>
+		<div class="section">
+			<h4>More</h4>
+			<button>Rules</button>
+			<button>Github</button>
+		</div>
 	</div>
 </div>
 
 <style>
 
 	.sidebar {
-		position: fixed;
-		left: 0;
-		top: 0;
 		height: 100vh;
-		width: 8vw;
+		width: 12rem;
+
+		padding: 1rem;
+
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 2.5%;
-		margin-top: 5%;
-		transition: width 0.3s ease;
+
+		border-right: solid 1px var(--color-navigation-border);
+
+		transition: width 0.3s ease, border-color 0.3s ease;
 	}
 
-	.sidebar.collapsed {
+	.collapsed {
 		width: 0;
+		border-color: transparent;
 	}
 
-	.sidebar::before {
-		content: "";
-		position: absolute;
-		right: 0;
-		top: 0;
-		height: 100%;
-		width: 1px;
-		background: rgba(255, 255, 255, 0.5);
-	}
 
 	.menu-links {
-		margin-top: 20%;
 		display: flex;
 		flex-direction: column;
-		gap: 30px;
-		align-items: center;
 	}
 
-	.sidebar a {
-
-		color: var(--color-text-primary);
-		font-size: 1rem;
-		text-decoration: none;
-		transition: opacity 0.3s ease;
-	}
-
-	.sidebar.collapsed a {
-		display: none; 
-	}
-
-	.sidebar a:hover {
+	h4 {
 		color: var(--color-text-secondary);
 	}
 
-	button {
-		position: relative;
-		background: none;
-		border: none;
-		color: var(--color-text-primary);
-		font-size: 1.5rem;
-		cursor: pointer;
+	.section {
+		padding-bottom: 1rem;
+		border-bottom: solid 1px var(--color-navigation-border);
 	}
 
-</style>
+	.sidebar button {
+		color: var(--color-text-primary);
+		background-color: var(--color-background-primary);
+				
+		padding: 0.7rem 2rem;
+		font-size: 1rem;
+		width: 100%;
+
+		border: none;
+		border-radius: 1rem;
+
+		cursor: pointer;
+		
+		text-align: left;
+
+		transition: background-color 0.3s ease;
+	}
+
+	.sidebar button:hover {
+		background-color: var(--color-background-secondary);
+	}
+
+	.sidebar.collapsed button, .sidebar.collapsed h4 {
+		display: none;
+	}
+</style> 

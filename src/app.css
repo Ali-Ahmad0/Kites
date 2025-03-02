@@ -12,6 +12,8 @@
     --color-text-primary: #ffffff;
     --color-text-secondary: #8a9599;
     --color-text-button: #ffffff;
+
+    --color-navigation-border: rgba(255, 255, 255, 0.2);
 }
 
 .light {
@@ -24,6 +26,8 @@
     --color-text-primary: #09090b;
     --color-text-secondary: #565658;
     --color-text-button: #ffffff;
+
+    --color-navigation-border: rgba(0, 0, 0, 0.2);
 }
 
 body {

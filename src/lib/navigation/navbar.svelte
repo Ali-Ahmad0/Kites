@@ -1,9 +1,17 @@
 <script lang="ts">
-    import { toggle_theme } from "$lib";
+    import { sidebar_collapsed, toggle_theme } from "$lib";
     import { goto } from "$app/navigation";
+
+    function toggle_sidebar() {
+        sidebar_collapsed.update((value) => !value);
+    }
+
 </script>
 
 <header>
+    <button onclick={toggle_sidebar} class="sidebar-button">
+		☰
+	</button>
     <h2>KITES</h2>
     <nav>
         <ul class="navbar-links">
@@ -13,33 +21,22 @@
         </ul>
     </nav>
     <button onclick="{() => goto("/login/signin")}" class="login-button">Log In</button>
-    <br>
 </header>
 
-<style>
-    
+<style> 
     header {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
 
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    height: 4rem;
-    padding: 0 10%;
-    position: relative; 
-    z-index: 1; 
+        height: 4rem;        
+        padding: 0 1rem;
+        
+        position: relative; 
+        z-index: 1;
 
+        border-bottom: solid 1px var(--color-navigation-border);
     }
-
-    header::after {
-        content: "";
-        position: absolute;
-        bottom: 0; 
-        left: 0;
-        width: 100%;
-        height: 1px; 
-        background: rgba(255, 255, 255, 0.5);        
-    }
-
 
     h2 {
         margin-right:auto;
@@ -101,8 +98,12 @@
         color: var(--color-text-button);
     }
 
-    br{
-        color: var(--color-text-primary) ;
-        height: min-content;
+    .sidebar-button {
+        background-color: var(--color-background-primary);
+        color: var(--color-text-primary);
+        border: none;
+
+        font-size: 1.5rem;
+        margin-right: 1rem;
     }
 </style>
