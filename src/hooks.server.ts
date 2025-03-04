@@ -1,6 +1,8 @@
+import { get_collection } from "$db/collection";
 import { db_connect } from "$db/mongo";
 import { get_session } from "$lib/helper/session";
 import { redirect } from "@sveltejs/kit";
+import { ObjectId } from "mongodb";
 import type { Handle } from "@sveltejs/kit";
 
 // Connect to the database
@@ -21,7 +23,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         // If session exists, add user_id to locals
         if (session) {
-            event.locals.user = { id: session.user_id };
+            const user = await get_collection("Users").findOne({ _id: new ObjectId(session.user_id as string) });
+            
+            // @ts-ignore
+            event.locals.user = { id: session.user_id, username: user.username };
             event.locals.authenticated = true;
         } else {
             // Delete session if it is invalid
