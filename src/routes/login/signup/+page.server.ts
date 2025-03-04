@@ -14,6 +14,16 @@ export const actions = {
             const password = data.get('password') as string;
             const confirm = data.get('confirm_password') as string;
 
+            // check if the username contains spaces
+            if(username.includes(" ")){
+                return fail(400,{
+                    success: false,
+                    username: { invalid: true, message: "Username must not have spaces" },
+                    password: { value: password },
+                    email: { value: email }
+                });
+            }
+
             // Validate password
             if (password.length < 8) {
                 return fail(400, { 
