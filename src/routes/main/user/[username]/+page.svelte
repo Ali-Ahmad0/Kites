@@ -19,7 +19,7 @@
 <div class="container">
     <div class="profile-card">
         <div class="details">
-            <img class="pfp" src="/icons/{mode}/profile.jpg" alt="pfp">
+            <img class="pfp" src="/profile.jpg" alt="pfp">
             <h2 class="username">{data.params_username}</h2>
             <h4 class="email-id">{data.params_email_id}</h4>
         </div>
@@ -77,7 +77,10 @@
         grid-area: pfp;
         width: 6rem;
         height: 6rem;
+        
         border-radius: 50%;
+        border: solid 3px;
+        border-color: var(--color-background-secondary);
     }
 
     .username {

@@ -1,4 +1,4 @@
-import { prisma } from '$db/prisma';
+import prisma from '$db/prisma';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params } : any) {

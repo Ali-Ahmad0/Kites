@@ -3,7 +3,7 @@ import { fail } from "@sveltejs/kit";
 import { hash } from '$lib'
 import { create_session } from "$lib/helper/session";
 import { dev } from "$app/environment";
-import { prisma } from "$db/prisma";
+import prisma from "$db/prisma";
 
 export const actions = {
     signup: async ({ request, cookies }) => {

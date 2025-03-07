@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { fail } from "@sveltejs/kit";
 import { create_session } from "$lib/helper/session";
 import { dev } from "$app/environment";
-import { prisma } from "$db/prisma";
+import prisma from "$db/prisma";
 
 export const actions: Actions = {
     login: async ({ request, cookies }) => {

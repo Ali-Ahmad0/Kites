@@ -5,4 +5,4 @@
     let { form } : PageProps = $props();
 </script>
 
-<LoginCard signin={true} form={form} /> 
+<LoginCard signin = {true} form = {form} /> 

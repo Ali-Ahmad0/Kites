@@ -39,8 +39,6 @@
 		margin: 0.5rem auto;
 		padding-top: 1rem;
 		padding-right: 0.5rem;
-
-        border-right: solid 1px var(--color-navigation-border);
 		
 		transition: width 0.3s ease;
     }
