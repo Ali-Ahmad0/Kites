@@ -4,7 +4,7 @@ declare global {
 	namespace App {
 		interface Locals {
 			user: {
-				id: string 
+				id: string, username: string
 			} | null;
 			
 			authenticated: boolean;

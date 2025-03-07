@@ -26,7 +26,7 @@
 </script>
 
 <header>
-    <button on:click={toggle_sidebar} class="sidebar-button">
+    <button onclick={toggle_sidebar} class="sidebar-button">
         ☰
     </button>
     <h2>KITES</h2>
@@ -40,9 +40,11 @@
         </ul>
     </nav>
     {#if page.data.authenticated}
-        <button on:click={logout} class="login-button">Log Out</button>
+        <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
+            <img src='/default-dark.jpg' alt="pfp">
+        </button>
     {:else}
-        <button on:click={() => goto("/login/signin")} class="login-button">Log In</button>
+        <button onclick={() => goto("/login/signin")} class="login-button">Log In</button>
     {/if}
 </header>
 
@@ -57,6 +59,16 @@
         
         border-bottom: solid 1px var(--color-navigation-border);
     }
+
+    .sidebar-button {
+        background-color: transparent;
+        color: var(--color-text-primary);
+        
+        border: none;
+        
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
     
     h2 {
         margin-right: auto;
@@ -70,7 +82,6 @@
         gap: 1.5rem;
         
         padding: 0 1rem;
-        margin-right: 1rem;
     }
     
     button {
@@ -106,15 +117,22 @@
         background-color: var(--color-blue-secondary);
         color: var(--color-text-button);
     }
-    
-    .sidebar-button {
+
+    .profile {
         background-color: transparent;
-        color: var(--color-text-primary);
-        
         border: none;
-        
-        font-size: 1.5rem;
-        margin-right: 1rem;
+    }
+
+    img {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+    
+        transition: opacity 0.3s ease;
+    }
+
+    img:hover {
+        opacity: 0.7;
     }
 
 </style>
