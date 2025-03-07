@@ -1,9 +1,7 @@
 <script lang="ts">
-    import { sidebar_collapsed, toggle_theme } from "$lib";
-    import { is_dark_mode } from "$lib/toggle/theme";
+    import { sidebar_collapsed, toggle_theme, is_dark_mode, Icon } from "$lib";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
-    import { Icon } from '$lib';
     
     let mode: any;
     let theme_icon: any;
@@ -15,11 +13,6 @@
     
     function toggle_sidebar() {
         sidebar_collapsed.update((value) => !value);
-    }
-
-    async function logout() {
-        await fetch('/api/logout', { method: 'POST' });
-        window.location.href = '/';
     }
 </script>
 
