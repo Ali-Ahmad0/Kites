@@ -46,7 +46,7 @@
                     };
                 }} method="POST" action="?/signup">
                 <label for="name">Username:</label>
-                <input type="name" id="name" name="name" placeholder="John Smith" required>
+                <input type="name" id="name" name="name" placeholder="use letters, numbers, _ , - only " required>
                 {#if form?.username?.invalid}
                     <span class="error">{form.username.message}</span>
                 {/if}
