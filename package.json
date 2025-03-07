@@ -32,6 +32,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@prisma/client": "^6.4.1",
 		"bcryptjs": "^3.0.2",
 		"cookies": "^0.9.1",
 		"jsonwebtoken": "^9.0.2",

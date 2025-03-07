@@ -1,16 +1,13 @@
 <script lang="ts">
-    import { sidebar_collapsed } from "$lib";
-    import { Icon } from '$lib';
-    import { is_dark_mode } from "$lib/toggle/theme"; 
+    import { sidebar_collapsed, is_dark_mode, Icon } from "$lib";
 
      // Reactive variables
-    let mode: any;
+    let mode: string = $state("dark_mode_icons");
 
-    $: {
+    $effect( () => {
         mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
-    }
+    })
     
-
 </script>
 
 <div class="sidebar" class:collapsed={$sidebar_collapsed}>

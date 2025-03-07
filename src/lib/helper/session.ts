@@ -1,24 +1,28 @@
-import { get_collection } from "$db/collection";
+import { prisma } from "$db/prisma";
 
 export async function create_session(user_id : string) {
-    const collection = get_collection("Sessions");
-    const session_id = Math.random().toString(36).substring(2);
+    const session_id = Math.random().toString(36).substring(2) as string;
 
-    await collection.insertOne({
-        session: session_id,
-        user_id: user_id,
-        session_created: new Date(),
-        
-        // Expires in 7 days
-        session_expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) 
+    await prisma.sessions.create({
+        data: {
+            session: session_id,
+            user_id: user_id,
+            session_created: new Date(),
+            
+            // Expires in 7 days
+            session_expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) 
+        }
     });
 
     return session_id;
 }
 
 export async function get_session(session_id : string) {
-    const collection = get_collection("Sessions");
-    const session = await collection.findOne({ session: session_id });
+    const session = await prisma.sessions.findFirst({
+        where: {
+            session: session_id
+        }
+    });
 
     if (session && session.session_expires > new Date()) {
         return session;
@@ -28,6 +32,9 @@ export async function get_session(session_id : string) {
 }
 
 export async function delete_session(session_id : string) {
-    const collection = get_collection("Sessions");
-    await collection.deleteOne({ session: session_id });
+    await prisma.sessions.deleteMany({
+        where: {
+            session: session_id
+        }
+    });
 }

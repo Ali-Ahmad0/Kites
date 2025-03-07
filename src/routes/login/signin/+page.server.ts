@@ -1,10 +1,9 @@
-import { get_collection } from "$db/collection";
 import type { Actions } from "./$types";
 import bcrypt from "bcryptjs";
 import { fail } from "@sveltejs/kit";
 import { create_session } from "$lib/helper/session";
 import { dev } from "$app/environment";
-
+import { prisma } from "$db/prisma";
 
 export const actions: Actions = {
     login: async ({ request, cookies }) => {
@@ -38,8 +37,11 @@ export const actions: Actions = {
                 });
             }
 
-            const collection = get_collection("Users");
-            const user = await collection.findOne({ email });
+            const user = await prisma.users.findFirst({
+                where: {
+                    email: email
+                }
+            });
 
             // Check if user exists
             if (!user) {
@@ -60,7 +62,7 @@ export const actions: Actions = {
             }
             
             // Create session
-            const session_id = await create_session(user._id.toString());
+            const session_id = await create_session(user.id.toString());
             cookies.set("session", session_id, { 
                 path: "/",
                 httpOnly: true,

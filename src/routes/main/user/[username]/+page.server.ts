@@ -1,11 +1,15 @@
-import { get_collection } from "$db/collection";
+import { prisma } from '$db/prisma';
 import { error } from '@sveltejs/kit';
 
 export async function load({ params } : any) {
     // Access username from route parameters
     const { username } = params;
 
-    const user = await get_collection("Users").findOne({ username });
+    const user = await prisma.users.findFirst({
+        where: {
+            username: username
+        }
+    })
     
     // Throw a 404 error if the user does not exist
     if (!user) {

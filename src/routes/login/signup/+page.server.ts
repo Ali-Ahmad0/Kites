@@ -1,9 +1,9 @@
 import type { Actions } from './$types';
-import { get_collection } from '$db/collection';
 import { fail } from "@sveltejs/kit";
 import { hash } from '$lib'
 import { create_session } from "$lib/helper/session";
 import { dev } from "$app/environment";
+import { prisma } from "$db/prisma";
 
 export const actions = {
     signup: async ({ request, cookies }) => {
@@ -13,10 +13,10 @@ export const actions = {
             const email = data.get('email') as string;
             const password = data.get('password') as string;
             const confirm = data.get('confirm_password') as string;
-            const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+            const username_regex = /^[a-zA-Z0-9_-]+$/;
 
             // check if the username contains spaces
-            if(!usernameRegex.test(username)){
+            if(!username_regex.test(username)){
                 return fail(400,{
                     success: false,
                     username: { invalid: true, message: "Invalid Username" },
@@ -72,11 +72,14 @@ export const actions = {
                 });
             }
 
-            const collection = get_collection('Users');
-
             // Check if email is available
-            const user_by_email = await collection.findOne({ email });
-            if (user_by_email != null) {
+            const email_exists = await prisma.users.findFirst({
+                where: {
+                    email : email
+                },
+            });
+
+            if (email_exists) {
                 return fail(400, { 
                     success: false,
                     email: { invalid: true, message: "Email already exists" },
@@ -85,8 +88,13 @@ export const actions = {
             }
             
             // Check if username is available
-            const user_by_name = await collection.findOne({ username });
-            if (user_by_name != null) {
+            const username_exists = await prisma.users.findFirst({
+                where: {
+                    username: username
+                },
+            });
+
+            if (username_exists) {
                 return fail(400, { 
                     success: false,
                     username: { invalid: true, message: "Username already exists" },
@@ -96,16 +104,28 @@ export const actions = {
 
             // Store new user in database
             const hashed_password = await hash(password);
-            await collection.insertOne({ username, email, password: hashed_password });
+            await prisma.users.create({
+                data: {
+                    username: username,
+                    email: email,
+                    password: hashed_password
+                }
+            })
             
             // Get user to create session
-            const user = await collection.findOne({ email });
+            const user = await prisma.users.findFirst({
+                where: {
+                    email : email,
+                    username: username
+                },
+            });
+
             if (!user) {
                 return fail(500, { success: false, message: "User not found after signup" });
             }
 
             // Create session
-            const session_id = await create_session(user._id.toString());
+            const session_id = await create_session(user.id.toString());
             cookies.set("session", session_id, { 
                 path: "/",
                 httpOnly: true,

@@ -1,14 +1,7 @@
-import { get_collection } from "$db/collection";
-import { db_connect } from "$db/mongo";
-import { get_session } from "$lib/helper/session";
+import { get_session } from "$lib";
 import { redirect } from "@sveltejs/kit";
-import { ObjectId } from "mongodb";
+import { prisma } from "$db/prisma";
 import type { Handle } from "@sveltejs/kit";
-
-// Connect to the database
-db_connect().then(() : void => {
-    console.log("[KITES | INFO]: Connected to database succesfully!");
-}).catch(e => {console.error("[KITES | ERROR]: Unable to connect to database: " + e)})
 
 export const handle: Handle = async ({ event, resolve }) => {
     // Initialize events.locals
@@ -23,8 +16,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         // If session exists, add user_id to locals
         if (session) {
-            const user = await get_collection("Users").findOne({ _id: new ObjectId(session.user_id as string) });
-            
+
+            const user = await prisma.users.findFirst({
+                where: {
+                    id: session.user_id
+                }
+            })
+
             // @ts-ignore
             event.locals.user = { id: session.user_id, username: user.username };
             event.locals.authenticated = true;

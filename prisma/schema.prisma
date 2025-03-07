@@ -17,7 +17,7 @@ model Posts {
 
 model Sessions {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  session         String
+  session         String   
   session_created DateTime @db.Date
   session_expires DateTime @db.Date
   user_id         String
