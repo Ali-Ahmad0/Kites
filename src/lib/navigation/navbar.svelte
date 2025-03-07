@@ -23,7 +23,7 @@
     </nav>
     {#if page.data.authenticated}
         <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
-            <img src="/default-dark.jpg" alt="pfp">
+            <img src='/default-dark.jpg' alt="pfp">
         </button>
     {:else}
         <button onclick={() => goto("/login/signin")} class="login-button">Log In</button>

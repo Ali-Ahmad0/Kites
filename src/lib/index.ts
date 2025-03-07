@@ -1,6 +1,6 @@
 export * from "./stores";
 
-export { toggle_theme } from "./toggle/theme";
+export * from "./toggle/theme";
 
 export { hash } from "./helper/hash";
 
