@@ -5,7 +5,7 @@ export async function load({ params } : any) {
     // Access username from route parameters
     const { username } = params;
 
-    const user = await prisma.users.findFirst({
+    const user = await prisma.users.findUnique({
         where: {
             username: username
         }

@@ -37,7 +37,7 @@ export const actions: Actions = {
                 });
             }
 
-            const user = await prisma.users.findFirst({
+            const user = await prisma.users.findUnique({
                 where: {
                     email: email
                 }

@@ -17,7 +17,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         // If session exists, add user_id to locals
         if (session) {
 
-            const user = await prisma.users.findFirst({
+            const user = await prisma.users.findUnique({
                 where: {
                     id: session.user_id
                 }

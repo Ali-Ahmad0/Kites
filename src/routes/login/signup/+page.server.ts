@@ -73,7 +73,7 @@ export const actions = {
             }
 
             // Check if email is available
-            const email_exists = await prisma.users.findFirst({
+            const email_exists = await prisma.users.findUnique({
                 where: {
                     email : email
                 },
@@ -88,7 +88,7 @@ export const actions = {
             }
             
             // Check if username is available
-            const username_exists = await prisma.users.findFirst({
+            const username_exists = await prisma.users.findUnique({
                 where: {
                     username: username
                 },
@@ -113,9 +113,8 @@ export const actions = {
             })
             
             // Get user to create session
-            const user = await prisma.users.findFirst({
+            const user = await prisma.users.findUnique({
                 where: {
-                    email : email,
                     username: username
                 },
             });

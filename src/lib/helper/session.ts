@@ -18,7 +18,7 @@ export async function create_session(user_id : string) {
 }
 
 export async function get_session(session_id : string) {
-    const session = await prisma.sessions.findFirst({
+    const session = await prisma.sessions.findUnique({
         where: {
             session: session_id
         }
