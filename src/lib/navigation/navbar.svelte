@@ -4,9 +4,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { Icon } from '$lib';
-	import type { fromStore } from "svelte/store";
     
-    // Reactive variables
     let mode: any;
     let theme_icon: any;
 
@@ -32,9 +30,9 @@
     <h2>KITES</h2>
     <nav>
         <ul class="navbar-links">
-            <li><button><Icon mode = {mode} name = "about_us" width = {23} height = {23} alt = "about_us"/></button></li>
-            <li><button><Icon mode = {mode} name = "notification_bell" width={25} height={25} alt = "notification_bell" /></button></li>
-            <li><button on:click={() => { toggle_theme();}}><Icon mode = {mode} name = {theme_icon} width = {20} height = {20} alt = "light_mode" />
+            <li><button><Icon mode = {mode} name = "about_us" width = {24} height = {24} alt = "about_us"/></button></li>
+            <li><button><Icon mode = {mode} name = "notification_bell" width={24} height={24} alt = "notification_bell" /></button></li>
+            <li><button onclick={() => { toggle_theme(); }}><Icon mode = {mode} name = {theme_icon} width = {24} height = {24} alt = "light_mode" />
             </button>
             </li>
         </ul>
