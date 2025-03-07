@@ -1,6 +1,14 @@
 <script lang="ts">
+    import { is_dark_mode } from '$lib';
+
     const { data } = $props();
 
+    let mode : string = $state("dark_mode_icons");
+
+    $effect(() => {
+        mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
+    })
+    
     async function logout() {
         await fetch('/api/logout', { method: 'POST' });
         window.location.href = '/';
@@ -11,7 +19,7 @@
 <div class="container">
     <div class="profile-card">
         <div class="details">
-            <img class="pfp" src="/default-dark.jpg" alt="pfp">
+            <img class="pfp" src="/icons/{mode}/profile.jpg" alt="pfp">
             <h2 class="username">{data.params_username}</h2>
             <h4 class="email-id">{data.params_email_id}</h4>
         </div>

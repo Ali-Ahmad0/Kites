@@ -3,13 +3,13 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
     
-    let mode: any;
-    let theme_icon: any;
+    let mode : string = $state("dark_mode_icons");
+    let theme_icon : string = $state("dark_mode");
 
-    $: {
+    $effect(() => {
         mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
         theme_icon = $is_dark_mode ? "dark_mode" : "light_mode";
-    }
+    });
     
     function toggle_sidebar() {
         sidebar_collapsed.update((value) => !value);
@@ -32,7 +32,7 @@
     </nav>
     {#if page.data.authenticated}
         <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
-            <img src='/default-dark.jpg' alt="pfp">
+            <img src="/icons/{mode}/profile.jpg" alt="pfp">
         </button>
     {:else}
         <button onclick={() => goto("/login/signin")} class="login-button">Log In</button>
@@ -77,18 +77,13 @@
     
     button {
         cursor: pointer;
-    }
-    
-    .navbar-links button {
-        background-color: var(--color-background-primary);
-        color: var(--color-text-primary);
-        
+        transition: opacity 0.3s ease;
+        background-color: transparent;
         border: none;
-        font-size: 1rem;
     }
-    
-    .navbar-links li:hover, button:hover {
-        color: var(--color-text-secondary);
+
+    button:hover {
+        opacity: 0.7;
     }
     
     .login-button {
