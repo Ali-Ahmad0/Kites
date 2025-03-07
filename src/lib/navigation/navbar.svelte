@@ -1,12 +1,24 @@
 <script lang="ts">
     import { sidebar_collapsed, toggle_theme } from "$lib";
+    import { is_dark_mode } from "$lib/toggle/theme";
     import { goto } from "$app/navigation";
     import { page } from "$app/state";
+    import { Icon } from '$lib';
+	import type { fromStore } from "svelte/store";
+    
+    // Reactive variables
+    let mode: any;
+    let theme_icon: any;
+
+    $: {
+        mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
+        theme_icon = $is_dark_mode ? "dark_mode" : "light_mode";
+    }
     
     function toggle_sidebar() {
         sidebar_collapsed.update((value) => !value);
     }
-    
+
     async function logout() {
         await fetch('/api/logout', { method: 'POST' });
         window.location.href = '/';
@@ -20,9 +32,11 @@
     <h2>KITES</h2>
     <nav>
         <ul class="navbar-links">
-            <li><button>About</button></li>
-            <li><button>Notifications</button></li>
-            <li><button on:click={toggle_theme}>Toggle Theme</button></li>
+            <li><button><Icon mode = {mode} name = "about_us" width = {23} height = {23} alt = "about_us"/></button></li>
+            <li><button><Icon mode = {mode} name = "notification_bell" width={25} height={25} alt = "notification_bell" /></button></li>
+            <li><button on:click={() => { toggle_theme();}}><Icon mode = {mode} name = {theme_icon} width = {20} height = {20} alt = "light_mode" />
+            </button>
+            </li>
         </ul>
     </nav>
     {#if page.data.authenticated}
@@ -102,4 +116,5 @@
         font-size: 1.5rem;
         margin-right: 1rem;
     }
+
 </style>

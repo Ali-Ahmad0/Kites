@@ -13,12 +13,13 @@ export const actions = {
             const email = data.get('email') as string;
             const password = data.get('password') as string;
             const confirm = data.get('confirm_password') as string;
+            const usernameRegex = /^[a-zA-Z0-9_-]+$/;
 
             // check if the username contains spaces
-            if(username.includes(" ")){
+            if(!usernameRegex.test(username)){
                 return fail(400,{
                     success: false,
-                    username: { invalid: true, message: "Username must not have spaces" },
+                    username: { invalid: true, message: "Invalid Username" },
                     password: { value: password },
                     email: { value: email }
                 });

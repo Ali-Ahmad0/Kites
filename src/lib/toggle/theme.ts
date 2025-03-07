@@ -1,14 +1,15 @@
-let isDarkMode : boolean = true;
+import { writable } from "svelte/store";
 
-// Switch between light and dark mode
-export function toggle_theme() : void {
-    // Change theme
-    if (isDarkMode) {
-        document.documentElement.classList.add("light");
-    } else {
-        document.documentElement.classList.remove("light");
-    }
+export const is_dark_mode = writable(true);
 
-    // Update theme
-    isDarkMode = !isDarkMode;
+export function toggle_theme(): void {
+    is_dark_mode.update((value) => {
+        if (value) {
+            document.documentElement.classList.add("light");
+        } else {
+            document.documentElement.classList.remove("light");
+        }
+        console.log("Theme toggled:", !value); // Debug log
+        return !value;
+    });
 }

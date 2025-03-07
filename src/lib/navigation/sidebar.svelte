@@ -1,24 +1,35 @@
 <script lang="ts">
     import { sidebar_collapsed } from "$lib";
+    import { Icon } from '$lib';
+    import { is_dark_mode } from "$lib/toggle/theme"; 
+
+     // Reactive variables
+    let mode: any;
+
+    $: {
+        mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
+    }
+    
+
 </script>
 
 <div class="sidebar" class:collapsed={$sidebar_collapsed}>
     <div class="menu-links">
         <div class="section">
-            <button>Home Page</button>
-            <button>My Account</button>
+            <button><Icon mode = {mode} name="home" width={20} height={30} alt="home" />Home Page</button>
+            <button><Icon mode = {mode} name="account" width={20} height={30} alt="account"/>My Account</button>
         </div>
         <div class="section">
             <h4>Topics</h4>
-            <button>Art</button>
-            <button>Philosophy</button>
-            <button>Nature</button>
-            <button>Science</button>
+            <button><Icon mode = {mode} name="art" width={20} height={30} alt="art"/>Art</button>
+            <button><Icon mode = {mode} name="philosophy" width={20} height={30} alt="philosophy"/>Philosophy</button>
+            <button><Icon mode = {mode} name="nature" width={20} height={30} alt="nature"/>Nature</button>
+            <button><Icon mode = {mode} name="science" width={20} height={30} alt="science"/>Science</button>
         </div>
         <div class="section">
             <h4>More</h4>
-            <button>Rules</button>
-            <button>Github</button>
+            <button><Icon mode = {mode} name="rules" width={20} height={30} alt="rules"/>Rules</button>
+            <button><Icon mode = {mode} name="github" width={20} height={30} alt="github"/>Github</button>
         </div>
     </div>
 </div>
@@ -78,6 +89,10 @@
         
 		cursor: pointer;
         text-align: left;
+
+        display: flex;      
+        align-items: center;  
+        gap: 6px;    
     }
     
     button:hover {
