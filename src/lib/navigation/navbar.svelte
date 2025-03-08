@@ -2,12 +2,10 @@
     import { sidebar_collapsed, toggle_theme, is_dark_mode, Icon } from "$lib";
     import { page } from "$app/state";
     
-    let mode : string = $state("dark_mode_icons");
-    let theme_icon : string = $state("dark_mode");
+    let folder : string = $state("dark_mode_icons");
 
     $effect(() => {
-        mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
-        theme_icon = $is_dark_mode ? "dark_mode" : "light_mode";
+        folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
     
     function toggle_sidebar() {
@@ -22,10 +20,20 @@
     <h2>KITES</h2>
     <nav>
         <ul class="navbar-links">
-            <li><button><Icon mode = {mode} name = "about_us" width = {24} height = {24} alt = "about_us"/></button></li>
-            <li><button><Icon mode = {mode} name = "notification_bell" width = {24} height = {24} alt = "notification_bell" /></button></li>
-            <li><button onclick={() => { toggle_theme(); }}><Icon mode = {mode} name = {theme_icon} width = {24} height = {24} alt = "light_mode" />
-            </button>
+            <li>
+                <button class="icon">
+                    <Icon mode = {folder} name = "about_us" width = {24} height = {24} alt = "about_us"/>
+                </button>
+            </li>
+            <li>
+                <button class="icon">
+                    <Icon mode = {folder} name = "notification_bell" width = {24} height = {24} alt = "notification_bell" />
+                </button>
+            </li>
+            <li>
+                <button class="icon" onclick={() => { toggle_theme(); }}>
+                    <Icon mode = {folder} name = "toggle_theme" width = {24} height = {24} alt = "light_mode" />
+                </button>
             </li>
         </ul>
     </nav>
@@ -58,6 +66,8 @@
         
         font-size: 1.5rem;
         margin-right: 1rem;
+
+        transition: background-color 0.3s ease;
     }
     
     h2 {
@@ -80,12 +90,13 @@
         
         background-color: transparent;
         border: none;
-
-        transition: opacity 0.3s ease;
-        
     }
 
-    button:hover {
+    .icon {
+        transition: opacity 0.3s ease;
+    }
+
+    .icon:hover {
         opacity: 0.7;
     }
     
@@ -101,7 +112,7 @@
         background-color: var(--color-blue-primary);
         color: var(--color-text-button);
         
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
     }
     
     .login-button:hover {

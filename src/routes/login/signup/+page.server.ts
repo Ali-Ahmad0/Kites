@@ -1,9 +1,9 @@
 import type { Actions } from './$types';
 import { fail } from "@sveltejs/kit";
 import { hash } from '$lib'
-import { create_session } from "$lib/helper/session";
+import { create_session } from "$lib/server/session.server";
 import { dev } from "$app/environment";
-import prisma from "$db/prisma";
+import { prisma } from "$lib/server/prisma.server";
 
 export const actions = {
     signup: async ({ request, cookies }) => {

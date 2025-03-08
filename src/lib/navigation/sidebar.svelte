@@ -2,10 +2,10 @@
     import { sidebar_collapsed, is_dark_mode, Icon } from "$lib";
 
      // Reactive variables
-    let mode: string = $state("dark_mode_icons");
+    let folder: string = $state("dark_mode_icons");
 
     $effect( () => {
-        mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
+        folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     })
     
 </script>
@@ -13,20 +13,20 @@
 <div class="sidebar" class:collapsed={$sidebar_collapsed}>
     <div class="menu-links">
         <div class="section">
-            <button><Icon mode = {mode} name="home" width={20} height={30} alt="home" />Home Page</button>
-            <button><Icon mode = {mode} name="account" width={20} height={30} alt="account"/>My Account</button>
+            <button><Icon mode = {folder} name="home" width = {20} height = {30} alt = "home" />Home Page</button>
+            <button><Icon mode = {folder} name="account" width = {20} height = {30} alt = "account"/>My Account</button>
         </div>
         <div class="section">
             <h4>Topics</h4>
-            <button><Icon mode = {mode} name="art" width={20} height={30} alt="art"/>Art</button>
-            <button><Icon mode = {mode} name="philosophy" width={20} height={30} alt="philosophy"/>Philosophy</button>
-            <button><Icon mode = {mode} name="nature" width={20} height={30} alt="nature"/>Nature</button>
-            <button><Icon mode = {mode} name="science" width={20} height={30} alt="science"/>Science</button>
+            <button><Icon mode = {folder} name="art" width = {20} height = {30} alt = "art"/>Art</button>
+            <button><Icon mode = {folder} name="philosophy" width = {20} height = {30} alt =" philosophy"/>Philosophy</button>
+            <button><Icon mode = {folder} name="nature" width={20} height={30} alt = "nature"/>Nature</button>
+            <button><Icon mode = {folder} name="science" width={20} height={30} alt = "science"/>Science</button>
         </div>
         <div class="section">
             <h4>More</h4>
-            <button><Icon mode = {mode} name="rules" width={20} height={30} alt="rules"/>Rules</button>
-            <button><Icon mode = {mode} name="github" width={20} height={30} alt="github"/>Github</button>
+            <button><Icon mode = {folder} name="rules" width={20} height={30} alt = "rules"/>Rules</button>
+            <button><Icon mode = {folder} name="github" width={20} height={30} alt = "github"/>Github</button>
         </div>
     </div>
 </div>
