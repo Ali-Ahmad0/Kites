@@ -1,14 +1,16 @@
 <script lang="ts">
-    
+
     import { sidebar_collapsed, toggle_theme, is_dark_mode, Icon } from "$lib";
     import { page } from "$app/state";
     import Tooltip from "$lib/tooltip.svelte";
+	import { goto } from "$app/navigation";
 
     let mode : string = $state("dark_mode_icons");
     let theme_icon : string = $state("dark_mode");
 
     $effect(() => {
         mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
+        theme_icon = $is_dark_mode ? "dark_mode" : "light_mode";
     });
     
     function toggle_sidebar() {
@@ -77,7 +79,7 @@
 
             <div class="icon-wrapper">
                 <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
-                    <img src="profile.jpg" alt="pfp">
+                    <img src="/icons/{mode}/profile.jpg" alt="pfp" class="pfp">
                 </button>       
             </div>
         </Tooltip>
