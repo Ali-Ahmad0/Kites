@@ -8,11 +8,13 @@ datasource db {
 }
 
 model Posts {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  author    String
-  content   String
-  createdAt String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String   @db.ObjectId
+  user      Users     @relation(fields: [userId], references: [id])
 }
 
 model Sessions {
@@ -20,14 +22,15 @@ model Sessions {
   session         String   @unique
   session_created DateTime @db.Date
   session_expires DateTime @db.Date
-  user_id         String   @db.ObjectId
-  user            Users    @relation(fields: [user_id], references: [id]) 
+  /// Multiple data types found: String: 33.3%, String (ObjectId): 66.7% out of 3 sampled entries
+  user_id         Json
 }
 
 model Users {
-  id       String      @id @default(auto()) @map("_id") @db.ObjectId
-  email    String      @unique
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
   password String
-  username String      @unique
-  sessions Sessions[]
+  username String @unique
+
+  Posts Posts[]
 }
