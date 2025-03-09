@@ -1,12 +1,40 @@
 <script lang="ts">
     import { sidebar_collapsed, is_dark_mode, Icon } from "$lib";
-
-     // Reactive variables
+    import { onMount } from 'svelte';
+    
+    // Reactive variables
     let mode: string = $state("dark_mode_icons");
-
+    
     $effect( () => {
         mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     })
+    
+     // Function to check window size and update the store
+     const checkWindowSize = () => {
+        if (typeof window !== 'undefined') {
+            if (window.innerWidth < 1024) {
+                sidebar_collapsed.set(true);
+            } else {
+                sidebar_collapsed.set(false);
+            }
+        }
+    };
+    
+    // Set up event listeners on mount and clean up on destroy
+    onMount(() => {
+        // Initial check
+        checkWindowSize();
+        
+        // Add event listeners
+        window.addEventListener('resize', checkWindowSize);
+        
+        // No need for 'load' event here since we're already mounted
+        
+        // Return cleanup function
+        return () => {
+            window.removeEventListener('resize', checkWindowSize);
+        };
+    });
     
 </script>
 
