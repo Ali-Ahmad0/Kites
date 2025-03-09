@@ -1,7 +1,6 @@
 <script lang="ts">
     
     import { sidebar_collapsed, toggle_theme, is_dark_mode, Icon } from "$lib";
-    import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import Tooltip from "$lib/tooltip.svelte";
 
@@ -10,7 +9,6 @@
 
     $effect(() => {
         mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
-        theme_icon = $is_dark_mode ? "dark_mode" : "light_mode";
     });
     
     function toggle_sidebar() {
@@ -79,7 +77,7 @@
 
             <div class="icon-wrapper">
                 <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
-                    <img src="/icons/{mode}/profile.jpg" alt="pfp">
+                    <img src="profile.jpg" alt="pfp">
                 </button>       
             </div>
         </Tooltip>
@@ -114,6 +112,8 @@
         
         font-size: 1.5rem;
         margin-right: 1rem;
+
+        transition: background-color 0.3s ease;
     }
     
     h2 {
@@ -127,31 +127,38 @@
         display: inline-flex;
         gap: 1.5rem;
         
+        margin-top: 1.2rem;
         padding: 0 1rem;
     }
     
     button {
         cursor: pointer;
-        transition: opacity 0.3s ease;
+        
         background-color: transparent;
         border: none;
     }
 
-    button:hover {
+    .icon {
+        transition: opacity 0.3s ease;
+    }
+
+    .icon:hover {
         opacity: 0.7;
     }
     
     .login-button {
-        padding: 0.55rem 1.5rem;
+        padding: 0.5rem 1.25rem;
+        margin: 0 1rem;
+
         font-size: 1rem;
         
         border: none;
-        border-radius: 1rem;
+        border-radius: 1.5rem;
         
         background-color: var(--color-blue-primary);
         color: var(--color-text-button);
         
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
     }
     
     .login-button:hover {
@@ -160,19 +167,24 @@
     }
 
     .profile {
+        margin: 0 1rem;
+
         background-color: transparent;
         border: none;
     }
 
-    img {
+    .pfp {
         width: 2.5rem;
         height: 2.5rem;
+        
         border-radius: 50%;
-    
+        border: solid 2px;
+        border-color: var(--color-background-secondary);
+
         transition: opacity 0.3s ease;
     }
 
-    img:hover {
+    .pfp:hover {
         opacity: 0.7;
     }
 

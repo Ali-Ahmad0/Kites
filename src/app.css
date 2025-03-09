@@ -18,7 +18,7 @@
 
 .light {
     --color-background-primary: #ffffff;
-    --color-background-secondary: #dae6e6;
+    --color-background-secondary: #edf2f2;
     
     --color-blue-primary: #3b82f8;
     --color-blue-secondary: #4db5ff;
@@ -41,4 +41,15 @@ button {
     cursor: pointer;
 }
 
+@media screen and (max-width: 1024px) {
+    html {
+        font-size: 14px !important; 
+    }
+}
+
+@media screen and (max-width:  768px) {
+    html {
+        font-size: 12px !important;
+    }
+}
 
