@@ -16,16 +16,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         // If session exists, add user_id to locals
         if (session) {
-            // Extract the string ID
-            const userId = session.user_id.$oid;
-            console.log('User ID:', userId);
-
-            // Use the string ID in the Prisma query
             const user = await prisma.users.findUnique({
                 where: {
-                    id: userId
+                    id: session.user_id
                 }
-            })
+            });
+
             // @ts-ignore
             event.locals.user = { id: session.user_id, username: user.username };
             event.locals.authenticated = true;

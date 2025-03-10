@@ -7,30 +7,35 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Posts {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String   @db.ObjectId
-  user      Users     @relation(fields: [userId], references: [id])
+model ForumPosts {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  heading String
+  content String  
+}
+
+model BlogPosts {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  heading String
+  content String
 }
 
 model Sessions {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   session         String   @unique
+  
   session_created DateTime @db.Date
   session_expires DateTime @db.Date
-  /// Multiple data types found: String: 33.3%, String (ObjectId): 66.7% out of 3 sampled entries
-  user_id         Json
+  
+  user_id         String   @db.ObjectId 
+  user            Users    @relation(fields: [user_id], references: [id]) 
 }
 
 model Users {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  email    String @unique
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  email    String   @unique
+  username String   @unique
   password String
-  username String @unique
-
-  Posts Posts[]
+  
+  sessions Sessions[]
 }
