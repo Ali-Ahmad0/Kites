@@ -1,13 +1,12 @@
 <script lang="ts">
-
     import { sidebar_collapsed, toggle_theme, is_dark_mode, Icon, Tooltip } from "$lib";
     import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 
-    let mode : string = $state("dark_mode_icons");
+    let folder: string = $state("dark_mode_icons");
 
     $effect(() => {
-        mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
+        folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
     
     function toggle_sidebar() {
@@ -32,7 +31,7 @@
             <li>
                 <Tooltip text="About US">
                     <button class="icon">
-                        <Icon mode = {mode} name = "about_us" width = 24 height = 24 alt = "about_us"/>
+                        <Icon mode = {folder} name = "about_us" width = 24 height = 24 alt = "about_us"/>
                     </button>
                 </Tooltip>
             </li>
@@ -40,22 +39,23 @@
             <li>
                 <Tooltip text="Notifications">
                       <button class="icon">
-                        <Icon mode = {mode} name = "notification_bell" width=24 height=24 alt = "notification_bell"/>
+                        <Icon mode = {folder} name = "notification_bell" width=24 height=24 alt = "notification_bell"/>
                     </button>        
-                </Tooltip>
-
+                </Tooltip>           
+            </li>
+            <li>
                 <Tooltip text="Change Theme">
-                        <button class="icon" onclick={() => { toggle_theme(); }}><Icon mode={mode} name="toggle_theme" width=24 height=24 alt = "toggle_theme" />
+                    <button class="icon" onclick={() => { toggle_theme(); }}>
+                        <Icon mode={folder} name="toggle_theme" width=24 height=24 alt = "toggle_theme" />
                     </button>
                 </Tooltip>
-           
             </li>
         </ul>
     </nav>
     {#if page.data.authenticated}
         <Tooltip text="Profile">
                 <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
-                    <img src="/icons/{mode}/profile.jpg" alt="pfp" class="pfp">
+                    <img src="/icons/{folder}/profile.jpg" alt="pfp" class="pfp">
                 </button>       
         </Tooltip>
         

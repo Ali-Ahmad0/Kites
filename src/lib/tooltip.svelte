@@ -2,7 +2,7 @@
     import { onDestroy } from 'svelte';
 
     let { children, text } = $props();    
-    let delay = 400;
+    let delay: number = 400;
 
     // Internal state
     let show_tooltip: boolean = $state(false);

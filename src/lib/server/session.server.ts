@@ -1,6 +1,6 @@
 import { prisma } from "$lib/server/prisma.server";
 
-export async function create_session(user_id : string) {
+export async function create_session(user_id: string) {
     const session_id = Math.random().toString(36).substring(2) as string;
 
     await prisma.sessions.create({
@@ -17,7 +17,7 @@ export async function create_session(user_id : string) {
     return session_id;
 }
 
-export async function get_session(session_id : string) {
+export async function get_session(session_id: string) {
     const session = await prisma.sessions.findUnique({
         where: {
             session: session_id
@@ -31,7 +31,7 @@ export async function get_session(session_id : string) {
     return null;
 }
 
-export async function delete_session(session_id : string) {
+export async function delete_session(session_id: string) {
     await prisma.sessions.deleteMany({
         where: {
             session: session_id
