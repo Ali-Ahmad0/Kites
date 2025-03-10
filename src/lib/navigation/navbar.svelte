@@ -55,7 +55,7 @@
     {#if page.data.authenticated}
         <Tooltip text="Profile">
                 <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
-                    <img src="/icons/{folder}/profile.jpg" alt="pfp" class="pfp">
+                    <img src="/profile.jpg" alt="pfp" class="pfp">
                 </button>       
         </Tooltip>
         
@@ -111,11 +111,13 @@
     }
 
     .icon {
-        transition: opacity 0.3s ease;
+        transition: all 0.2s ease;
     }
 
     .icon:hover {
         opacity: 0.7;
+        transform: translateY(-2px);
+        
     }
     
     .login-button {

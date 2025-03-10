@@ -13,23 +13,40 @@
         await fetch('/api/logout', { method: 'POST' });
         window.location.href = '/';
     }
-
 </script>
 
 <div class="container">
     <div class="profile-card">
         <div class="details">
-            <img class="pfp" src="/profile.jpg" alt="pfp">
-            <h2 class="username">{data.params_username}</h2>
-            <h4 class="email-id">{data.params_email_id}</h4>
+            <div class="pfp-container">
+                <img class="pfp" src="/profile.jpg" alt="pfp">
+            </div>
+            <div class="user-info">
+                <h2 class="username">{data.params_username}</h2>
+                <h4 class="email-id">{data.params_email_id}</h4>
+            </div>
         </div>
+        
         {#if data.authenticated && data.user?.username === data.params_username}
+            <div class="divider"></div>
             <div class="buttons">
-                <button class="settings-button">Settings</button>
-                <button class="logout-button" onclick={logout}>Log Out</button>
+                <button class="settings-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Settings
+                </button>
+                <button class="logout-button" onclick={logout}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Log Out
+                </button>
             </div>
         {/if}
-
     </div>
 </div>
 
@@ -38,107 +55,157 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
+        
         margin-top: 2rem;
+        padding: 0 1rem;
     }
 
     .profile-card {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-
-        width: 35vw;
-        max-width: 700px;
-        min-width: 400px;
-
+        
+        width: 100%;
+        max-width: 500px;
+        
         padding: 2rem;
-        height: fit-content;
+        
         background-color: var(--color-background-primary);
-        border: solid 2px;
-        border-color: var(--color-blue-primary);
+        
+        border: solid 1px var(--color-blue-primary);
         border-radius: 1rem;
+
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .details {
-        margin-bottom: 1rem;
-        display: grid;
-        grid-template-areas: 
-            "pfp username"
-            "pfp email-id";
-        grid-template-columns: auto 1fr;
-        grid-row-gap: 0; 
-        grid-column-gap: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        
+        width: 100%;
+    }
 
-        align-items: center; 
+    .pfp-container {
+        position: relative;
+        flex-shrink: 0;
     }
 
     .pfp {
-        grid-area: pfp;
         width: 6rem;
         height: 6rem;
         
         border-radius: 50%;
-        border: solid 3px;
-        border-color: var(--color-background-secondary);
+        border: solid 3px var(--color-blue-primary);
+        
+        object-fit: cover;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
     }
 
     .username {
-        grid-area: username;
-        
         margin: 0;
-        padding-top: 1rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        
+        color: var(--color-text-primary);
     }
 
     .email-id {
-        grid-area: email-id;
-
-        margin: 0;
-        padding-bottom: 1rem;
-
+        margin: 0.5rem 0 0 0;
+        
+        font-size: 1rem;
+        font-weight: 400;
+        
         color: var(--color-text-secondary);
+    }
+
+    .divider {
+        width: 100%;
+        height: 1px;
+        
+        background-color: var(--color-navigation-border);
+        
+        margin: 1.5rem 0;
     }
 
     .buttons {
         display: flex;
         gap: 1rem;
-
         width: 100%;
     }
 
-    .settings-button {
-        padding: 0.55rem 1.5rem;
-        font-size: 1rem;
+    .settings-button, .logout-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
         
-        border: none;
-        border-radius: 1rem;
+        padding: 0.65rem 1.25rem;
+        
+        font-size: 0.95rem;
+        font-weight: 500;
+        
+        border-radius: 0.75rem;
+        
+        cursor: pointer;
+        
+        transition: all 0.2s ease;
+    }
+
+    .settings-button {
+        flex: 1;
         
         background-color: var(--color-blue-primary);
         color: var(--color-text-button);
         
-        transition: background-color 0.3s ease;
+        border: none;
     }
 
     .settings-button:hover {
         background-color: var(--color-blue-secondary);
-        color: var(--color-text-button);
+        transform: translateY(-2px);
+    }
+
+    .settings-button:active {
+        transform: translateY(0);
     }
 
     .logout-button {
-        padding: 0.55rem 1.5rem;
-        font-size: 1rem;
-        
-        border-radius: 1rem;
-        border-color: var(--color-blue-secondary);
+        flex: 1;
         
         background-color: transparent;
         color: var(--color-text-primary);
         
-        transition: all 0.3s ease;
+        border: 1px solid var(--color-navigation-border);
     }
     
     .logout-button:hover {
         border-color: var(--color-blue-primary);
-        color: var(--color-text-secondary);
+        color: var(--color-blue-primary);
+
+        transform: translateY(-2px);
+    }
+
+    .logout-button:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 500px) {
+        .details {
+            flex-direction: column;
+            text-align: center;
+
+            gap: 1rem;
+        }
+
+        .buttons {
+            flex-direction: column;
+        }
     }
 </style>
