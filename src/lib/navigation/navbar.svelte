@@ -1,37 +1,24 @@
 <script lang="ts">
 
-    import { sidebar_collapsed, toggle_theme, is_dark_mode, Icon } from "$lib";
+    import { sidebar_collapsed, toggle_theme, is_dark_mode, Icon, Tooltip } from "$lib";
     import { page } from "$app/state";
-    import Tooltip from "$lib/tooltip.svelte";
 	import { goto } from "$app/navigation";
 
     let mode : string = $state("dark_mode_icons");
-    let theme_icon : string = $state("dark_mode");
 
     $effect(() => {
         mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
-        theme_icon = $is_dark_mode ? "dark_mode" : "light_mode";
     });
     
     function toggle_sidebar() {
         sidebar_collapsed.update((value) => !value);
     }
 
-    // Tooltip customization options
-    const tooltipOptions = {
-        position: "bottom",
-        delay: 400,
-        bgColor: "var(--color-background-secondary)",
-        textColor: "var(--color-text-primary)",
-        borderRadius: "0.5rem"
-    };
-
 </script>
 
 <header>
 
-    <Tooltip text="Sidebar" position="bottom" delay={tooltipOptions.delay} bgColor={tooltipOptions.bgColor} textColor={tooltipOptions.textColor} borderRadius={tooltipOptions.borderRadius}>
-
+    <Tooltip text="Sidebar">
     <div class="icon-wrapper">
         <button onclick={toggle_sidebar} class="sidebar-button">
             ☰
@@ -43,54 +30,37 @@
     <nav>
         <ul class="navbar-links">
             <li>
-                <Tooltip text="About US" position="bottom" delay={tooltipOptions.delay} bgColor={tooltipOptions.bgColor} textColor={tooltipOptions.textColor} borderRadius={tooltipOptions.borderRadius}>
-
-                    <div class="icon-wrapper">
-                        <button>
-                        <Icon mode = {mode} name = "about_us" width = {24} height = {24} alt = "about_us"/>
-                        </button>
-                    </div>
+                <Tooltip text="About US">
+                    <button class="icon">
+                        <Icon mode = {mode} name = "about_us" width = 24 height = 24 alt = "about_us"/>
+                    </button>
                 </Tooltip>
             </li>
 
             <li>
-                <Tooltip text="Notifications" position="bottom" delay={tooltipOptions.delay} bgColor={tooltipOptions.bgColor} textColor={tooltipOptions.textColor} borderRadius={tooltipOptions.borderRadius}>
-
-                    <div class="icon-wrapper">
-                      <button><Icon mode = {mode} name = "notification_bell" width={24} height={24} alt = "notification_bell" /></button>        
-                    </div>
+                <Tooltip text="Notifications">
+                      <button class="icon">
+                        <Icon mode = {mode} name = "notification_bell" width=24 height=24 alt = "notification_bell"/>
+                    </button>        
                 </Tooltip>
-            </li>
 
-            <li>
-                <Tooltip text="Change Theme" position="bottom" delay={tooltipOptions.delay} bgColor={tooltipOptions.bgColor} textColor={tooltipOptions.textColor} borderRadius={tooltipOptions.borderRadius}>
-
-                    <div class="icon-wrapper">
-                        <button onclick={() => { toggle_theme(); }}><Icon mode = {mode} name = {theme_icon} width = {24} height = {24} alt = "light_mode" />
-                        </button>        
-                    </div>
+                <Tooltip text="Change Theme">
+                        <button class="icon" onclick={() => { toggle_theme(); }}><Icon mode={mode} name="toggle_theme" width=24 height=24 alt = "toggle_theme" />
+                    </button>
                 </Tooltip>
            
             </li>
         </ul>
     </nav>
     {#if page.data.authenticated}
-        <Tooltip text="Profile" position="bottom" delay={tooltipOptions.delay} bgColor={tooltipOptions.bgColor} textColor={tooltipOptions.textColor} borderRadius={tooltipOptions.borderRadius}>
-
-            <div class="icon-wrapper">
+        <Tooltip text="Profile">
                 <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
                     <img src="/icons/{mode}/profile.jpg" alt="pfp" class="pfp">
                 </button>       
-            </div>
         </Tooltip>
         
     {:else}
-        <Tooltip text="Login" position="bottom" delay={tooltipOptions.delay} bgColor={tooltipOptions.bgColor} textColor={tooltipOptions.textColor} borderRadius={tooltipOptions.borderRadius}>
-
-            <div class="icon-wrapper">
-                <button onclick={() => goto("/login/signin")} class="login-button">Log In</button>
-            </div>
-        </Tooltip>
+        <button onclick={() => goto("/login/signin")} class="login-button">Log In</button>
     {/if}
 </header>
 
