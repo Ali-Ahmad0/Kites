@@ -5,7 +5,7 @@
     // Reactive variables
     let folder: string = $state("dark_mode_icons");
     
-    $effect( () => {
+    $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     })
     

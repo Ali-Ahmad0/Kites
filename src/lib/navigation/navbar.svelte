@@ -12,7 +12,6 @@
     function toggle_sidebar() {
         sidebar_collapsed.update((value) => !value);
     }
-
 </script>
 
 <header>
@@ -35,7 +34,6 @@
                     </button>
                 </Tooltip>
             </li>
-
             <li>
                 <Tooltip text="Notifications">
                       <button class="icon">
