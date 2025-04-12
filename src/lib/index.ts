@@ -12,4 +12,5 @@ export { default as LoginCard } from "./login/logincard.svelte";
 export { default as Icon } from "./navigation/icon.svelte";
 export { default as Tooltip } from "./navigation/tooltip.svelte";
 
-export { default as Thumbnail } from "./posts/thumbnail.svelte" 
+export { default as Thumbnail } from "./posts/thumbnail.svelte";
+export { default as ForumPost } from "./posts/forum_post.svelte";

@@ -4,6 +4,8 @@
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
 
+    const {heading, username, content, topic} = $props();
+
     // Update folder on dark mode change
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
@@ -14,16 +16,16 @@
     <div class="details">
         <a href="-" class="author">
             <img class="profile-image" src="/profile.jpg" alt="user's profile">
-            <p class="user-name">Username</p>
+            <p class="user-name">{username}</p>
         </a>   
-        <p class="topic">Art</p>
+        <p class="topic">{topic}</p>
     </div>
     
     <div class="post">
-        <h1 class="title">Title</h1>
+        <h1 class="title">{heading}</h1>
         
         <p class="content">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus error, hic eveniet maiores magni veniam? Possimus accusantium eos sunt alias eveniet ratione, molestiae veritatis explicabo nihil. Magni iste totam delectus mollitia numquam repellendus eligendi quod et sapiente, repudiandae quas consectetur quaerat excepturi illo iure, molestias ducimus rerum deserunt vero, vitae nemo eum impedit nobis. Esse quos quas ducimus cupiditate consequuntur consectetur praesentium sunt sed?
+            {content}
         </p>
         
         <img src="/orange.jpeg" alt="" class="post-image">

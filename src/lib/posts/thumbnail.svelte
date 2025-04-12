@@ -2,7 +2,7 @@
     const { post_id, username, topic, heading } = $props();
 </script>
 
-<a href='main/forum_posts/{post_id}'>
+<a href='forum_posts/{post_id}'>
     <div class="post">
         <div class="header">
             <img src="/profile.jpg" alt="pfp" class="pfp">

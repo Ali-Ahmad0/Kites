@@ -18,11 +18,19 @@ export const actions : Actions = {
                 return fail(400, { success: false, message: "User must be signed in"});
             }
 
+            const user = await prisma.users.findUnique({
+                    where: { id:user_id }
+            });
+
+            if (!user) {
+                return fail(400, { success: false, message: "User does not exist"});
+            }
+
             await prisma.forumPosts.create({
                 data: {
                     heading: heading,
                     content: content,
-                    author_id: user_id,
+                    author_name: user.username,
                     topic: "Art",
                     likes: 0
                 }
