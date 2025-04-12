@@ -1,6 +1,30 @@
-import { prisma } from "$lib/server/prisma.server";
+
 import { get_session } from "$lib/server/session.server";
 import { fail, type Actions } from "@sveltejs/kit";
+import { prisma } from "$lib/server/prisma.server";
+import { error } from "@sveltejs/kit";
+
+export async function load({params}:any) {
+    
+    const {topic} = params;
+
+    // if (!(topic in ['Art', 'Science', 'Philosophy', 'Nature'])) {
+    //     throw error(
+    //         404, {
+    //         message:"Topic does not exist"
+    //     })
+    // }
+
+    const posts = await prisma.forumPosts.findMany({
+        where: {
+            topic : topic
+        }
+    })
+
+    return {
+        posts: posts
+    }
+}
 
 export const actions : Actions = {
     create: async({ request, cookies }) => {

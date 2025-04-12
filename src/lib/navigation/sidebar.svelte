@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+    import { page } from "$app/state";
     import { sidebar_collapsed, is_dark_mode, Icon } from "$lib";
     import { onMount } from 'svelte';
     
@@ -41,15 +43,15 @@
 <div class="sidebar" class:collapsed={$sidebar_collapsed}>
     <div class="menu-links">
         <div class="section">
-            <button><Icon mode = {folder} name="home" width = {20} height = {30} alt = "home" />Home Page</button>
-            <button><Icon mode = {folder} name="account" width = {20} height = {30} alt = "account"/>My Account</button>
+            <button onclick={ () => goto("/main/home") }><Icon mode = {folder} name="home" width = {20} height = {30} alt = "home" />Home Page</button>
+            <button onclick={ () => goto(`/main/user/${page.data.user.username}`) }><Icon mode = {folder} name="account" width = {20} height = {30} alt = "account"/>My Account</button>
         </div>
         <div class="section">
             <h4>Topics</h4>
-            <button><Icon mode = {folder} name="art" width = {20} height = {30} alt = "art"/>Art</button>
-            <button><Icon mode = {folder} name="philosophy" width = {20} height = {30} alt =" philosophy"/>Philosophy</button>
-            <button><Icon mode = {folder} name="nature" width={20} height={30} alt = "nature"/>Nature</button>
-            <button><Icon mode = {folder} name="science" width={20} height={30} alt = "science"/>Science</button>
+            <button onclick={ () => goto('/main/forum_posts/Art')}><Icon mode = {folder} name="art" width = {20} height = {30} alt = "art"/>Art</button>
+            <button onclick={ () => goto('/main/forum_posts/Philosophy')}><Icon mode = {folder} name="philosophy" width = {20} height = {30} alt =" philosophy"/>Philosophy</button>
+            <button onclick={ () => goto('/main/forum_posts/Nature')}><Icon mode = {folder} name="nature" width={20} height={30} alt = "nature"/>Nature</button>
+            <button onclick={ () => goto('/main/forum_posts/Science')}><Icon mode = {folder} name="science" width={20} height={30} alt = "science"/>Science</button>
         </div>
         <div class="section">
             <h4>More</h4>

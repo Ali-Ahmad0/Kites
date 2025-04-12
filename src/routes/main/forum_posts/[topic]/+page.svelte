@@ -1,7 +1,8 @@
 <script lang="ts">
+	import Thumbnail from '$lib/posts/thumbnail.svelte';
     import { fade, scale } from 'svelte/transition';
-    
-    let { form } = $props();
+
+    const {data, form} = $props();
     
     // State for modal visibility
     let showModal = $state(false);
@@ -27,6 +28,10 @@
         }
     }
 </script>
+
+{#each data.posts as post }
+    <Thumbnail post_id={post.id} username={post.author_name} topic={post.topic} heading={post.heading} />
+{/each}
 
 <div class="post-container">
     <!-- Add button to open modal -->
