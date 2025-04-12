@@ -4,30 +4,10 @@
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
 
-    // Simulated comment data from DB
-    let comments = $state([
-        {
-            id: 1,
-            author: "Abeha",
-            text: "This is so helpful!",
-        },
-        {
-            id: 2,
-            author: "Ali",
-            text: "Interesting perspective, I like it!",
-        },
-        {
-            id: 3,
-            author: "Zainab",
-            text: "I have a question...",
-        }
-    ]);
-
     // Update folder on dark mode change
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
-
 </script>
 
 <div class="container">
@@ -73,8 +53,7 @@
         </div>
     </div>
 
-
-    <!-- Comments List -->
+    <!-- Comments List
     {#each comments as comment}
         <div class="comment">
             <div class="comment-wrapper">
@@ -88,149 +67,96 @@
                 </div>
             </div>
         </div>
-    {/each}
+    {/each} -->
 </div>
 
 <style>
-    .container{
+    .container {
         display: flex;
         flex-direction: column;
-        width: 78rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 1rem;
     }
 
     .details {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 1rem 0;
     }
 
     .author {
         text-decoration: none;
         display: flex;
         align-items: center;
-        gap: 1.2rem;
+        gap: 0.75rem;
     }
 
     .profile-image {
-        width: 2rem;
-        height: 2rem;
+        width: 2.5rem;
+        height: 2.5rem;
         border-radius: 50%;
-        margin-left: 10rem;
-        margin-top: 1rem;
+        object-fit: cover;
     }
 
     .user-name {
         color: var(--color-text-primary);
-        margin-top: 2.5rem;
+        margin: 0;
+        font-weight: 500;
     }
 
     .topic {
-        margin-left: 33rem;
-        margin-top: 2.5rem;
         color: var(--color-text-primary);
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .post {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .title {
         color: var(--color-text-primary);
-        margin-left: 10rem;
-        margin-top: 1rem;
-    }
-
-    .post-image {
-        width: 30rem;
-        height: 35rem;
-        border-radius: 0.5rem;
-        margin-left: 16rem;
-        margin-top: 2.5rem;
+        margin: 0;
+        font-size: 1.75rem;
     }
 
     .content {
-        margin-left: 10rem;
-        margin-right: 23rem;
-    }
-
-    .comment {
-        max-width: 61.25rem;
-        margin-left: 10rem;
-        margin-right:23rem;
-        margin-top:2rem;
-        font-size: 14px;
-        padding: 0 1.25rem;
-        max-height: 37.5rem;
-        overflow-y: auto;
-        margin-bottom: 1rem;
-        padding-bottom: 1rem;
-
-        border-bottom: 0.0625rem solid var(--color-navigation-border);
-    }
-
-    .comment:last-child {
-        border-bottom: none;
-    }
-
-    .comment-wrapper {
-        display: flex;
-        gap: 1.2rem;
-    }
-
-    .comment-avatar {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
+        color: var(--color-text-primary);
+        line-height: 1.6;
         margin: 0;
     }
 
-    .comment-content {
-        flex: 1;
-    }
-
-    .comment-header {
-        margin-bottom: 0.25rem;
-        display: flex;
-        align-items: center;
-        gap: 1.2rem;
-        flex-wrap: wrap;
-    }
-
-    .comment-author {
-        font-weight: 500;
-        margin-top: 0.4rem;
-        color: var(--color-text-primary);
-    }
-
-    .comment-time {
-        color: var(--color-text-secondary);
-        font-size: 0.75rem;
-        margin-top: 0.3rem;
-    }
-
-    .comment-text {
-        margin-bottom: 0.5rem;
-        margin-top: 1rem;
-        color: var(--color-text-primary);
-        line-height: 1.5;
+    .post-image {
+        width: 100%;
+        max-height: 500px;
+        border-radius: 0.5rem;
+        object-fit: contain;
+        align-self: center;
     }
 
     .engagement {
         display: flex;
         gap: 0.75rem;
-        margin-top: 1rem;
+        margin: 1rem 0;
     }
     
     .engagement-btn {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-     
         padding: 0.5rem 1rem;
         border-radius: 2rem;
         background: transparent;
-        border-color: transparent;
-     
+        border: none;
         color: var(--color-text-secondary);
-     
         font-size: 0.85rem;
         font-weight: 500;
         cursor: pointer;
-     
         transition: all 0.2s ease;
     }
     
@@ -246,5 +172,66 @@
         color: #10b981;
     }
 
-    
+    /* .comment {
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-navigation-border);
+    }
+
+    .comment:last-child {
+        border-bottom: none;
+    }
+
+    .comment-wrapper {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .comment-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .comment-content {
+        flex: 1;
+    }
+
+    .comment-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .comment-author {
+        font-weight: 500;
+        color: var(--color-text-primary);
+    }
+
+    .comment-time {
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+    }
+
+    .comment-text {
+        color: var(--color-text-primary);
+        line-height: 1.5;
+        margin: 0;
+    } */
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 0.5rem;
+        }
+        
+        .post-image {
+            max-height: 350px;
+        }
+        
+        .engagement {
+            flex-wrap: wrap;
+        }
+    }
 </style>
