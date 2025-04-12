@@ -31,7 +31,7 @@
 </script>
 
 <div class="tooltip-container" onmouseenter={handle_mouse_enter} onmouseleave={handle_mouse_leave} onfocusin={handle_mouse_enter} role="presentation">
-     {@render children()}
+    {@render children()}
 
     {#if show_tooltip && text}
         <div class="tooltip" role="tooltip" bind:this={tooltip_element}>

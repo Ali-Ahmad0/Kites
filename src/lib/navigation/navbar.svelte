@@ -101,14 +101,10 @@
         padding: 0 1rem;
     }
     
-    button {
+    .icon {
         cursor: pointer;
-        
         background-color: transparent;
         border: none;
-    }
-
-    .icon {
         transition: all 0.2s ease;
     }
 
