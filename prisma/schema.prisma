@@ -11,10 +11,10 @@ model ForumPosts {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   heading String
   content String 
-  author_id String   @db.ObjectId
+  author_name String  
   topic String
   likes Int
-  user      Users    @relation(fields: [author_id], references: [id])
+  user      Users    @relation(fields: [author_name], references: [username])
 }
 
 model BlogPosts {
