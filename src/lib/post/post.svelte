@@ -4,40 +4,22 @@
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
 
-    // Post like/dislike states
-    let liked_post = $state(false);
-    let disliked_post = $state(false);
-    let post_like_count = $state(0);
-    let post_dislike_count = $state(0);
-
     // Simulated comment data from DB
     let comments = $state([
         {
             id: 1,
             author: "Abeha",
             text: "This is so helpful!",
-            liked: false,
-            disliked: false,
-            like_count: 3,
-            dislike_count: 0
         },
         {
             id: 2,
             author: "Ali",
             text: "Interesting perspective, I like it!",
-            liked: false,
-            disliked: false,
-            like_count: 1,
-            dislike_count: 1
         },
         {
             id: 3,
             author: "Zainab",
             text: "I have a question...",
-            liked: false,
-            disliked: false,
-            like_count: 0,
-            dislike_count: 0
         }
     ]);
 
@@ -46,63 +28,6 @@
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
 
-    // Toggle like for post
-    function toggleLikePost() {
-        liked_post = !liked_post;
-        if (liked_post) {
-            post_like_count++;
-            if (disliked_post) {
-                post_dislike_count--;
-                disliked_post = false;
-            }
-        } else {
-            post_like_count--;
-        }
-    }
-
-    // Toggle dislike for post
-    function toggleDislikePost() {
-        disliked_post = !disliked_post;
-        if (disliked_post) {
-            post_dislike_count++;
-            if (liked_post) {
-                post_like_count--;
-                liked_post = false;
-            }
-        } else {
-            post_dislike_count--;
-        }
-    }
-
-    // Toggle like for comment
-    function toggleLikeComment(index: number) {
-        let comment = comments[index];
-        if (!comment.liked) {
-            comment.like_count++;
-            if (comment.disliked) {
-                comment.dislike_count--;
-                comment.disliked = false;
-            }
-        } else {
-            comment.like_count--;
-        }
-        comment.liked = !comment.liked;
-    }
-
-    // Toggle dislike for comment
-    function toggleDislikeComment(index: number) {
-        let comment = comments[index];
-        if (!comment.disliked) {
-            comment.dislike_count++;
-            if (comment.liked) {
-                comment.like_count--;
-                comment.liked = false;
-            }
-        } else {
-            comment.dislike_count--;
-        }
-        comment.disliked = !comment.disliked;
-    }
 </script>
 
 <div class="container">
@@ -122,43 +47,35 @@
         </p>
         
         <img src="/orange.jpeg" alt="" class="post-image">
-    </div>
-    <div class="post-reactions">
-        <div class="post-reaction">
-            <button class="icon" onclick={toggleLikePost}>
-                <Icon mode={folder} name={liked_post ? "/thumb_up_filled" : "/thumb_up"} width={24} height={24} alt="like"/> 
-                <p class="count">{post_like_count}</p>
+        <div class="engagement">
+            <button class="engagement-btn like-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span>Like</span>
             </button>
-        </div>
-
-        <div class="dislike">
-            <button class="icon" onclick={toggleDislikePost}>
-                <Icon mode={folder} name={disliked_post ? "/thumb_down_filled" : "/thumb_down"} width={24} height={24} alt="dislike"/>
-                <span class="count">{post_dislike_count}</span>
+            <button class="engagement-btn comment-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+                <span>Comment</span>
             </button>
-        </div>
-
-        <div class="comment">
-            <button class="icon">
-                <Icon mode={folder} name="comment" width={24} height={24} alt="comment"/>
-            </button>
-        </div>
-
-        <div class="share">
-            <button class="icon">
-                <Icon mode={folder} name="share" width={24} height={24} alt="share"/>
+            <button class="engagement-btn share-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+                <span>Share</span>
             </button>
         </div>
     </div>
 
-    <!-- Main comment input -->
-    <div class="comment-input-container">
-        <input type="text" placeholder="Add a comment" class="comment-input">
-        <button class="comment-button">Comment</button>
-    </div>
 
     <!-- Comments List -->
-    {#each comments as comment, index}
+    {#each comments as comment}
         <div class="comment">
             <div class="comment-wrapper">
                 <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
@@ -175,14 +92,13 @@
 </div>
 
 <style>
-
     .container{
         display: flex;
         flex-direction: column;
         width: 78rem;
     }
 
-    .details{
+    .details {
         display: flex;
     }
 
@@ -229,61 +145,6 @@
     .content {
         margin-left: 10rem;
         margin-right: 23rem;
-    }
-
-    .post-reactions {
-        display: flex;
-        gap: 2rem;
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-        margin-left: 16rem;
-    }
-
-    .icon {
-        transition: all 0.2s ease;
-        cursor: pointer;
-        background-color: transparent;
-        border: none;
-    }
-
-    .icon:hover {
-        opacity: 0.7;
-        transform: translateY(-0.125rem);
-    }
-
-    .comment-input-container {
-        width: 31rem;
-        height: 3.5rem;
-        margin-left: 15.5rem;
-        display: flex;
-    }
-
-    .comment-input {
-        width: 40rem;
-        height: 2.5rem;
-        background-color: var(--color-background-primary);
-        border: 0.0625rem solid var(--color-navigation-border);
-        border-radius: 1.25rem;
-        color: var(--color-text-primary);
-        padding: 0 0.9375rem;
-        font-size: 0.875rem;
-        outline: none;
-    }
-
-    .comment-button{
-        background-color: var(--color-blue-primary);
-        color: var(--color-text-button);
-        border: none;
-        border-radius: 5rem;
-        width: 9rem;
-        height: 2.5rem;
-        margin-left:1rem;
-        transition: all 0.3s ease;
-    }
-
-    .comment-button:hover{
-        background-color: var(--color-blue-secondary);
-        color: var(--color-text-button);
     }
 
     .comment {
@@ -348,30 +209,41 @@
         line-height: 1.5;
     }
 
-    .comment-actions {
+    .engagement {
         display: flex;
-        color: var(--color-text-secondary);
-        font-size: 0.75rem;
-        gap: 2rem;
+        gap: 0.75rem;
+        margin-top: 1rem;
     }
-
-    .comment-reaction{
+    
+    .engagement-btn {
         display: flex;
-        gap: 0.6rem;
-        margin-top: 0.5rem;
+        align-items: center;
+        gap: 0.5rem;
+     
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
         background: transparent;
-        border: none;
-        background-color: var(--color-background-primary);
+        border-color: transparent;
+     
+        color: var(--color-text-secondary);
+     
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+     
         transition: all 0.2s ease;
     }
-
-    .comment-reaction:hover{
-        opacity: 0.7;
-        transform: translateY(-0.125rem);
+    
+    .like-btn:hover {
+        color: #f43f5e;
     }
-
-    .count{
-        color: var(--color-text-primary);
+    
+    .comment-btn:hover {
+        color: #3b82f6;
+    }
+    
+    .share-btn:hover {
+        color: #10b981;
     }
 
     
