@@ -10,7 +10,11 @@ datasource db {
 model ForumPosts {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   heading String
-  content String  
+  content String 
+  author_id String   @db.ObjectId
+  topic String
+  likes Int
+  user      Users    @relation(fields: [author_id], references: [id])
 }
 
 model BlogPosts {
@@ -38,4 +42,5 @@ model Users {
   password String
   
   sessions Sessions[]
+  forum_posts ForumPosts[]
 }
