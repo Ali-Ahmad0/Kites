@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { Icon, Tooltip, is_dark_mode } from "$lib";
+    import { is_dark_mode } from "$lib";
 
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
 
-    const {heading, username, content, topic} = $props();
+    const { heading, username, content, topic } = $props();
 
     // Update folder on dark mode change
     $effect(() => {

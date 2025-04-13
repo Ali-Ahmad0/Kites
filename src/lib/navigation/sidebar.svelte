@@ -12,7 +12,7 @@
     })
     
      // Function to check window size and update the store
-     const checkWindowSize = () => {
+     const check_window_size = () => {
         if (typeof window !== 'undefined') {
             if (window.innerWidth < 1024) {
                 sidebar_collapsed.set(true);
@@ -21,20 +21,28 @@
             }
         }
     };
+
+    function goto_account() {
+        if (page.data.user === undefined) {
+            goto('/login/signin');
+        }
+
+        goto(`/user/${page.data.user.username}`);
+    }
     
     // Set up event listeners on mount and clean up on destroy
     onMount(() => {
         // Initial check
-        checkWindowSize();
+        check_window_size();
         
         // Add event listeners
-        window.addEventListener('resize', checkWindowSize);
+        window.addEventListener('resize', check_window_size);
         
         // No need for 'load' event here since we're already mounted
         
         // Return cleanup function
         return () => {
-            window.removeEventListener('resize', checkWindowSize);
+            window.removeEventListener('resize', check_window_size);
         };
     });
     
@@ -43,20 +51,44 @@
 <div class="sidebar" class:collapsed={$sidebar_collapsed}>
     <div class="menu-links">
         <div class="section">
-            <button onclick={ () => goto("/main/home") }><Icon mode = {folder} name="home" width = {20} height = {30} alt = "home" />Home Page</button>
-            <button onclick={ () => goto(`/main/user/${page.data.user.username}`) }><Icon mode = {folder} name="account" width = {20} height = {30} alt = "account"/>My Account</button>
+            <button onclick={() => goto("/main/home")}>
+                <Icon mode = {folder} name="home" width = {20} height = {30} alt = "home" />
+                Home Page
+            </button>
+            <button onclick={goto_account}>
+                <Icon mode = {folder} name="account" width = {20} height = {30} alt = "account"/>
+                My Account
+            </button>
         </div>
         <div class="section">
             <h4>Topics</h4>
-            <button onclick={ () => goto('/main/forum_posts/Art')}><Icon mode = {folder} name="art" width = {20} height = {30} alt = "art"/>Art</button>
-            <button onclick={ () => goto('/main/forum_posts/Philosophy')}><Icon mode = {folder} name="philosophy" width = {20} height = {30} alt =" philosophy"/>Philosophy</button>
-            <button onclick={ () => goto('/main/forum_posts/Nature')}><Icon mode = {folder} name="nature" width={20} height={30} alt = "nature"/>Nature</button>
-            <button onclick={ () => goto('/main/forum_posts/Science')}><Icon mode = {folder} name="science" width={20} height={30} alt = "science"/>Science</button>
+            <button onclick={() => goto('/main/forum_posts/Art')}>
+                <Icon mode = {folder} name="art" width = {20} height = {30} alt = "art"/>
+                Art
+            </button>
+            <button onclick={() => goto('/main/forum_posts/Philosophy')}>
+                <Icon mode = {folder} name="philosophy" width = {20} height = {30} alt =" philosophy"/>
+                Philosophy
+            </button>
+            <button onclick={() => goto('/main/forum_posts/Nature')}>
+                <Icon mode = {folder} name="nature" width={20} height={30} alt = "nature"/>
+                Nature
+            </button>
+            <button onclick={() => goto('/main/forum_posts/Science')}>
+                <Icon mode = {folder} name="science" width={20} height={30} alt = "science"/>
+                Science
+            </button>
         </div>
         <div class="section">
             <h4>More</h4>
-            <button><Icon mode = {folder} name="rules" width={20} height={30} alt = "rules"/>Rules</button>
-            <button><Icon mode = {folder} name="github" width={20} height={30} alt = "github"/>Github</button>
+            <button>
+                <Icon mode = {folder} name="rules" width={20} height={30} alt = "rules"/>
+                Rules
+            </button>
+            <button>
+                <Icon mode = {folder} name="github" width={20} height={30} alt = "github"/>
+                Github
+            </button>
         </div>
     </div>
 </div>
