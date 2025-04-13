@@ -3,6 +3,8 @@ import { get_session } from "$lib/server/session.server";
 import { fail, type Actions } from "@sveltejs/kit";
 import { prisma } from "$lib/server/prisma.server";
 import { error } from "@sveltejs/kit";
+import fs from 'fs/promises';
+
 
 export async function load({params}:any) {
     
@@ -30,9 +32,12 @@ export const actions : Actions = {
     create: async({ request, cookies }) => {
         try {
             const data = await request.formData();
+            // let imagePath = null;
             
             const heading = data.get('heading') as string;
-            const content = data.get('content') as string
+            const content = data.get('content') as string;
+            // const imageFile = data.get('image') as File;
+
 
             const session_id = cookies.get('session') as string;
             const session_data = await get_session(session_id);
@@ -50,6 +55,18 @@ export const actions : Actions = {
                 return fail(400, { success: false, message: "User does not exist"});
             }
 
+            // if (!heading || !content) {
+            //     return fail(400, { missing: true , message: "Provide heading and content"});
+            // }
+
+            // if (imageFile && imageFile.size > 0) {
+            //     const buffer = Buffer.from(await imageFile.arrayBuffer());
+            //     const filename = `${Date.now()}-${imageFile.name}`;
+            //     const uploadPath = path.join('static/uploads', filename);
+            //     await fs.writeFile(uploadPath, buffer);
+            //     imagePath = `/uploads/${filename}`;
+            // }
+
             await prisma.forumPosts.create({
                 data: {
                     heading: heading,
@@ -59,6 +76,8 @@ export const actions : Actions = {
                     likes: 0
                 }
             })
+
+            // await prisma
    
         } catch (error) {
             return fail(500, { success: false, message: "Internal server error" });
