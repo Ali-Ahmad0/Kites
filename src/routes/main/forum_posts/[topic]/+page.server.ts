@@ -6,31 +6,30 @@ import { error } from "@sveltejs/kit";
 import fs from 'fs/promises';
 
 
-export async function load({params}:any) {
+export async function load({ params }: any) {
     
-    const {topic} = params;
+    const { topic } = params;
 
-    // if (!(topic in ['Art', 'Science', 'Philosophy', 'Nature'])) {
-    //     throw error(
-    //         404, {
-    //         message:"Topic does not exist"
-    //     })
-    // }
-
-    const posts = await prisma.forumPosts.findMany({
-        where: {
-            topic : topic
-        }
-    })
-
-    return {
-        posts: posts
+    // Check for valid topic
+    if (!['Art', 'Science', 'Philosophy', 'Nature'].includes(topic)) {
+        throw error(
+            404, {
+            message: "Topic does not exist"
+        })
     }
+
+    // Return posts of that topic
+    const posts = await prisma.forumPosts.findMany({
+        where: { topic: topic }
+    });
+
+    return { posts: posts }
 }
 
 export const actions : Actions = {
     create: async({ request, cookies }) => {
         try {
+            // Get form data
             const data = await request.formData();
             // let imagePath = null;
             
@@ -39,20 +38,28 @@ export const actions : Actions = {
             // const imageFile = data.get('image') as File;
 
 
+            // Check if user is signed in
             const session_id = cookies.get('session') as string;
             const session_data = await get_session(session_id);
             const user_id = session_data?.user_id;
 
             if (user_id === undefined) {
-                return fail(400, { success: false, message: "User must be signed in"});
+                return fail(400, { 
+                    success: false, 
+                    message: "User must be signed in"
+                });
             }
 
+            // Find user
             const user = await prisma.users.findUnique({
-                    where: { id:user_id }
+                where: { id:user_id }
             });
 
             if (!user) {
-                return fail(400, { success: false, message: "User does not exist"});
+                return fail(400, { 
+                    success: false,
+                    message: "User does not exist"
+                });
             }
 
             // if (!heading || !content) {
@@ -72,7 +79,7 @@ export const actions : Actions = {
                     heading: heading,
                     content: content,
                     author_name: user.username,
-                    topic: "Art",
+                    topic: topic,
                     likes: 0
                 }
             })
@@ -80,9 +87,7 @@ export const actions : Actions = {
             // await prisma
    
         } catch (error) {
-            return fail(500, { success: false, message: "Internal server error" });
+            return fail(500, { error: true, message: "Internal server error" });
         }
-        
-
     }
 }

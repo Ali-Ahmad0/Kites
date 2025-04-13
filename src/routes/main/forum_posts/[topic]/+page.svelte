@@ -1,19 +1,21 @@
 <script lang="ts">
-	import Thumbnail from '$lib/posts/thumbnail.svelte';
+	import { Thumbnail } from '$lib';
     import { fade, scale } from 'svelte/transition';
+    import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 
-    const {data, form} = $props();
+    const { data, form } = $props();
     
     // State for modal visibility
     let showModal = $state(false);
     
     // Toggle modal visibility
-    function toggleModal() {
+    function toggle_modal() {
         showModal = !showModal;
     }
     
     // Close modal when clicking outside
-    function handleOutsideClick(event: MouseEvent) {
+    function handle_outside_click(event: MouseEvent) {
         const target = event.target as HTMLElement;
         if (target.classList.contains('modal-backdrop')) {
             showModal = false;
@@ -21,7 +23,7 @@
     }
     
     // Keyboard event handler for modal backdrop
-    function handleBackdropKeydown(event: KeyboardEvent) {
+    function handle_backdrop_keydown(event: KeyboardEvent) {
         // Close modal on Escape key
         if (event.key === 'Escape') {
             showModal = false;
@@ -37,7 +39,7 @@
     <!-- Add button to open modal -->
     <button 
         class="add-button" 
-        onclick={toggleModal}
+        onclick={toggle_modal}
         aria-label="Add new post"
     >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -48,11 +50,10 @@
     
     <!-- Modal backdrop and content -->
     {#if showModal}
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <div 
             class="modal-backdrop" 
-            onclick={handleOutsideClick}
-            onkeydown={handleBackdropKeydown}
+            onclick={handle_outside_click}
+            onkeydown={handle_backdrop_keydown}
             tabindex="-1"
             role="dialog"
             aria-modal="true"
@@ -63,7 +64,7 @@
                     <h2>Create New Post</h2>
                     <button 
                         class="close-button" 
-                        onclick={toggleModal}
+                        onclick={toggle_modal}
                         aria-label="Close modal"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -74,10 +75,30 @@
                 </div>
                 
                 <div class="modal-body">
-                    <form method="POST" action="?/create" enctype="multipart/form-data">
+                    <form use:enhance={( {} ) => {
+                        return async ({ result, update }) => {
+                            // Redirect to signin
+                            if (result.type === "failure") {
+                                goto('/login/signin');
+                            }
+    
+                            await update();
+                        };
+                    }} method="POST" action="?/create">
                         <div class="form-group">
                             <label for="heading">Heading</label>
                             <input type="text" id="heading" name="heading" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="topic">Topic</label>
+                            <select id="topic" name="topic" required>
+                                <option value="" disabled selected>Select a topic</option>
+                                <option value="Art">Art</option>
+                                <option value="Philosophy">Philosophy</option>
+                                <option value="Nature">Nature</option>
+                                <option value="Science">Science</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
@@ -94,7 +115,7 @@
                             <button 
                                 type="button" 
                                 class="cancel" 
-                                onclick={toggleModal}
+                                onclick={toggle_modal}
                             >
                                 Cancel
                             </button>
@@ -114,23 +135,29 @@
     
     .add-button {
         position: fixed;
+        
         bottom: 2rem;
         right: 2rem;
+        
         width: 3.5rem;
         height: 3.5rem;
         border-radius: 50%;
+        
         background-color: var(--color-blue-primary);
         color: white;
+        
         border: none;
         display: flex;
         align-items: center;
         justify-content: center;
+        
         cursor: pointer;
+        
         transition: transform 0.2s, background-color 0.2s;
     }
     
     .add-button:hover {
-        transform: scale(1.05);
+        transform: scale(1.075);
         background-color: var(--color-blue-secondary)
     }
     
@@ -138,21 +165,28 @@
         position: fixed;
         top: 0;
         left: 0;
+        
         width: 100%;
         height: 100%;
+        
         background-color: rgba(0, 0, 0, 0.5);
+        
         display: flex;
         align-items: center;
         justify-content: center;
+        
         z-index: 100;
     }
     
     .modal-content {
         background-color: var(--color-background-secondary);
         border-radius: 1.5rem;
+        
         width: 90%;
+        
         max-width: 500px;
         max-height: 90vh;
+        
         overflow-y: auto;
     }
     
@@ -160,6 +194,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        
         padding: 1rem;
     }
     
@@ -171,10 +206,13 @@
     .close-button {
         background: none;
         border: none;
+        
         cursor: pointer;
         color: var(--color-text-primary);
+        
         padding: 0.25rem;
         border-radius: 0.25rem;
+        
         transition: color 0.2s;
     }
     
@@ -193,19 +231,38 @@
     .form-group label {
         display: block;
         margin-bottom: 0.5rem;
-        font-weight: 500;
     }
     
     .form-group input,
     .form-group textarea {
         width: 95%;
-        padding: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        
+        color: var(--color-text-secondary);
+        background-color: var(--color-background-primary);
+        
+        border-radius: 0.25rem;
+        border-color: var(--color-blue-secondary);
+        
+        font-family: inherit;
+        font-size: 1rem;
+    }
+
+        .form-group select {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
         color: var(--color-text-secondary);
         background-color: var(--color-background-primary);
         border-radius: 0.25rem;
         border-color: var(--color-blue-secondary);
         font-family: inherit;
         font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--color-blue-primary);
     }
 
     .form-group textarea {
@@ -216,37 +273,38 @@
     
     .form-actions {
         display: flex;
+        
         justify-content: flex-end;
         gap: 0.75rem;
+        
         margin-top: 1.5rem;
+        margin-bottom: 1rem;
     }
     
-    button.cancel {
-        background-color: var(--color-blue-primary);
+    button.cancel, button.confirm {
         color: white;
+
         border: none;
-        padding: 0.75rem 1.25rem;
         border-radius: 0.25rem;
+
+        padding: 0.6rem 1.25rem;
         cursor: pointer;
-        font-weight: 500;
+
         transition: background-color 0.2s;
+    }
+
+    button.cancel {
+        background-color: var(--color-red-primary);
+    }
+
+    button.confirm {
+        background-color: var(--color-blue-primary);
     }
     
     button.cancel:hover {
-        background-color: var(--color-blue-secondary);
+        background-color: var(--color-red-secondary);
     }
-    
-    button.confirm {
-        background-color: var(--color-blue-primary);
-        color: white;
-        border: none;
-        padding: 0.75rem 1.25rem;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        font-weight: 500;
-        transition: background-color 0.2s;
-    }
-    
+      
     button.confirm:hover {
         background-color: var(--color-blue-secondary);
     }

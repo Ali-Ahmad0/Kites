@@ -8,13 +8,13 @@ datasource db {
 }
 
 model ForumPosts {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  heading String
-  content String 
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  heading     String
+  content     String 
   author_name String  
-  topic String
-  likes Int
-  user      Users    @relation(fields: [author_name], references: [username])
+  topic       String
+  likes       Int
+  user        Users    @relation(fields: [author_name], references: [username])
 }
 
 model BlogPosts {
@@ -36,12 +36,12 @@ model Sessions {
 
 
 model Users {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   
-  email    String   @unique
-  username String   @unique
-  password String
+  email       String   @unique
+  username    String   @unique
+  password    String
   
-  sessions Sessions[]
+  sessions    Sessions[]
   forum_posts ForumPosts[]
 }
