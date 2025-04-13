@@ -35,12 +35,12 @@ model Sessions {
 }
 
 model Users {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   
-  email    String   @unique
-  username String   @unique
-  password String
+  email       String   @unique
+  username    String   @unique
+  password    String
   
-  sessions Sessions[]
+  sessions    Sessions[]
   forum_posts ForumPosts[]
 }
