@@ -8,5 +8,5 @@ const global_prisma = globalThis as unknown as { prisma: PrismaClient };
 export const prisma = global_prisma.prisma || new PrismaClient();
 
 if (env.NODE_ENV !== 'production') {
-  global_prisma.prisma = prisma;
+    global_prisma.prisma = prisma;
 }

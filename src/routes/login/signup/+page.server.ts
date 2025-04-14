@@ -77,6 +77,7 @@ export const actions = {
                 where: {
                     email : email
                 },
+                select: { id: true }
             });
 
             if (email_exists) {
@@ -92,6 +93,7 @@ export const actions = {
                 where: {
                     username: username
                 },
+                select: { id: true }
             });
 
             if (username_exists) {
@@ -117,6 +119,7 @@ export const actions = {
                 where: {
                     username: username
                 },
+                select: { id: true }
             });
 
             if (!user) {

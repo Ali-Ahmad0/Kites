@@ -1,19 +1,43 @@
 import { prisma } from '$lib/server/prisma.server';
 
-export const load = async () => {
-  try {
-    const posts = await prisma.forumPosts.findMany({
-      take: 10, 
-    });
+export async function load({ locals }) {
+    try {
+      // Fetch posts from all topics
+      const posts = await prisma.forumPosts.findMany({});
 
-    return {
-      posts: posts
-    };
-  } 
-  catch (error) {
-    console.error("[KITES | ERROR]: Failed to fetch posts: ", error);
-    return {
-      posts: [] 
-    };
-  }
+      // Check user like status for posts
+      let like_status = [];
+
+      const user = locals.user;
+      for (const post of posts) {
+          if (user) {
+              const user_liked = await prisma.userLikes.findUnique({
+                  where: {
+                      user_id_post_id: {
+                          user_id: user.id,
+                          post_id: post.id
+                      }
+                  },
+                  select: { id: true }
+              });
+
+              like_status.push(user_liked !== null)
+          } else {
+              like_status.push(false);
+          }
+      }
+
+      return {
+          posts: posts.map((post, index) => ({
+              ...post,
+              user_liked: like_status[index] // Attach like status directly to each post
+          }))
+      };
+    } 
+    catch (error) {
+        console.error("[KITES | ERROR]: Failed to fetch posts: ", error);
+        return {
+            posts: [] 
+        };
+    }
 };

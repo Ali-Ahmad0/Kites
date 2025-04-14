@@ -8,7 +8,8 @@ export async function load({ params } : any) {
     const user = await prisma.users.findUnique({
         where: {
             username: username
-        }
+        },
+        select: { email: true }
     })
     
     // Throw a 404 error if the user does not exist

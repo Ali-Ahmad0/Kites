@@ -19,6 +19,9 @@ export const handle: Handle = async ({ event, resolve }) => {
             const user = await prisma.users.findUnique({
                 where: {
                     id: session.user_id
+                },
+                select: {
+                    id: true, username: true
                 }
             });
 

@@ -9,12 +9,16 @@ datasource db {
 
 model ForumPosts {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  
   heading     String
   content     String 
-  author_name String  
   topic       String
   likes       Int
-  user        Users    @relation(fields: [author_name], references: [username])
+
+  author_name String  
+
+  user        Users    @relation(fields: [author_name], references: [username])  
+  user_likes  UserLikes[]
 }
 
 model BlogPosts {
@@ -43,4 +47,17 @@ model Users {
   
   sessions    Sessions[]
   forum_posts ForumPosts[]
+  user_likes  UserLikes[]
+}
+
+model UserLikes {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  user_id String  @db.ObjectId
+  post_id String  @db.ObjectId
+
+  user    Users   @relation(fields: [user_id], references: [id])
+  post    ForumPosts @relation(fields: [post_id], references: [id])
+
+  @@unique([user_id, post_id])
 }
