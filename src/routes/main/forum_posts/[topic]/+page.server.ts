@@ -2,8 +2,6 @@
 import { fail, type Actions } from "@sveltejs/kit";
 import { prisma } from "$lib/server/prisma.server";
 import { error } from "@sveltejs/kit";
-import fs from 'fs/promises';
-
 
 export async function load({ locals, params }: any) {
     try {
@@ -65,12 +63,10 @@ export const actions : Actions = {
         try {
             // Get form data
             const data = await request.formData();
-            // let imagePath = null;
             
             const heading = data.get('heading') as string;
             const content = data.get('content') as string;
-            // const imageFile = data.get('image') as File;
-
+            const topic = data.get('topic') as string;
 
             // Check if user is signed in
             const user = locals.user;
@@ -82,18 +78,7 @@ export const actions : Actions = {
                 });
             }
 
-            // if (!heading || !content) {
-            //     return fail(400, { missing: true , message: "Provide heading and content"});
-            // }
-
-            // if (imageFile && imageFile.size > 0) {
-            //     const buffer = Buffer.from(await imageFile.arrayBuffer());
-            //     const filename = `${Date.now()}-${imageFile.name}`;
-            //     const uploadPath = path.join('static/uploads', filename);
-            //     await fs.writeFile(uploadPath, buffer);
-            //     imagePath = `/uploads/${filename}`;
-            // }
-
+            // Create a new post
             await prisma.forumPosts.create({
                 data: {
                     heading: heading,
@@ -102,9 +87,9 @@ export const actions : Actions = {
                     topic: topic,
                     likes: 0
                 }
-            })
+            });
 
-            // await prisma
+            return { success: true, message: "Post created successfully" };
    
         } catch (error) {
             return fail(500, { error: true, message: "Internal server error" });

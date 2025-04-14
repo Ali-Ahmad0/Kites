@@ -33,8 +33,7 @@
 
 {#each data.posts as post }
     <Thumbnail post_id={post.id} user_liked={post.user_liked} 
-    username={post.author_name} topic={post.topic} heading={post.heading} 
-    />
+    username={post.author_name} topic={post.topic} heading={post.heading} />
 {/each}
 
 <div class="post-container">
@@ -107,11 +106,6 @@
                             <label for="content">Content</label>
                             <textarea id="content" name="content" rows="5" required></textarea>
                         </div>
-
-                        <!-- <div class="form-group">
-                            <label for="image">Image</label>
-                            <input type="file" id="image" name="image">
-                        </div> -->
                         
                         <div class="form-actions">
                             <button 
@@ -270,8 +264,6 @@
     .form-group textarea {
         resize: none;
     }
-
-    .form-group 
     
     .form-actions {
         display: flex;
