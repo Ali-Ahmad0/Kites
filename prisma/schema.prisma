@@ -38,6 +38,7 @@ model Sessions {
   user            Users    @relation(fields: [user_id], references: [id]) 
 }
 
+
 model Users {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   

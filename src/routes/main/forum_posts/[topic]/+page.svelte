@@ -107,6 +107,11 @@
                             <label for="content">Content</label>
                             <textarea id="content" name="content" rows="5" required></textarea>
                         </div>
+
+                        <!-- <div class="form-group">
+                            <label for="image">Image</label>
+                            <input type="file" id="image" name="image">
+                        </div> -->
                         
                         <div class="form-actions">
                             <button 
@@ -265,6 +270,8 @@
     .form-group textarea {
         resize: none;
     }
+
+    .form-group 
     
     .form-actions {
         display: flex;
