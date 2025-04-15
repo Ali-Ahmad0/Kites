@@ -47,7 +47,7 @@
         position: sticky;
         top: 4rem;
         z-index: 1;
-        width: 12rem;
+        width: 11.5rem;
         transition: width 0.3s ease;
     }
     
@@ -59,6 +59,5 @@
         grid-area: content;
         overflow-y: auto;
         padding: 1rem;
-        transition: margin-left 0.3s ease;
     }
 </style>
