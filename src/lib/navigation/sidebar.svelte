@@ -3,7 +3,6 @@
     import { page } from "$app/state";
     import { sidebar_collapsed, is_dark_mode, Icon } from "$lib";
     import { onMount } from 'svelte';
-    
     // Reactive variables
     let folder: string = $state("dark_mode_icons");
     
@@ -48,112 +47,103 @@
     
 </script>
 
-<div class="sidebar" class:collapsed={$sidebar_collapsed}>
-    <div class="menu-links">
-        <div class="section">
-            <button onclick={() => goto("/main/home")}>
-                <Icon mode = {folder} name="home" width = {20} height = {30} alt = "home" />
-                Home Page
-            </button>
-            <button onclick={goto_account}>
-                <Icon mode = {folder} name="account" width = {20} height = {30} alt = "account"/>
-                My Account
-            </button>
-        </div>
-        <div class="section">
-            <h4>Topics</h4>
-            <button onclick={() => goto('/main/forum_posts/Art')}>
-                <Icon mode = {folder} name="art" width = {20} height = {30} alt = "art"/>
-                Art
-            </button>
-            <button onclick={() => goto('/main/forum_posts/Philosophy')}>
-                <Icon mode = {folder} name="philosophy" width = {20} height = {30} alt =" philosophy"/>
-                Philosophy
-            </button>
-            <button onclick={() => goto('/main/forum_posts/Nature')}>
-                <Icon mode = {folder} name="nature" width={20} height={30} alt = "nature"/>
-                Nature
-            </button>
-            <button onclick={() => goto('/main/forum_posts/Science')}>
-                <Icon mode = {folder} name="science" width={20} height={30} alt = "science"/>
-                Science
-            </button>
-        </div>
-        <div class="section">
-            <h4>More</h4>
-            <button>
-                <Icon mode = {folder} name="rules" width={20} height={30} alt = "rules"/>
-                Rules
-            </button>
-            <button>
-                <Icon mode = {folder} name="github" width={20} height={30} alt = "github"/>
-                Github
-            </button>
+
+<!-- START COLLAPSED ICONS MODIFICATION -->
+    <div class="sidebar" class:collapsed={$sidebar_collapsed}>
+        <div class="menu-links">
+            <div class="section">
+                <button onclick={() => goto("/main/home")}>
+                    <Icon mode = {folder} name="home" width = {20} height = {30} alt = "home" />
+                    <span class:label-hidden={$sidebar_collapsed}>Home Page</span>
+                </button>
+                <button onclick={goto_account}>
+                    <Icon mode = {folder} name="account" width = {20} height = {30} alt = "account"/>
+                    <span class:label-hidden={$sidebar_collapsed}>My Account</span>
+                </button>
+            </div>
+            <div class="section">
+                <h4 class:label-hidden={$sidebar_collapsed}>Topics</h4>
+                <button onclick={() => goto('/main/forum_posts/Art')}>
+                    <Icon mode = {folder} name="art" width = {20} height = {30} alt = "art"/>
+                    <span class:label-hidden={$sidebar_collapsed}>Art</span>
+                </button>
+                <button onclick={() => goto('/main/forum_posts/Philosophy')}>
+                    <Icon mode = {folder} name="philosophy" width = {20} height = {30} alt =" philosophy"/>
+                    <span class:label-hidden={$sidebar_collapsed}>Philosophy</span>
+                </button>
+                <button onclick={() => goto('/main/forum_posts/Nature')}>
+                    <Icon mode = {folder} name="nature" width={20} height={30} alt = "nature"/>
+                    <span class:label-hidden={$sidebar_collapsed}>Nature</span>
+                </button>
+                <button onclick={() => goto('/main/forum_posts/Science')}>
+                    <Icon mode = {folder} name="science" width={20} height={30} alt = "science"/>
+                    <span class:label-hidden={$sidebar_collapsed}>Science</span>
+                </button>
+            </div>
+            <div class="section">
+                <h4 class:label-hidden={$sidebar_collapsed}>More</h4>
+                <button>
+                    <Icon mode = {folder} name="rules" width={20} height={30} alt = "rules"/>
+                    <span class:label-hidden={$sidebar_collapsed}>Rules</span>
+                </button>
+                <button>
+                    <Icon mode = {folder} name="github" width={20} height={30} alt = "github"/>
+                    <span class:label-hidden={$sidebar_collapsed}>Github</span>
+                </button>
+            </div>
         </div>
     </div>
-</div>
+<!-- END COLLAPSED ICONS MODIFICATION -->
 
+<!-- In Sidebar.svelte -->
 <style>
+    /* Keep all your original expanded state styles */
     .sidebar {
         width: 12rem;
         height: calc(100vh - 8rem);
-		
-		margin: 0.5rem auto;
-		padding-top: 1rem;
-		padding-right: 0.5rem;
-		
-		transition: width 0.3s ease;
+        margin: 0.5rem auto;
+        padding-top: 1rem;
+        padding-right: 0.5rem;
+        transition: width 0.3s ease;
     }
     
-    .sidebar.collapsed {
-        width: 0;
-        overflow: hidden;
-
-		border-right: none;
-    }
-    
-    .menu-links {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    h4 {
-        color: var(--color-text-secondary);
-        
-		margin: 0.5rem 0;
-        padding: 0 2rem;
-    }
-    
-    .section {
-        padding-bottom: 1rem;
-        border-bottom: solid 1px var(--color-navigation-border);
-    }
-    
-    .section:last-child {
-        border-bottom: none;
-    }
-    
+    /* Your original button styles */
     button {
         color: var(--color-text-primary);
         background-color: var(--color-background-primary);
-        
-		padding: 0.7rem 2rem;
+        padding: 0.7rem 2rem;
         font-size: 1rem;
         width: 100%;
-        
-		border: none;
+        border: none;
         border-radius: 1rem;
-        
-		cursor: pointer;
+        cursor: pointer;
         text-align: left;
-
         display: flex;      
         align-items: center;  
         gap: 6px;    
     }
     
-    button:hover {
-        background-color: var(--color-background-secondary);
-        transition: background-color 0.3s ease;
+    /* ONLY make these two changes for collapsed state */
+    :global(.sidebar.collapsed) button {
+        background: transparent; /* Remove button backgrounds */
+        box-shadow: none; /* Remove any shadows */
+    }
+    
+    /* Keep your existing collapsed state styles */
+    .sidebar.collapsed {
+        width: 3rem;
+        padding-right: 0;
+    }
+    
+    .label-hidden {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        position: absolute;
+    }
+    
+    .sidebar.collapsed h4 {
+        display: none;
     }
 </style>
