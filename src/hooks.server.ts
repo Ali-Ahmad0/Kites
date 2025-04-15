@@ -1,5 +1,5 @@
-import { get_session } from "$lib";
-import { prisma } from "$lib";
+import { get_session } from "$lib/server/session.server";
+import { prisma } from "$lib/server/prisma.server";
 
 import { redirect } from "@sveltejs/kit";
 import type { Handle } from "@sveltejs/kit";

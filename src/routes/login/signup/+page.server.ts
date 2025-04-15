@@ -1,8 +1,8 @@
 import type { Actions } from './$types';
 import { fail } from "@sveltejs/kit";
 import { hash } from '$lib'
-import { create_session } from "$lib";
-import { prisma } from "$lib";
+import { create_session } from "$lib/server/session.server";
+import { prisma } from "$lib/server/prisma.server";
 import { dev } from "$app/environment";
 
 export const actions = {
