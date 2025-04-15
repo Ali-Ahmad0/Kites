@@ -1,9 +1,9 @@
 import type { Actions } from "./$types";
 import bcrypt from "bcryptjs";
 import { fail } from "@sveltejs/kit";
-import { create_session } from "$lib/server/session.server";
+import { create_session } from "$lib";
+import { prisma }from "$lib";
 import { dev } from "$app/environment";
-import { prisma }from "$lib/server/prisma.server";
 
 export const actions : Actions = {
     login: async ({ request, cookies }) => {

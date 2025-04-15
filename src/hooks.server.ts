@@ -1,6 +1,7 @@
-import { get_session } from "$lib/server/session.server";
+import { get_session } from "$lib";
+import { prisma } from "$lib";
+
 import { redirect } from "@sveltejs/kit";
-import { prisma } from "$lib/server/prisma.server";
 import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {

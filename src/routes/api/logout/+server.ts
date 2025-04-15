@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { delete_session } from '$lib/server/session.server';
+import { delete_session } from '$lib';
 
 export async function POST({ cookies }) {
     try {

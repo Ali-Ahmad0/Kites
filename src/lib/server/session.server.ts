@@ -1,4 +1,4 @@
-import { prisma } from "$lib/server/prisma.server";
+import { prisma } from "$lib";
 
 export async function create_session(user_id: string) {
     const session_id = Math.random().toString(36).substring(2) as string;

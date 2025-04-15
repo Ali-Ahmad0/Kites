@@ -2,6 +2,9 @@ export * from "./helper/stores";
 export * from "./helper/stores";
 export * from "./toggle/theme";
 
+export * from "./server/prisma.server"
+export * from "./server/session.server"
+
 export { hash } from "./helper/hash";
 
 export { default as Navbar } from "./navigation/navbar.svelte";
