@@ -16,9 +16,22 @@ model ForumPosts {
   likes       Int
 
   author_name String  
-
   user        Users    @relation(fields: [author_name], references: [username])  
+  
   user_likes  UserLikes[]
+  forum_post_comments ForumPostComments[] 
+}
+
+model ForumPostComments {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  post_id     String  @db.ObjectId
+  
+  comment     String  
+  author_name String 
+
+  post        ForumPosts  @relation(fields: [post_id], references: [id])
+  user        Users       @relation(fields: [author_name], references: [username])
+
 }
 
 model BlogPosts {
@@ -49,6 +62,8 @@ model Users {
   sessions    Sessions[]
   forum_posts ForumPosts[]
   user_likes  UserLikes[]
+  
+  forum_post_comments ForumPostComments[]
 }
 
 model UserLikes {
@@ -57,8 +72,8 @@ model UserLikes {
   user_id String  @db.ObjectId
   post_id String  @db.ObjectId
 
-  user    Users   @relation(fields: [user_id], references: [id])
-  post    ForumPosts @relation(fields: [post_id], references: [id])
+  user    Users       @relation(fields: [user_id], references: [id])
+  post    ForumPosts  @relation(fields: [post_id], references: [id])
 
   @@unique([user_id, post_id])
 }

@@ -5,6 +5,6 @@
 </script>
 
 {#each data.posts as post }
-    <Thumbnail post_id={post.id} username={post.author_name} topic={post.topic} heading={post.heading} />
+    <Thumbnail post_id={post.id} username={post.author_name} topic={post.topic} heading={post.heading} user_liked={post.user_liked} />
 {/each}
 

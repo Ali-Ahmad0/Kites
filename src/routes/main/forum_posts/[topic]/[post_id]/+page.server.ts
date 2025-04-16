@@ -37,6 +37,13 @@ export async function load({ locals, params }: any) {
             user_liked_bool = user_liked !== null;
         }
 
+        // Fetch any comments on the post
+        const comments = await prisma.forumPostComments.findMany({
+            where: { post_id: post.id }
+        });
+
+        console.log(comments);
+
         return {
             // Data regarding the post
             post_id: post.id,
@@ -46,7 +53,9 @@ export async function load({ locals, params }: any) {
             heading: post.heading,
             content: post.content,
         
-            user_liked: user_liked_bool
+            user_liked: user_liked_bool,
+
+            comments: comments
         }
     }
 

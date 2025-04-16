@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-    import { is_dark_mode } from "$lib";
-	import { error } from "@sveltejs/kit";
-	
+    import { is_dark_mode } from "$lib";	
     import { Engagement } from "$lib";
 
     const { 
         post_id, user_liked,
-        heading, username, content, topic 
+        heading, username, content, topic,
+        comments
     } = $props();
 
     // Dynamic icon folder based on dark mode
@@ -40,21 +38,19 @@
         <Engagement post_id={post_id} user_liked={user_liked} />
     </div>
 
-    <!-- Comments List
-    {#each comments as comment}
+    {#each comments as comment_data}
         <div class="comment">
             <div class="comment-wrapper">
                 <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
                 <div class="comment-content">
                     <div class="comment-header">
-                        <span class="comment-author">{comment.author}</span>
-                        <span class="comment-time"> • 2d ago</span>
+                        <span class="comment-author">{comment_data.author_name}</span>
                     </div>
-                    <div class="comment-text">{comment.text}</div>
+                    <div class="comment-text">{comment_data.comment}</div>
                 </div>
             </div>
         </div>
-    {/each} -->
+    {/each}
 </div>
 
 <style>
@@ -104,6 +100,8 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+
+        border-bottom: 1px solid var(--color-navigation-border);
     }
 
     .title {
@@ -126,7 +124,7 @@
         align-self: center;
     }
 
-    /* .comment {
+    .comment {
         padding: 1rem 0;
         border-bottom: 1px solid var(--color-navigation-border);
     }
@@ -163,16 +161,11 @@
         color: var(--color-text-primary);
     }
 
-    .comment-time {
-        color: var(--color-text-secondary);
-        font-size: 0.75rem;
-    }
-
     .comment-text {
         color: var(--color-text-primary);
         line-height: 1.5;
         margin: 0;
-    } */
+    }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
