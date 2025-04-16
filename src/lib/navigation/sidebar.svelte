@@ -27,7 +27,7 @@
             goto('/login/signin');
         }
 
-        goto(`main/user/${page.data.user.username}`);
+        goto(`/main/user/${page.data.user.username}`);
     }
     
     onMount(() => {
