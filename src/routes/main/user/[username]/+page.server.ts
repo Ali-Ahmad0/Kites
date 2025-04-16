@@ -1,6 +1,7 @@
 import { prisma } from '$lib/server/prisma.server';
 import { error } from '@sveltejs/kit';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function load({ params } : any) {
     // Access username from route parameters
     const { username } = params;
