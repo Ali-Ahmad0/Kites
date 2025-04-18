@@ -5,7 +5,7 @@ import { create_session } from "$lib/server/session.server";
 import { prisma } from "$lib/server/prisma.server";
 import { dev } from "$app/environment";
 
-export const actions = {
+export const actions : Actions = {
     signup: async ({ request, cookies }) => {
         try {
             const data = await request.formData();

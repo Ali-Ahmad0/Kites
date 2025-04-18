@@ -26,7 +26,6 @@ export const handle: Handle = async ({ event, resolve }) => {
                 }
             });
 
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             event.locals.user = { id: session.user_id, username: user.username };
             event.locals.authenticated = true;

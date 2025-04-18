@@ -1,4 +1,4 @@
-import { fail, redirect as svelteRedirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma.server';
 import bcrypt from 'bcryptjs';
@@ -60,11 +60,12 @@ export const actions: Actions = {
             data: { username }
         });
     
-        throw svelteRedirect(303, '/user/settings');
+        throw redirect(303, '/user/settings');
     },
 
     changePassword: async ({ request, locals }) => {
-        if (!locals.user) throw svelteRedirect(303, '/login');
+        if (!locals.user) 
+            throw redirect(303, '/login');
         
         const formData = await request.formData();
         const currentPassword = formData.get('currentPassword')?.toString();
@@ -114,6 +115,6 @@ export const actions: Actions = {
             }
         });
         
-        throw svelteRedirect(303, '/user/settings');
+        throw redirect(303, '/user/settings');
     }
 };
