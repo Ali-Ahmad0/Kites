@@ -21,7 +21,7 @@ export async function POST({ request, locals }) {
                 comment: data.comment,
                 author_name: user.username
             }
-        })
+        });
 
         return json({ success: true });
     } catch (e) {

@@ -72,7 +72,7 @@ export const actions : Actions = {
             const user = locals.user;
 
             if (!user) {
-                return fail(400, { 
+                return fail(401, { 
                     success: false, 
                     message: "User must be signed in"
                 });

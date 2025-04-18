@@ -15,3 +15,4 @@ export { default as Tooltip } from "./navigation/tooltip.svelte";
 export { default as Thumbnail } from "./posts/forum/thumbnail.svelte";
 export { default as ForumPost } from "./posts/forum/post.svelte";
 export { default as Engagement } from "./posts/forum/engagement.svelte";
+export { default as CreatePost } from "./posts/forum/create.svelte"; 

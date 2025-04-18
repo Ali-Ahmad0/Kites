@@ -42,8 +42,6 @@ export async function load({ locals, params }: any) {
             where: { post_id: post.id }
         });
 
-        console.log(comments);
-
         return {
             // Data regarding the post
             post_id: post.id,

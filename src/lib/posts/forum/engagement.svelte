@@ -17,7 +17,7 @@
             liked = !liked;
 
             // Send API request to like/unlike post
-            const response = await fetch('/api/like_post', {
+            const response = await fetch('/api/forum/like', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -66,12 +66,13 @@
     }
 
     async function submit_comment() {
-        if (!comment_text.trim()) return;
+        if (!comment_text.trim()) 
+            return;
         
         try {
             is_submitting = true;
             
-            const response = await fetch('/api/comment', {
+            const response = await fetch('/api/forum/comment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -140,11 +141,7 @@
         <div class="modal-content" transition:scale={{ start: 0.95, duration: 200 }}>
             <div class="modal-header">
                 <h2>Add Comment</h2>
-                <button 
-                    class="close-button" 
-                    onclick={toggle_modal}
-                    aria-label="Close modal"
-                >
+                <button class="close-button" onclick={toggle_modal} aria-label="Close modal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -154,27 +151,16 @@
             
             <div class="modal-body">
                 <div class="form-group">
-                    <textarea 
-                        id="comment" 
-                        bind:value={comment_text} 
-                        rows="5" 
-                        placeholder="Write your comment here..."
-                        required
-                    ></textarea>
+                    <textarea id="comment" bind:value={comment_text} rows="5" placeholder="Write your comment here..."required>
+                    </textarea>
                 </div>
                 
                 <div class="form-actions">
-                    <button 
-                        type="button" 
-                        class="cancel" 
-                        onclick={toggle_modal}
-                    >
+                    <button type="button" class="cancel" onclick={toggle_modal}>
                         Cancel
                     </button>
                     <button 
-                        type="button" 
-                        class="confirm" 
-                        onclick={submit_comment}
+                        type="button" class="confirm" onclick={submit_comment} 
                         disabled={!comment_text.trim() || is_submitting}
                     >
                         {is_submitting ? 'Posting...' : 'Post Comment'}
