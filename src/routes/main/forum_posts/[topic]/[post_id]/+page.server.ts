@@ -45,31 +45,29 @@ export async function load({ locals, params }: any) {
         const image = await prisma.forumImages.findFirst({
             where: { post_id: post_id },
             select: {
-            binary_blob: true,
-            mime_type: true
+                binary_blob: true,
+                mime_type: true
             }
         });
         
-        let dataUrl = null;
+        let data_url = null;
         if (image) {
             // Convert Prisma Bytes (Buffer) to base64
             const base64 = Buffer.from(image.binary_blob).toString('base64');
-            dataUrl = `data:${image.mime_type};base64,${base64}`;
-            console.log("Image found and converted to data URL");
-        } else {
-            console.log("No image found for this post");
+            data_url = `data:${image.mime_type};base64,${base64}`;
         }
-
-        console.log("Post data returned successfully");
+        
         return {
             post_id: post.id,
             heading: post.heading,
             content: post.content,
             author: post.author_name,
             topic: post.topic,
-            image: dataUrl,
-            comments: comments,
-            user_liked: user_liked_bool
+            
+            image: data_url,
+
+            user_liked: user_liked_bool,            
+            comments: comments
         }
     } catch (e) {
         throw error(500,`Database error: ${e}`);

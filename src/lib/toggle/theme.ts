@@ -9,7 +9,6 @@ export function toggle_theme(): void {
         } else {
             document.documentElement.classList.remove("light");
         }
-        console.log("Theme toggled:", !value); // Debug log
         return !value;
     });
 }

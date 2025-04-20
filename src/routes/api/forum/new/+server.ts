@@ -14,8 +14,7 @@ export async function POST({ request, locals }) {
             );
         }
         
-        const imageFile = data.get('image') as File;
-        console.log(imageFile.size);
+        const image_file = data.get('image') as File;
         let file_name: string | null = null;
         let mime_type: string | null = null;
         let size: number | null = null;
@@ -31,13 +30,13 @@ export async function POST({ request, locals }) {
         });
 
           // create the image if there was one
-        if (imageFile && imageFile.size > 0) {
-            file_name = imageFile.name;
-            mime_type = imageFile.type;
-            size = imageFile.size;
+        if (image_file && image_file.size > 0) {
+            file_name = image_file.name;
+            mime_type = image_file.type;
+            size = image_file.size;
         
-            const arrayBuffer = await imageFile.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer); 
+            const array_buffer = await image_file.arrayBuffer();
+            const buffer = Buffer.from(array_buffer); 
         
             await prisma.forumImages.create({
                 data: {
