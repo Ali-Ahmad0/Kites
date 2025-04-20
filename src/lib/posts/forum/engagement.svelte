@@ -96,7 +96,7 @@
             comment_text = "";
             show_modal = false;
         } catch (e) {
-            console.error('Error submitting comment:', e);
+            console.error('[KITES | ERROR]: Error submitting comment:', e);
         } finally {
             is_submitting = false;
         }

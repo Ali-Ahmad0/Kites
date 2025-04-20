@@ -7,19 +7,66 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ForumPosts {
+model Users {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  email       String   @unique
+  username    String   @unique
+  password    String
+  
+  sessions    Sessions[]
+  forum_posts ForumPosts[]
+  user_likes  UserLikes[]
+  
+  forum_post_comments ForumPostComments[]
+}
+
+model Sessions {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  session         String   @unique
+  
+  session_created DateTime @db.Date
+  session_expires DateTime @db.Date
+  
+  user_id         String   @db.ObjectId 
+  user            Users    @relation(fields: [user_id], references: [id]) 
+}
+
+model Otp {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  email         String
+  code          String
+  code_expires  DateTime @db.Date
+  used          Boolean  @default(false)
+
+  @@index([email])
+}
+
+model ForumPosts {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   
   heading     String
   content     String 
   topic       String
-  likes       Int
+  likes       Int     @default(0)
 
   author_name String  
-  user        Users    @relation(fields: [author_name], references: [username])  
+  user        Users   @relation(fields: [author_name], references: [username])  
   
   user_likes  UserLikes[]
   forum_post_comments ForumPostComments[] 
+}
+
+model UserLikes {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  user_id String  @db.ObjectId
+  post_id String  @db.ObjectId
+
+  user    Users       @relation(fields: [user_id], references: [id])
+  post    ForumPosts  @relation(fields: [post_id], references: [id])
+
+  @@unique([user_id, post_id])
 }
 
 model ForumPostComments {
@@ -38,42 +85,4 @@ model BlogPosts {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   heading String
   content String
-}
-
-model Sessions {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  session         String   @unique
-  
-  session_created DateTime @db.Date
-  session_expires DateTime @db.Date
-  
-  user_id         String   @db.ObjectId 
-  user            Users    @relation(fields: [user_id], references: [id]) 
-}
-
-
-model Users {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  
-  email       String   @unique
-  username    String   @unique
-  password    String
-  
-  sessions    Sessions[]
-  forum_posts ForumPosts[]
-  user_likes  UserLikes[]
-  
-  forum_post_comments ForumPostComments[]
-}
-
-model UserLikes {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-
-  user_id String  @db.ObjectId
-  post_id String  @db.ObjectId
-
-  user    Users       @relation(fields: [user_id], references: [id])
-  post    ForumPosts  @relation(fields: [post_id], references: [id])
-
-  @@unique([user_id, post_id])
 }

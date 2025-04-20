@@ -1,18 +1,20 @@
 import type { Actions } from './$types';
 import { fail } from "@sveltejs/kit";
 import { hash } from '$lib'
-import { create_session } from "$lib/server/session.server";
 import { prisma } from "$lib/server/prisma.server";
 import { dev } from "$app/environment";
+import { generate_otp } from '$lib/server/otp.server';
 
 export const actions : Actions = {
     signup: async ({ request, cookies }) => {
         try {
             const data = await request.formData();
+            
             const username = data.get('name') as string;
             const email = data.get('email') as string;
             const password = data.get('password') as string;
             const confirm = data.get('confirm_password') as string;
+            
             const username_regex = /^[a-zA-Z0-9_-]+$/;
 
             // check if the username contains spaces
@@ -104,39 +106,37 @@ export const actions : Actions = {
                 });
             }
 
-            // Store new user in database
             const hashed_password = await hash(password);
-            await prisma.users.create({
-                data: {
-                    username: username,
-                    email: email,
-                    password: hashed_password
-                }
-            })
-            
-            // Get user to create session
-            const user = await prisma.users.findUnique({
-                where: {
-                    username: username
-                },
-                select: { id: true }
-            });
 
-            if (!user) {
-                return fail(500, { success: false, message: "User not found after signup" });
-            }
-
-            // Create session
-            const session_id = await create_session(user.id.toString());
-            cookies.set("session", session_id, { 
+            // Store OTP verification data in cookies
+            cookies.set("otp_username", username, { 
                 path: "/",
                 httpOnly: true,
                 sameSite: "strict",
                 secure: !dev,
-                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+                maxAge: 15 * 60 * 1000 // 15 minutes
             });
 
-            return { success: true, message: "Signup successful" };
+            cookies.set("otp_password", hashed_password, { 
+                path: "/",
+                httpOnly: true,
+                sameSite: "strict",
+                secure: !dev,
+                maxAge: 15 * 60 * 1000 // 15 minutes
+            });
+
+            cookies.set("otp_email", email, {
+                path: "/",
+                httpOnly: true,
+                sameSite: "strict",
+                secure: !dev,
+                maxAge: 15 * 60 * 1000 // 15 minutes
+            });
+
+            const otp = await generate_otp(email);
+            console.log(otp);
+            
+            return { success: true, message: "Sending OTP..." };
         } catch (error) {
             return fail(500, { success: false, message: "Internal server error" });
         }
