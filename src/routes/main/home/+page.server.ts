@@ -52,7 +52,11 @@ export async function load( { locals } ) {
 
             // Get author pfp for the post
             const author_pfp = await prisma.userImages.findUnique({
-                where: { username: post.author_name }
+                where: { username: post.author_name },
+                select: {
+                    binary_blob: true,
+                    mime_type: true
+                }
             });
 
             let author_pfp_url = null;

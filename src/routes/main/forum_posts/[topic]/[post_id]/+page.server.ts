@@ -42,6 +42,30 @@ export async function load({ locals, params }: any) {
             where: { post_id: post.id }
         });
 
+        let comment_author_pfps = [];
+        for (const comment of comments) {
+            const comment_author_pfp = await prisma.userImages.findUnique({
+                where: { username: comment.author_name },
+                select: {
+                    binary_blob: true,
+                    mime_type: true
+                }
+            });
+
+            let comment_author_pfp_url = null;
+            if (comment_author_pfp) {
+                const base64 = Buffer.from(comment_author_pfp.binary_blob).toString('base64');
+                comment_author_pfp_url = `data:${comment_author_pfp.mime_type};base64,${base64}`;
+            }
+
+            comment_author_pfps.push(comment_author_pfp_url);
+        }
+
+        const comments_with_pfps = comments.map((comment, index) => ({
+            ...comment,
+            author_pfp: comment_author_pfps[index]
+        }));
+
         const image = await prisma.forumImages.findUnique({
             where: { post_id: post_id },
             select: {
@@ -77,7 +101,7 @@ export async function load({ locals, params }: any) {
             image: image_url,
 
             user_liked: user_liked_bool,            
-            comments: comments
+            comments: comments_with_pfps
         }
     } catch (e) {
         throw error(500,`Database error: ${e}`);

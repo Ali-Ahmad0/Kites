@@ -44,7 +44,11 @@
     {#each comments as comment_data}
         <div class="comment">
             <div class="comment-wrapper">
-                <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
+                {#if comment_data.author_pfp}
+                    <img class="comment-avatar" src={comment_data.author_pfp} alt="avatar" />
+                {:else}
+                    <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
+                {/if}
                 <div class="comment-content">
                     <div class="comment-header">
                         <span class="comment-author">{comment_data.author_name}</span>
