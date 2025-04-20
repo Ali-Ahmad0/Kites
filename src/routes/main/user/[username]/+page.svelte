@@ -28,7 +28,7 @@
             });
 
             if(response.status === 200){
-                window.location.href = `main/user/${data.params_username}`;
+                window.location.href = `/main/user/${data.params_username}`;
             }
 
         } catch(e) {
@@ -50,8 +50,8 @@
     <div class="profile-card">
         <div class="details">
             <div class="pfp-container">
-                {#if data.pfp}
-                    <img src={data.pfp} alt="pfp" class="pfp">
+                {#if data.my_pfp}
+                    <img src={data.my_pfp} alt="pfp" class="pfp">
                 {:else}
                     <img class="pfp" src="/profile.jpg" alt="pfp">
                 {/if}

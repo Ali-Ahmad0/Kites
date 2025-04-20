@@ -18,38 +18,37 @@ export async function load({ params, locals }: any) {
             where: { topic: topic }
         });
     
-        // Get all post IDs
-        const postIds = posts.map(post => post.id);
-    
-        // Fetch images for those post IDs
-        const images = await prisma.forumImages.findMany({
-            where: { post_id: { in: postIds } },
-            select: {
-                post_id: true,
-                binary_blob: true,
-                mime_type: true
+       
+        const posts_with_images = await Promise.all(
+            posts.map(async (post) => {
+                const image = await prisma.forumImages.findUnique({
+                    where: { post_id: post.id },
+                    select: {
+                      binary_blob: true,
+                      mime_type: true,
+                    },
+              });
+
+            let image_url = null;
+            if (image) {
+                const base64 = Buffer.from(image.binary_blob).toString('base64');
+                image_url = `data:${image.mime_type};base64,${base64}`;
             }
-        });
-    
-        // Create a mapping from post ID → dataURL
-        const imageMap: Record<string, string> = {};
-        for (const img of images) {
-            const base64 = Buffer.from(img.binary_blob).toString('base64');
-            const dataUrl = `data:${img.mime_type};base64,${base64}`;
-            imageMap[img.post_id] = dataUrl;
-        }
-        
-        // Attach image URLs to the posts
-        const posts_with_images = posts.map(post => ({
-            ...post,
-            imageUrl: imageMap[post.id] || null
-        }));
+
+            return {
+                ...post,
+                image_url: image_url, // Attach image to post
+            };
+          })
+        );
 
         // Check user like status for posts
         let like_status = [];
+        let author_pfps = [];
     
         const user = locals.user;
         for (const post of posts) {
+            // Check like status for current user
             if (user) {
                 const user_liked = await prisma.userLikes.findUnique({
                     where: {
@@ -65,11 +64,25 @@ export async function load({ params, locals }: any) {
             } else {
                 like_status.push(false);
             }
+
+            // Get author pfp for the post
+            const author_pfp = await prisma.userImages.findUnique({
+                where: { username: post.author_name }
+            });
+
+            let author_pfp_url = null;
+            if (author_pfp) {
+                const base64 = Buffer.from(author_pfp.binary_blob).toString('base64');
+                author_pfp_url = `data:${author_pfp.mime_type};base64,${base64}`;
+            }
+
+            author_pfps.push(author_pfp_url);
         }
     
         return {
             posts: posts_with_images.map((post, index) => ({
                 ...post,
+                author_pfp: author_pfps[index], // Attatch pfp of author
                 user_liked: like_status[index] // Attach like status directly to each post
             }))
         };

@@ -8,7 +8,7 @@
 
 <div class="layout" class:collapsed={$sidebar_collapsed}>
     <div class="navbar">
-        <Navbar image={data.pfp} />
+        <Navbar image={data.my_pfp} />
     </div>
     <div class="sidebar">
         <Sidebar />

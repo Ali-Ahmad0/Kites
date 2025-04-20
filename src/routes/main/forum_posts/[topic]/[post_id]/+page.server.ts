@@ -49,12 +49,21 @@ export async function load({ locals, params }: any) {
                 mime_type: true
             }
         });
-        
-        let data_url = null;
+
+        let image_url = null;
         if (image) {
-            // Convert Prisma Bytes (Buffer) to base64
             const base64 = Buffer.from(image.binary_blob).toString('base64');
-            data_url = `data:${image.mime_type};base64,${base64}`;
+            image_url = `data:${image.mime_type};base64,${base64}`;
+        }
+
+        const author_pfp = await prisma.userImages.findUnique({
+            where: { username: post.author_name }
+        })
+
+        let author_pfp_url = null;
+        if (author_pfp) {
+            const base64 = Buffer.from(author_pfp.binary_blob).toString('base64');
+            author_pfp_url = `data:${author_pfp.mime_type};base64,${base64}`;
         }
         
         return {
@@ -64,7 +73,8 @@ export async function load({ locals, params }: any) {
             author: post.author_name,
             topic: post.topic,
             
-            image: data_url,
+            author_pfp: author_pfp_url,
+            image: image_url,
 
             user_liked: user_liked_bool,            
             comments: comments

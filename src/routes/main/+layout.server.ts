@@ -7,7 +7,7 @@ export const load = async ({ locals }: RequestEvent) => {
     
     if (locals.user && locals.authenticated) {
         const image = await prisma.userImages.findUnique({
-            where: { user_id: locals.user.id },
+            where: { username: locals.user.username },
             select: {
                 binary_blob: true,
                 mime_type: true
@@ -22,6 +22,6 @@ export const load = async ({ locals }: RequestEvent) => {
     }
   
     return {
-        pfp: data_url
+        my_pfp: data_url
     };
 };

@@ -58,8 +58,8 @@ model UserImages {
   mime_type     String
   size          Int
   binary_blob   Bytes
-  user_id       String @db.ObjectId @unique
-  user          Users  @relation(fields: [user_id], references: [id]) 
+  username      String @unique
+  user          Users  @relation(fields: [username], references: [username]) 
 }
 
 model ForumPosts {

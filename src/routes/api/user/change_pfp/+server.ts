@@ -30,7 +30,7 @@ export async function POST({ request, locals }) {
         
             // Check if user has pfp
             const pfp_exists = await prisma.userImages.findUnique({
-                where: { user_id: user.id },
+                where: { username: user.username },
                 select: { id: true }
             });
 
@@ -42,7 +42,7 @@ export async function POST({ request, locals }) {
                         mime_type: mime_type ?? undefined,
                         size: size ?? undefined,
                         binary_blob: buffer,
-                        user_id: user.id
+                        username: user.username
                     }
                 });
             }
@@ -50,13 +50,13 @@ export async function POST({ request, locals }) {
             // Update existing pfp
             else {
                 await prisma.userImages.update({
-                    where: { user_id: user.id },
+                    where: { username: user.username },
                     data: {
                         file_name: file_name,
                         mime_type: mime_type ?? undefined,
                         size: size ?? undefined,
                         binary_blob: buffer,
-                        user_id: user.id
+                        username: user.username
                     }
                 });
             }
