@@ -17,7 +17,7 @@ model Users {
   sessions    Sessions[]
   forum_posts ForumPosts[]
   user_likes  UserLikes[]
-  
+  profile_picture UserImages[]
   forum_post_comments ForumPostComments[]
 }
 
@@ -50,6 +50,16 @@ model ForumImages {
   binary_blob   Bytes
   post_id       String @db.ObjectId
   post     ForumPosts    @relation(fields: [post_id], references: [id]) 
+}
+
+model UserImages {
+  id  String  @id @default(auto()) @map("_id") @db.ObjectId
+  file_name String
+  mime_type     String
+  size          Int
+  binary_blob   Bytes
+  user_id       String @db.ObjectId
+  user     Users    @relation(fields: [user_id], references: [id]) 
 }
 
 model ForumPosts {

@@ -53,17 +53,17 @@
         try {
             is_creating = true;
 
-            const formData = new FormData();
-            formData.append('heading', heading_text);
-            formData.append('content', content_text);
-            formData.append('topic', topic_chosen);
+            const form_data = new FormData();
+            form_data.append('heading', heading_text);
+            form_data.append('content', content_text);
+            form_data.append('topic', topic_chosen);
             if (image) {
-                formData.append('image', image);
+                form_data.append('image', image);
             }
 
             const response = await fetch('/api/forum/new', {
                 method: 'POST',
-                body: formData 
+                body: form_data 
             });
 
             if (response.status === 401) {

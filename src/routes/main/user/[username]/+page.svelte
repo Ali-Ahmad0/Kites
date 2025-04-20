@@ -4,7 +4,37 @@
     
     const { data } = $props();
 
-    let mode : string = $state("dark_mode_icons");
+    let mode: string = $state("dark_mode_icons");
+    let image: File | undefined = $state();
+
+    async function change_pfp(event: Event) {
+
+        const target = event.target as HTMLInputElement;
+        if (target?.files && target.files.length > 0) {
+            image = target.files[0]; 
+        } else {
+            image = undefined;
+        }
+
+        if (!image) return;
+        
+        try{
+            const form_data = new FormData();
+            form_data.append('image', image);
+            
+            const response = await fetch('/api/user/change_pfp', {
+                method: 'POST',
+                body: form_data
+            });
+
+            if(response.status === 200){
+                window.location.href = `/user/${data.params_username}`;
+            }
+
+        } catch(e) {
+            console.error(e);
+        }
+    }
 
     $effect(() => {
         mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
@@ -20,7 +50,16 @@
     <div class="profile-card">
         <div class="details">
             <div class="pfp-container">
-                <img class="pfp" src="/profile.jpg" alt="pfp">
+                {#if data.image}
+                    <img src={data.image} alt="pfp" class="pfp">
+                {:else}
+                    <img class="pfp" src="/profile.jpg" alt="pfp">
+                {/if}
+                
+                {#if data.authenticated && data.user?.username === data.params_username}
+                    <label for="image" class="change-pfp-btn">Change</label>
+                    <input type="file" id="image" name="image" accept="image/*" onchange={change_pfp}>    
+                {/if}
             </div>
             <div class="user-info">
                 <h2 class="username">{data.params_username}</h2>
@@ -209,4 +248,35 @@
             flex-direction: column;
         }
     }
+
+    .pfp-container {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .change-pfp-btn {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 80%);
+        
+        background-color: transparent;
+        color: white;
+
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        border-radius: 0.5rem;
+
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+    }
+
+    .change-pfp-btn:hover {
+        opacity: 0.6;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
 </style>
