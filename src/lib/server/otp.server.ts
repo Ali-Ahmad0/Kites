@@ -1,4 +1,36 @@
+import { NODEMAILER_EMAIL_ID, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI, OAUTH_REFRESH_TOKEN } from "$env/static/private";
 import { prisma } from "$lib/server/prisma.server";
+import { google } from "googleapis"
+import nodemailer from 'nodemailer'
+
+const oauth_client = new google.auth.OAuth2(
+    OAUTH_CLIENT_ID,
+    OAUTH_CLIENT_SECRET,
+    OAUTH_REDIRECT_URI
+);
+
+oauth_client.setCredentials({
+    refresh_token: OAUTH_REFRESH_TOKEN
+})
+
+// Nodemailer transporter
+
+// Nodemailer transporter with OAuth2
+const create_transporter = async () => {
+    const access_token = await oauth_client.getAccessToken();
+
+    return nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            type: 'OAuth2',
+            user: NODEMAILER_EMAIL_ID,
+            clientId: OAUTH_CLIENT_ID,
+            clientSecret: OAUTH_CLIENT_SECRET,
+            refreshToken: OAUTH_REFRESH_TOKEN,
+            accessToken: access_token.token || ''
+        }
+    });
+};
 
 const OTP_LENGTH = 6;
 const OTP_DIGITS = '0123456789'
@@ -20,8 +52,31 @@ export async function generate_otp(email: string) {
             email: email,
             code: code,
             code_expires: code_expires
-        }
+        }    
     });
+
+    // Send OTP using nodemailer
+    try {
+        const transporter = await create_transporter();
+
+        const mail_options = {
+            from: `"Kites" <${NODEMAILER_EMAIL_ID}>`,
+            to: email,
+            subject: 'Your OTP for Account Verification',
+            text: `Your OTP is: ${code}`,
+            html: `
+                <div>
+                    <h2>Account Verification</h2>
+                    <p>Your OTP code is: <strong>${code}</strong></p>
+                    <p>This code will expire in 5 minutes.</p>
+                </div>
+            `
+        };
+
+        await transporter.sendMail(mail_options);
+    } catch (e) {
+        console.error('[KITES | ERROR]: Failed to send email:', e);
+    }
 
     return code;
 }

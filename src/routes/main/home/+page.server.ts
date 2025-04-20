@@ -1,41 +1,39 @@
 import { prisma } from '$lib/server/prisma.server';
 
 export const load = async () => {
-  try {
-    const posts = await prisma.forumPosts.findMany({
-      take: 10,
-    });
+    try {
+        const posts = await prisma.forumPosts.findMany({});
 
-    const postsWithImages = await Promise.all(
-      posts.map(async (post) => {
-        const image = await prisma.forumImages.findFirst({
-          where: { post_id: post.id },
-          select: {
-            binary_blob: true,
-            mime_type: true,
-          },
-        });
+        const posts_with_images = await Promise.all(
+            posts.map(async (post) => {
+                const image = await prisma.forumImages.findFirst({
+                    where: { post_id: post.id },
+                    select: {
+                      binary_blob: true,
+                      mime_type: true,
+                    },
+              });
 
-        let imageUrl = null;
-        if (image) {
-          const base64 = Buffer.from(image.binary_blob).toString('base64');
-          imageUrl = `data:${image.mime_type};base64,${base64}`;
-        }
+            let image_url = null;
+            if (image) {
+                const base64 = Buffer.from(image.binary_blob).toString('base64');
+                image_url = `data:${image.mime_type};base64,${base64}`;
+            }
+
+            return {
+                ...post,
+                image_url: image_url, // Attach image to post
+            };
+          })
+        );
 
         return {
-          ...post,
-          imageUrl, // Attach image to post
+            posts: posts_with_images,
         };
-      })
-    );
-
-    return {
-      posts: postsWithImages,
-    };
-  } catch (error) {
-    console.error("[KITES | ERROR]: Failed to fetch posts: ", error);
-    return {
-      posts: [],
-    };
-  }
+    } catch (error) {
+          console.error("[KITES | ERROR]: Failed to fetch posts: ", error);
+          return {
+              posts: [],
+          };
+    }
 };
