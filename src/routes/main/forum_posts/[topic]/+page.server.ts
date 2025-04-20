@@ -40,7 +40,7 @@ export async function load({ params, locals }: any) {
         }
         
         // Attach image URLs to the posts
-        const postsWithImages = posts.map(post => ({
+        const posts_with_images = posts.map(post => ({
             ...post,
             imageUrl: imageMap[post.id] || null
         }));
@@ -68,7 +68,7 @@ export async function load({ params, locals }: any) {
         }
     
         return {
-            posts: postsWithImages.map((post, index) => ({
+            posts: posts_with_images.map((post, index) => ({
                 ...post,
                 user_liked: like_status[index] // Attach like status directly to each post
             }))
