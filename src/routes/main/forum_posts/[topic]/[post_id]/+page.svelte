@@ -3,4 +3,4 @@
     const { data } = $props();
 </script>
 
-<ForumPost heading={data.heading} username={data.author} content={data.content} topic={data.topic}/>
+<ForumPost heading={data.heading} username={data.author} content={data.content} topic={data.topic} image={data.image}/>

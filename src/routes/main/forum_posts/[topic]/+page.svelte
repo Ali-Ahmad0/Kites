@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 
     const { data, form } = $props();
-    
+
     // State for modal visibility
     let showModal = $state(false);
     
@@ -29,10 +29,11 @@
             showModal = false;
         }
     }
+
 </script>
 
 {#each data.posts as post }
-    <Thumbnail post_id={post.id} username={post.author_name} topic={post.topic} heading={post.heading} />
+    <Thumbnail post_id={post.id} username={post.author_name} topic={post.topic} heading={post.heading} image={post.imageUrl}/>
 {/each}
 
 <div class="post-container">
@@ -75,16 +76,24 @@
                 </div>
                 
                 <div class="modal-body">
-                    <form use:enhance={( {} ) => {
-                        return async ({ result, update }) => {
-                            // Redirect to signin
-                            if (result.type === "failure") {
+                    <form use:enhance={() => {
+                        return async ({ form, data, result, update }) => {
+                            const formData = new FormData(form);
+                    
+                            const response = await fetch(form.action, {
+                                method: form.method,
+                                body: formData,
+                            });
+                    
+                            if (response.ok) {
+                                await update(); // refresh data
+                            } else {
                                 goto('/login/signin');
                             }
-    
-                            await update();
                         };
-                    }} method="POST" action="?/create">
+                    }} method="POST" action="?/create" enctype="multipart/form-data">
+                    
+
                         <div class="form-group">
                             <label for="heading">Heading</label>
                             <input type="text" id="heading" name="heading" required>
@@ -106,10 +115,10 @@
                             <textarea id="content" name="content" rows="5" required></textarea>
                         </div>
 
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                             <label for="image">Image</label>
                             <input type="file" id="image" name="image">
-                        </div> -->
+                        </div>
                         
                         <div class="form-actions">
                             <button 
@@ -268,28 +277,21 @@
     .form-group textarea {
         resize: none;
     }
-
-    .form-group 
     
     .form-actions {
         display: flex;
-        
         justify-content: flex-end;
         gap: 0.75rem;
-        
         margin-top: 1.5rem;
         margin-bottom: 1rem;
     }
     
     button.cancel, button.confirm {
         color: white;
-
         border: none;
         border-radius: 0.25rem;
-
         padding: 0.6rem 1.25rem;
         cursor: pointer;
-
         transition: background-color 0.2s;
     }
 

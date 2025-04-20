@@ -1,5 +1,5 @@
 <script>
-    const { post_id, username, topic, heading } = $props();
+    const { post_id, username, topic, heading, image } = $props();
 </script>
 
 <a href='{topic}/{post_id}'>
@@ -10,7 +10,7 @@
             <span class="topic"><strong>{topic}</strong></span>
         </div>
         <h3 class="title">{heading}</h3>
-        <img src="/default.jpg" alt="cover" class="cover">
+        <img src={image} alt="cover" class="cover">
         
         <div class="engagement">
             <button class="engagement-btn like-btn">

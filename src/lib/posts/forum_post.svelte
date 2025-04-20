@@ -3,9 +3,12 @@
 
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
+    // let image_uploaded : boolean = $state(true);
 
-    const { heading, username, content, topic } = $props();
+    const { heading, username, content, topic, image } = $props();
 
+    //check if image has been uploaded
+  
     // Update folder on dark mode change
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
@@ -28,7 +31,8 @@
             {content}
         </p>
         
-        <img src="/orange.jpeg" alt="" class="post-image">
+        <img src={image} alt="" class="post-image">
+ 
         <div class="engagement">
             <button class="engagement-btn like-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

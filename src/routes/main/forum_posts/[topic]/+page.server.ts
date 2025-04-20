@@ -3,78 +3,87 @@ import { get_session } from "$lib/server/session.server";
 import { fail, type Actions } from "@sveltejs/kit";
 import { prisma } from "$lib/server/prisma.server";
 import { error } from "@sveltejs/kit";
-import fs from 'fs/promises';
-
+import { buffer } from "stream/consumers";
 
 export async function load({ params }: any) {
-    
     const { topic } = params;
 
-    // Check for valid topic
     if (!['Art', 'Science', 'Philosophy', 'Nature'].includes(topic)) {
-        throw error(
-            404, {
-            message: "Topic does not exist"
-        })
+        throw error(404, { message: "Topic does not exist" });
     }
 
-    // Return posts of that topic
     const posts = await prisma.forumPosts.findMany({
         where: { topic: topic }
     });
 
-    return { posts: posts }
+    // Get all post IDs
+    const postIds = posts.map(post => post.id);
+
+    // Fetch images for those post IDs
+    const images = await prisma.images.findMany({
+        where: { post_id: { in: postIds } },
+        select: {
+            post_id: true,
+            binary_blob: true,
+            mime_type: true
+        }
+    });
+
+    // Create a mapping from post ID → dataURL
+    const imageMap: Record<string, string> = {};
+    for (const img of images) {
+        const base64 = Buffer.from(img.binary_blob).toString('base64');
+        const dataUrl = `data:${img.mime_type};base64,${base64}`;
+        imageMap[img.post_id] = dataUrl;
+    }
+
+    // Attach image URLs to the posts
+    const postsWithImages = posts.map(post => ({
+        ...post,
+        imageUrl: imageMap[post.id] || null
+    }));
+
+    return {
+        posts: postsWithImages
+    };
 }
 
 export const actions : Actions = {
-    create: async({ request, cookies }) => {
+    create: async ({ request, cookies, params }) => {
         try {
-            // Get form data
             const data = await request.formData();
-            // let imagePath = null;
-            
             const heading = data.get('heading') as string;
             const content = data.get('content') as string;
-            // const imageFile = data.get('image') as File;
+            const imageFile = data.get('image') as File;
+            const topic = params.topic as string;
+    
+            let file_name: string | null = null;
+            let mime_type: string | null = null;
+            let size: number | null = null;
 
-
-            // Check if user is signed in
             const session_id = cookies.get('session') as string;
             const session_data = await get_session(session_id);
             const user_id = session_data?.user_id;
-
-            if (user_id === undefined) {
-                return fail(400, { 
-                    success: false, 
-                    message: "User must be signed in"
-                });
+    
+            if (!user_id) {
+                return fail(400, { success: false, message: "User must be signed in" });
             }
-
-            // Find user
+    
             const user = await prisma.users.findUnique({
-                where: { id:user_id }
+                where: { id: user_id }
             });
-
+    
             if (!user) {
-                return fail(400, { 
-                    success: false,
-                    message: "User does not exist"
-                });
+                return fail(400, { success: false, message: "User does not exist" });
             }
-
-            // if (!heading || !content) {
-            //     return fail(400, { missing: true , message: "Provide heading and content"});
-            // }
-
-            // if (imageFile && imageFile.size > 0) {
-            //     const buffer = Buffer.from(await imageFile.arrayBuffer());
-            //     const filename = `${Date.now()}-${imageFile.name}`;
-            //     const uploadPath = path.join('static/uploads', filename);
-            //     await fs.writeFile(uploadPath, buffer);
-            //     imagePath = `/uploads/${filename}`;
-            // }
-
-            await prisma.forumPosts.create({
+    
+            if (!heading || !content) {
+                return fail(400, { missing: true, message: "Provide heading and content" });
+            }
+    
+            
+            // Create the post and capture its ID
+            const post = await prisma.forumPosts.create({
                 data: {
                     heading: heading,
                     content: content,
@@ -82,12 +91,32 @@ export const actions : Actions = {
                     topic: topic,
                     likes: 0
                 }
-            })
-
-            // await prisma
-   
-        } catch (error) {
+            });
+            
+            // create the image if there was one
+            if (imageFile && imageFile.size > 0) {
+                file_name = imageFile.name;
+                mime_type = imageFile.type;
+                size = imageFile.size;
+            
+                const arrayBuffer = await imageFile.arrayBuffer();
+                const buffer = Buffer.from(arrayBuffer); // this is a binary buffer
+            
+                await prisma.images.create({
+                    data: {
+                        file_name: file_name,
+                        mime_type: mime_type ?? undefined,
+                        size: size ?? undefined,
+                        binary_blob: buffer, // ← store binary directly
+                        post_id: post.id
+                    }
+                });
+            }
+            return { success: true };
+    
+        } catch (err) {
+            console.error(err);
             return fail(500, { error: true, message: "Internal server error" });
         }
     }
-}
+}    

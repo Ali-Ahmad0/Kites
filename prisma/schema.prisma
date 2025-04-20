@@ -15,6 +15,7 @@ model ForumPosts {
   topic       String
   likes       Int
   user        Users    @relation(fields: [author_name], references: [username])
+  images      Images[]
 }
 
 model BlogPosts {
@@ -34,6 +35,15 @@ model Sessions {
   user            Users    @relation(fields: [user_id], references: [id]) 
 }
 
+model Images {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  file_name      String
+  mime_type  String
+  size         Int?
+  binary_blob  Bytes    // ← Use Bytes type for BLOB storage
+  post_id   String      @db.ObjectId
+  forumPost ForumPosts  @relation(fields: [post_id], references: [id])
+}
 
 model Users {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
