@@ -48,18 +48,18 @@ model ForumImages {
   mime_type     String
   size          Int
   binary_blob   Bytes
-  post_id       String @db.ObjectId
-  post     ForumPosts    @relation(fields: [post_id], references: [id]) 
+  post_id       String      @db.ObjectId @unique
+  post          ForumPosts  @relation(fields: [post_id], references: [id]) 
 }
 
 model UserImages {
-  id  String  @id @default(auto()) @map("_id") @db.ObjectId
-  file_name String
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  file_name     String
   mime_type     String
   size          Int
   binary_blob   Bytes
-  user_id       String @db.ObjectId
-  user     Users    @relation(fields: [user_id], references: [id]) 
+  user_id       String @db.ObjectId @unique
+  user          Users  @relation(fields: [user_id], references: [id]) 
 }
 
 model ForumPosts {

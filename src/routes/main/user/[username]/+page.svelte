@@ -18,7 +18,7 @@
 
         if (!image) return;
         
-        try{
+        try {
             const form_data = new FormData();
             form_data.append('image', image);
             
@@ -28,7 +28,7 @@
             });
 
             if(response.status === 200){
-                window.location.href = `/user/${data.params_username}`;
+                window.location.href = `main/user/${data.params_username}`;
             }
 
         } catch(e) {
@@ -50,8 +50,8 @@
     <div class="profile-card">
         <div class="details">
             <div class="pfp-container">
-                {#if data.image}
-                    <img src={data.image} alt="pfp" class="pfp">
+                {#if data.pfp}
+                    <img src={data.pfp} alt="pfp" class="pfp">
                 {:else}
                     <img class="pfp" src="/profile.jpg" alt="pfp">
                 {/if}

@@ -3,6 +3,7 @@
     import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 
+    let { image } = $props();
     let folder: string = $state("dark_mode_icons");
 
     $effect(() => {
@@ -53,7 +54,11 @@
     {#if page.data.authenticated}
         <Tooltip text="Profile">
                 <button onclick={() => goto(`/main/user/${page.data.user.username}`)} class="profile">
-                    <img src="/profile.jpg" alt="pfp" class="pfp">
+                    {#if image}
+                        <img src={image} alt="pfp" class="pfp">
+                    {:else}
+                        <img class="pfp" src="/profile.jpg" alt="pfp">
+                    {/if}
                 </button>       
         </Tooltip>
         
@@ -136,9 +141,10 @@
 
     .profile {
         margin: 0 1rem;
+        border: none;
 
         background-color: transparent;
-        border: none;
+        color: transparent;
     }
 
     .pfp {

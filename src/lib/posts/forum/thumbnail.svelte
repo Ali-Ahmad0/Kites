@@ -2,7 +2,7 @@
 	import { Engagement } from "$lib";
 
     const { 
-        post_id, user_liked, 
+        post_id, user_liked, pfp, 
         username, topic, heading, image
     } = $props();
 
@@ -11,7 +11,11 @@
 <div class="post">
         <a href='/main/forum_posts/{topic}/{post_id}'>
         <div class="header">
-            <img src="/profile.jpg" alt="pfp" class="pfp">
+            {#if pfp}
+                <img src={pfp} alt="pfp" class="pfp">
+            {:else}
+                <img class="pfp" src="/profile.jpg" alt="pfp">
+            {/if}
             <span class="username">{username}</span>
             <span class="topic"><strong>{topic}</strong></span>
         </div>

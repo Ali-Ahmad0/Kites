@@ -3,12 +3,12 @@
     import { Sidebar } from "$lib";
     import { sidebar_collapsed } from "$lib";
    
-    let { children } = $props();
+    let { data, children } = $props();
 </script>
 
 <div class="layout" class:collapsed={$sidebar_collapsed}>
     <div class="navbar">
-        <Navbar />
+        <Navbar image={data.pfp} />
     </div>
     <div class="sidebar">
         <Sidebar />

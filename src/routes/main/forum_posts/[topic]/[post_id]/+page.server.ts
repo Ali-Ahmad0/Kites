@@ -42,7 +42,7 @@ export async function load({ locals, params }: any) {
             where: { post_id: post.id }
         });
 
-        const image = await prisma.forumImages.findFirst({
+        const image = await prisma.forumImages.findUnique({
             where: { post_id: post_id },
             select: {
                 binary_blob: true,

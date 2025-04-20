@@ -3,7 +3,7 @@
     import { Engagement } from "$lib";
 
     const { 
-        post_id, user_liked,
+        post_id, user_liked, pfp,
         heading, username, content, topic,
         comments, image
     } = $props();
@@ -21,7 +21,11 @@
 <div class="container">
     <div class="details">
         <a href="-" class="author">
-            <img class="profile-image" src="/profile.jpg" alt="user's profile">
+            {#if pfp}
+                <img src={pfp} alt="pfp" class="pfp">
+            {:else}
+                <img class="pfp" src="/profile.jpg" alt="pfp">
+            {/if}
             <p class="user-name">{username}</p>
         </a>   
         <p class="topic">{topic}</p>
@@ -76,7 +80,7 @@
         gap: 0.75rem;
     }
 
-    .profile-image {
+    .pfp {
         width: 2.5rem;
         height: 2.5rem;
         border-radius: 50%;
