@@ -1,21 +1,46 @@
-import { prisma } from "$lib/server/prisma.server.js";
+import { prisma } from "$lib/server/prisma.server";
 import { error } from "@sveltejs/kit";
 
-export async function load({params} : any ) {
-    const {post_id} = params;
+export async function load({ locals, params }: any) {
+    const { post_id } = params;
 
-    const post = await prisma.forumPosts.findUnique({
-        where: {
-            id : post_id
+    try {
+        // Find the post from URL parameters
+        const post = await prisma.forumPosts.findUnique({
+            where: {
+                id: post_id
+            }
+        });
+
+        if (!post){
+            throw error(
+                404, {
+                message:"Post not found"
+            });
+        };
+
+        // Check if logged in user has liked the post
+        let user_liked_bool: boolean = false;
+        
+        const user = locals.user;
+        if (user) {
+            const user_liked = await prisma.userLikes.findUnique({
+                where: {
+                    user_id_post_id: {
+                        post_id: post.id,
+                        user_id: user.id
+                    }
+                },
+                select: { id: true }
+            });
+    
+            user_liked_bool = user_liked !== null;
         }
-    })
 
-    if (!post){
-        throw error(
-            404,{
-            message:"Post not found"
-        })
-    }
+        // Fetch any comments on the post
+        const comments = await prisma.forumPostComments.findMany({
+            where: { post_id: post.id }
+        });
 
     const image = await prisma.images.findFirst({
         where: { post_id: post_id },
@@ -43,4 +68,5 @@ export async function load({params} : any ) {
         topic: post.topic,
         image: dataUrl
     }
+
 }

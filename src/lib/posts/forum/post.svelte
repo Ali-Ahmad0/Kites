@@ -1,18 +1,29 @@
 <script lang="ts">
-    import { is_dark_mode } from "$lib";
+    import { is_dark_mode } from "$lib";	
+    import { Engagement } from "$lib";
+
+    const { 
+        post_id, user_liked,
+        heading, username, content, topic,
+        comments
+    } = $props();
 
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
     // let image_uploaded : boolean = $state(true);
 
+<<<<<<< HEAD:src/lib/posts/forum_post.svelte
     const { heading, username, content, topic, image } = $props();
 
     //check if image has been uploaded
   
+=======
+>>>>>>> b6e9c65a64048e2ce601536ce9dc109e5139c1e1:src/lib/posts/forum/post.svelte
     // Update folder on dark mode change
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
+
 </script>
 
 <div class="container">
@@ -31,6 +42,7 @@
             {content}
         </p>
         
+<<<<<<< HEAD:src/lib/posts/forum_post.svelte
         <img src={image} alt="" class="post-image">
  
         <div class="engagement">
@@ -57,23 +69,25 @@
                 <span>Share</span>
             </button>
         </div>
+=======
+        <img src="/orange.jpeg" alt="" class="post-image">
+        <Engagement post_id={post_id} user_liked={user_liked} />
+>>>>>>> b6e9c65a64048e2ce601536ce9dc109e5139c1e1:src/lib/posts/forum/post.svelte
     </div>
 
-    <!-- Comments List
-    {#each comments as comment}
+    {#each comments as comment_data}
         <div class="comment">
             <div class="comment-wrapper">
                 <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
                 <div class="comment-content">
                     <div class="comment-header">
-                        <span class="comment-author">{comment.author}</span>
-                        <span class="comment-time"> • 2d ago</span>
+                        <span class="comment-author">{comment_data.author_name}</span>
                     </div>
-                    <div class="comment-text">{comment.text}</div>
+                    <div class="comment-text">{comment_data.comment}</div>
                 </div>
             </div>
         </div>
-    {/each} -->
+    {/each}
 </div>
 
 <style>
@@ -123,6 +137,8 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+
+        border-bottom: 1px solid var(--color-navigation-border);
     }
 
     .title {
@@ -145,40 +161,7 @@
         align-self: center;
     }
 
-    .engagement {
-        display: flex;
-        gap: 0.75rem;
-        margin: 1rem 0;
-    }
-    
-    .engagement-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        border-radius: 2rem;
-        background: transparent;
-        border: none;
-        color: var(--color-text-secondary);
-        font-size: 0.85rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .like-btn:hover {
-        color: #f43f5e;
-    }
-    
-    .comment-btn:hover {
-        color: #3b82f6;
-    }
-    
-    .share-btn:hover {
-        color: #10b981;
-    }
-
-    /* .comment {
+    .comment {
         padding: 1rem 0;
         border-bottom: 1px solid var(--color-navigation-border);
     }
@@ -215,16 +198,11 @@
         color: var(--color-text-primary);
     }
 
-    .comment-time {
-        color: var(--color-text-secondary);
-        font-size: 0.75rem;
-    }
-
     .comment-text {
         color: var(--color-text-primary);
         line-height: 1.5;
         margin: 0;
-    } */
+    }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
@@ -234,10 +212,6 @@
         
         .post-image {
             max-height: 350px;
-        }
-        
-        .engagement {
-            flex-wrap: wrap;
         }
     }
 </style>

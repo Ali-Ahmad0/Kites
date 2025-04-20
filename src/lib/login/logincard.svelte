@@ -46,7 +46,7 @@
                     return async ({ result, update }) => {
                         // Redirect to homepage
                         if (result.status === 200) {
-                            window.location.href = "/main/home";
+                            window.location.href = "/login/signup/verify";
                         }
 
                         await update();

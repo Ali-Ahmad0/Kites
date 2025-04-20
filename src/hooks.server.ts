@@ -1,6 +1,7 @@
 import { get_session } from "$lib/server/session.server";
-import { redirect } from "@sveltejs/kit";
 import { prisma } from "$lib/server/prisma.server";
+
+import { redirect } from "@sveltejs/kit";
 import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -19,6 +20,9 @@ export const handle: Handle = async ({ event, resolve }) => {
             const user = await prisma.users.findUnique({
                 where: {
                     id: session.user_id
+                },
+                select: {
+                    id: true, username: true
                 }
             });
 

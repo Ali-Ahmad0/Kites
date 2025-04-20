@@ -1,21 +1,32 @@
 <script lang="ts">
-	import { CreatePost, Thumbnail } from '$lib';
-
-    const { data, form } = $props();
-
+    import { fade, scale } from 'svelte/transition';
+    import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+    
     // State for modal visibility
-    let showModal = $state(false);
+    let show_modal = $state(false);
+
+    let heading_text = $state("");
+    let content_text = $state("");
+    let topic_chosen = $state("");
+    let is_creating = $state(false);
     
     // Toggle modal visibility
     function toggle_modal() {
-        showModal = !showModal;
+        // Redirect to login if needed
+        if (!page.data.authenticated) {
+            goto('/login/signin');
+        }
+
+        show_modal = !show_modal;
     }
     
     // Close modal when clicking outside
     function handle_outside_click(event: MouseEvent) {
         const target = event.target as HTMLElement;
         if (target.classList.contains('modal-backdrop')) {
-            showModal = false;
+            show_modal = false;
         }
     }
     
@@ -23,15 +34,53 @@
     function handle_backdrop_keydown(event: KeyboardEvent) {
         // Close modal on Escape key
         if (event.key === 'Escape') {
-            showModal = false;
+            show_modal = false;
+        }
+    }
+
+    async function create_post() {
+        if (!heading_text.trim() || !topic_chosen.trim() || !content_text.trim())
+            return;
+
+        try {
+            is_creating = true;
+
+            const response = await fetch('/api/forum/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    heading: heading_text,
+                    content: content_text,
+                    topic: topic_chosen
+                })
+            });
+
+            if (response.status === 401) {
+                goto('/login/signin');
+                return;
+            }
+
+            if (response.status !== 200) {
+                throw new Error('Failed to submit comment');
+            }
+
+            // Success - close modal and reset
+            heading_text = "";
+            content_text = "";
+            topic_chosen = "";
+
+            show_modal = false;
+
+        } catch (e) {
+            console.error("[KITES | ERROR] Failed to create new post", e);
+        } finally {
+            is_creating = false;
         }
     }
 
 </script>
-
-{#each data.posts as post }
-    <Thumbnail post_id={post.id} username={post.author_name} topic={post.topic} heading={post.heading} image={post.imageUrl}/>
-{/each}
 
 <div class="post-container">
     <!-- Add button to open modal -->
@@ -47,7 +96,7 @@
     </button>
     
     <!-- Modal backdrop and content -->
-    {#if showModal}
+    {#if show_modal}
         <div 
             class="modal-backdrop" 
             onclick={handle_outside_click}
@@ -60,11 +109,7 @@
             <div class="modal-content" transition:scale={{ start: 0.95, duration: 200 }}>
                 <div class="modal-header">
                     <h2>Create New Post</h2>
-                    <button 
-                        class="close-button" 
-                        onclick={toggle_modal}
-                        aria-label="Close modal"
-                    >
+                    <button class="close-button" onclick={toggle_modal} aria-label="Close modal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -73,61 +118,38 @@
                 </div>
                 
                 <div class="modal-body">
-                    <form use:enhance={() => {
-                        return async ({ form, data, result, update }) => {
-                            const formData = new FormData(form);
-                    
-                            const response = await fetch(form.action, {
-                                method: form.method,
-                                body: formData,
-                            });
-                    
-                            if (response.ok) {
-                                await update(); // refresh data
-                            } else {
-                                goto('/login/signin');
-                            }
-                        };
-                    }} method="POST" action="?/create" enctype="multipart/form-data">
-                    
+                    <div class="form-group">
+                        <label for="heading">Heading</label>
+                        <input type="text" id="heading" name="heading" bind:value={heading_text} required>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="heading">Heading</label>
-                            <input type="text" id="heading" name="heading" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="topic">Topic</label>
-                            <select id="topic" name="topic" required>
-                                <option value="" disabled selected>Select a topic</option>
-                                <option value="Art">Art</option>
-                                <option value="Philosophy">Philosophy</option>
-                                <option value="Nature">Nature</option>
-                                <option value="Science">Science</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="content">Content</label>
-                            <textarea id="content" name="content" rows="5" required></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Image</label>
-                            <input type="file" id="image" name="image">
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button 
-                                type="button" 
-                                class="cancel" 
-                                onclick={toggle_modal}
-                            >
-                                Cancel
-                            </button>
-                            <button type="submit" class="confirm">Create Post</button>
-                        </div>
-                    </form>
+                    <div class="form-group">
+                        <label for="topic">Topic</label>
+                        <select id="topic" name="topic" bind:value={topic_chosen} required>
+                            <option value="" disabled selected>Select a topic</option>
+                            <option value="Art">Art</option>
+                            <option value="Philosophy">Philosophy</option>
+                            <option value="Nature">Nature</option>
+                            <option value="Science">Science</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea id="content" name="content" rows="5" bind:value={content_text} required>
+                        </textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="cancel" onclick={toggle_modal}>
+                            Cancel
+                        </button>
+                        <button type="button" class="confirm" onclick={create_post}
+                        disabled={!heading_text.trim() || !topic_chosen.trim() || !content_text.trim() || is_creating}>
+                            {is_creating ? 'Creating...' : 'Create Post'}
+                        </button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -254,7 +276,7 @@
         font-size: 1rem;
     }
 
-        .form-group select {
+    .form-group select {
         width: 100%;
         padding: 0.5rem 0.75rem;
         color: var(--color-text-secondary);
@@ -277,18 +299,23 @@
     
     .form-actions {
         display: flex;
+        
         justify-content: flex-end;
         gap: 0.75rem;
+        
         margin-top: 1.5rem;
         margin-bottom: 1rem;
     }
     
     button.cancel, button.confirm {
         color: white;
+
         border: none;
         border-radius: 0.25rem;
+
         padding: 0.6rem 1.25rem;
         cursor: pointer;
+
         transition: background-color 0.2s;
     }
 
@@ -299,12 +326,18 @@
     button.confirm {
         background-color: var(--color-blue-primary);
     }
-    
+
     button.cancel:hover {
         background-color: var(--color-red-secondary);
     }
       
     button.confirm:hover {
         background-color: var(--color-blue-secondary);
+    }
+
+    
+    button.confirm:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 </style>

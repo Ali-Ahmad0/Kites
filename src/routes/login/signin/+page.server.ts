@@ -2,8 +2,8 @@ import type { Actions } from "./$types";
 import bcrypt from "bcryptjs";
 import { fail } from "@sveltejs/kit";
 import { create_session } from "$lib/server/session.server";
-import { dev } from "$app/environment";
 import { prisma }from "$lib/server/prisma.server";
+import { dev } from "$app/environment";
 
 export const actions : Actions = {
     login: async ({ request, cookies }) => {
@@ -38,8 +38,9 @@ export const actions : Actions = {
             }
 
             const user = await prisma.users.findUnique({
-                where: {
-                    email: email
+                where: { email: email },
+                select: {
+                    id: true, password: true
                 }
             });
 
