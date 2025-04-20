@@ -41,7 +41,7 @@
     function handle_file_upload(event: Event) {
         const target = event.target as HTMLInputElement;
         if (target?.files && target.files.length > 0) {
-            image = target.files[0]; // set the first selected file
+            image = target.files[0]; 
         } else {
             image = undefined;
         }
@@ -92,7 +92,7 @@
 </script>
 
 <div class="post-container">
-    <!-- Add button to open modal -->
+    
     <button 
         class="add-button" 
         onclick={toggle_modal}
