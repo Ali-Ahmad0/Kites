@@ -1,6 +1,5 @@
 <script lang="ts">
     import { fade, scale } from 'svelte/transition';
-    import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
     
@@ -10,6 +9,7 @@
     let heading_text = $state("");
     let content_text = $state("");
     let topic_chosen = $state("");
+    let image: File | undefined = $state(undefined);
     let is_creating = $state(false);
     
     // Toggle modal visibility
@@ -38,23 +38,32 @@
         }
     }
 
+    function handle_file_upload(event: Event) {
+        const target = event.target as HTMLInputElement;
+        if (target?.files && target.files.length > 0) {
+            image = target.files[0]; // set the first selected file
+        } else {
+            image = undefined;
+        }
+    }
+
     async function create_post() {
-        if (!heading_text.trim() || !topic_chosen.trim() || !content_text.trim())
-            return;
+        if (!heading_text.trim() || !topic_chosen.trim() || !content_text.trim()) return;
 
         try {
             is_creating = true;
 
+            const formData = new FormData();
+            formData.append('heading', heading_text);
+            formData.append('content', content_text);
+            formData.append('topic', topic_chosen);
+            if (image) {
+                formData.append('image', image);
+            }
+
             const response = await fetch('/api/forum/new', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    heading: heading_text,
-                    content: content_text,
-                    topic: topic_chosen
-                })
+                body: formData 
             });
 
             if (response.status === 401) {
@@ -63,14 +72,14 @@
             }
 
             if (response.status !== 200) {
-                throw new Error('Failed to submit comment');
+                throw new Error('Failed to submit post');
             }
 
-            // Success - close modal and reset
+            // Reset
             heading_text = "";
             content_text = "";
             topic_chosen = "";
-
+            image = undefined;
             show_modal = false;
 
         } catch (e) {
@@ -138,6 +147,11 @@
                         <label for="content">Content</label>
                         <textarea id="content" name="content" rows="5" bind:value={content_text} required>
                         </textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="file" id="image" name="image" onchange={handle_file_upload} accept="image/*">
                     </div>
                     
                     <div class="form-actions">

@@ -8,7 +8,7 @@ export const load = async () => {
 
     const postsWithImages = await Promise.all(
       posts.map(async (post) => {
-        const image = await prisma.images.findFirst({
+        const image = await prisma.forumImages.findFirst({
           where: { post_id: post.id },
           select: {
             binary_blob: true,

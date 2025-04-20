@@ -3,7 +3,7 @@
 
     const { 
         post_id, user_liked, 
-        username, topic, heading 
+        username, topic, heading, image
     } = $props();
 
 </script>
@@ -16,7 +16,7 @@
             <span class="topic"><strong>{topic}</strong></span>
         </div>
         <h3 class="title">{heading}</h3>
-        <img src="/default.jpg" alt="cover" class="cover">
+        <img src={image} alt="cover" class="cover">
         </a>
         <Engagement post_id={post_id} user_liked={user_liked} />
     </div>    

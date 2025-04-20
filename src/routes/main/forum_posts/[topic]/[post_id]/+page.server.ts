@@ -42,31 +42,36 @@ export async function load({ locals, params }: any) {
             where: { post_id: post.id }
         });
 
-    const image = await prisma.images.findFirst({
-        where: { post_id: post_id },
-        select: {
-          binary_blob: true,
-          mime_type: true
+        const image = await prisma.forumImages.findFirst({
+            where: { post_id: post_id },
+            select: {
+            binary_blob: true,
+            mime_type: true
+            }
+        });
+        
+        let dataUrl = null;
+        if (image) {
+            // Convert Prisma Bytes (Buffer) to base64
+            const base64 = Buffer.from(image.binary_blob).toString('base64');
+            dataUrl = `data:${image.mime_type};base64,${base64}`;
+            console.log("Image found and converted to data URL");
+        } else {
+            console.log("No image found for this post");
         }
-    });
-      
-    let dataUrl = null;
-    if (image) {
-        // Convert Prisma Bytes (Buffer) to base64
-        const base64 = Buffer.from(image.binary_blob).toString('base64');
-        dataUrl = `data:${image.mime_type};base64,${base64}`;
-        console.log("Image found and converted to data URL");
-    } else {
-        console.log("No image found for this post");
-    }
 
-    console.log("Post data returned successfully");
-    return {
-        heading: post.heading,
-        content: post.content,
-        author: post.author_name,
-        topic: post.topic,
-        image: dataUrl
+        console.log("Post data returned successfully");
+        return {
+            post_id: post.id,
+            heading: post.heading,
+            content: post.content,
+            author: post.author_name,
+            topic: post.topic,
+            image: dataUrl,
+            comments: comments,
+            user_liked: user_liked_bool
+        }
+    } catch (e) {
+        throw error(500,`Database error: ${e}`);
     }
-
 }

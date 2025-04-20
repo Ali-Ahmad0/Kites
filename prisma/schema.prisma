@@ -42,6 +42,16 @@ model Otp {
   @@index([email])
 }
 
+model ForumImages {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  file_name     String
+  mime_type     String
+  size          Int
+  binary_blob   Bytes
+  post_id       String @db.ObjectId
+  post     ForumPosts    @relation(fields: [post_id], references: [id]) 
+}
+
 model ForumPosts {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   
@@ -54,6 +64,7 @@ model ForumPosts {
   user        Users   @relation(fields: [author_name], references: [username])  
   
   user_likes  UserLikes[]
+  images      ForumImages[]
   forum_post_comments ForumPostComments[] 
 }
 
