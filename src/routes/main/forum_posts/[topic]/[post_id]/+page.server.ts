@@ -24,7 +24,7 @@ export async function load({ locals, params }: any) {
         
         const user = locals.user;
         if (user) {
-            const user_liked = await prisma.userLikes.findUnique({
+            const user_liked = await prisma.forumLikes.findUnique({
                 where: {
                     user_id_post_id: {
                         post_id: post.id,
@@ -38,7 +38,7 @@ export async function load({ locals, params }: any) {
         }
 
         // Fetch any comments on the post
-        const comments = await prisma.forumPostComments.findMany({
+        const comments = await prisma.forumComments.findMany({
             where: { post_id: post.id }
         });
 

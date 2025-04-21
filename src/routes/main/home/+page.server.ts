@@ -35,7 +35,7 @@ export async function load( { locals } ) {
         for (const post of posts) {
             // Check like status for current user
             if (user) {
-                const user_liked = await prisma.userLikes.findUnique({
+                const user_liked = await prisma.forumLikes.findUnique({
                     where: {
                         user_id_post_id: {
                             user_id: user.id,

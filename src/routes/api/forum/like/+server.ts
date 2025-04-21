@@ -25,7 +25,7 @@ export async function POST({ request, locals }) {
             });
 
             // Keep record of user like
-            await prisma.userLikes.create({
+            await prisma.forumLikes.create({
                 data: {
                     user_id: user.id, 
                     post_id: data.post_id
@@ -44,7 +44,7 @@ export async function POST({ request, locals }) {
             })
 
             // Delete record of user like
-            await prisma.userLikes.delete({
+            await prisma.forumLikes.delete({
                 where: {
                     user_id_post_id: {
                         user_id: user.id, 

@@ -72,7 +72,7 @@
             }
 
             if (response.status !== 200) {
-                throw new Error('Failed to submit post');
+                console.error('[KITES | ERROR]: Failed to create new post');
             }
 
             // Reset
@@ -81,6 +81,8 @@
             topic_chosen = "";
             image = undefined;
             show_modal = false;
+
+            window.location.reload();
 
         } catch (e) {
             console.error("[KITES | ERROR] Failed to create new post", e);

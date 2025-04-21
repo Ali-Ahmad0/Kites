@@ -28,7 +28,7 @@
             });
 
             if(response.status === 200){
-                window.location.href = `/main/user/${data.params_username}`;
+                window.location.reload();
             }
 
         } catch(e) {
@@ -41,7 +41,7 @@
     })
     
     async function logout() {
-        await fetch('/api/logout', { method: 'POST' });
+        await fetch('/api/user/logout', { method: 'POST' });
         window.location.href = '/';
     }
 </script>

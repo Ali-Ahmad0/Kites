@@ -13,12 +13,24 @@ model Users {
   email       String   @unique
   username    String   @unique
   password    String
+
+  rank        String   @default("default")
   
-  sessions    Sessions[]
-  forum_posts ForumPosts[]
-  user_likes  UserLikes[]
+  sessions        Sessions[]
+  forum_posts     ForumPosts[]
+  forum_likes     ForumLikes[]
   profile_picture UserImages[]
-  forum_post_comments ForumPostComments[]
+  forum_comments  ForumComments[]
+}
+
+model UserImages {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  file_name     String
+  mime_type     String
+  size          Int
+  binary_blob   Bytes
+  username      String @unique
+  user          Users  @relation(fields: [username], references: [username]) 
 }
 
 model Sessions {
@@ -42,26 +54,6 @@ model Otp {
   @@index([email])
 }
 
-model ForumImages {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  file_name     String
-  mime_type     String
-  size          Int
-  binary_blob   Bytes
-  post_id       String      @db.ObjectId @unique
-  post          ForumPosts  @relation(fields: [post_id], references: [id]) 
-}
-
-model UserImages {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  file_name     String
-  mime_type     String
-  size          Int
-  binary_blob   Bytes
-  username      String @unique
-  user          Users  @relation(fields: [username], references: [username]) 
-}
-
 model ForumPosts {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   
@@ -73,12 +65,23 @@ model ForumPosts {
   author_name String  
   user        Users   @relation(fields: [author_name], references: [username])  
   
-  user_likes  UserLikes[]
-  images      ForumImages[]
-  forum_post_comments ForumPostComments[] 
+  user_likes     ForumLikes[]
+  images         ForumImages[]
+  forum_comments ForumComments[] 
 }
 
-model UserLikes {
+model ForumImages {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  file_name     String
+  mime_type     String
+  size          Int
+  binary_blob   Bytes
+  post_id       String      @db.ObjectId @unique
+  post          ForumPosts  @relation(fields: [post_id], references: [id]) 
+}
+
+
+model ForumLikes {
   id      String  @id @default(auto()) @map("_id") @db.ObjectId
 
   user_id String  @db.ObjectId
@@ -90,7 +93,7 @@ model UserLikes {
   @@unique([user_id, post_id])
 }
 
-model ForumPostComments {
+model ForumComments {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   post_id     String  @db.ObjectId
   
@@ -99,7 +102,6 @@ model ForumPostComments {
 
   post        ForumPosts  @relation(fields: [post_id], references: [id])
   user        Users       @relation(fields: [author_name], references: [username])
-
 }
 
 model BlogPosts {

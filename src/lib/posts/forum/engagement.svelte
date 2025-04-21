@@ -37,7 +37,7 @@
                 goto('/login/signin');
             }
         } catch (e) {
-            throw error(500, `Error: ${e}`);
+            console.error('[KITES | ERROR]: ', e);
         }
     }
 
@@ -89,12 +89,14 @@
             }
 
             if (response.status !== 200) {
-                throw new Error('Failed to submit comment');
+                console.error('[KITES | ERROR]: Error submitting comment');
             }
 
             // Success - close modal and reset
             comment_text = "";
             show_modal = false;
+
+            window.location.reload();
         } catch (e) {
             console.error('[KITES | ERROR]: Error submitting comment:', e);
         } finally {

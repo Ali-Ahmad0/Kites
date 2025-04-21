@@ -15,7 +15,7 @@ export async function POST({ request, locals }) {
         }
 
         // Create a new comment
-        await prisma.forumPostComments.create({
+        await prisma.forumComments.create({
             data: {
                 post_id: data.post_id,
                 comment: data.comment,

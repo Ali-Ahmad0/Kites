@@ -133,8 +133,7 @@ export const actions : Actions = {
                 maxAge: 15 * 60 * 1000 // 15 minutes
             });
 
-            const otp = await generate_otp(email);
-            console.log(otp);
+            await generate_otp(email);
             
             return { success: true, message: "Sending OTP..." };
         } catch (error) {
