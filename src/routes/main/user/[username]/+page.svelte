@@ -37,12 +37,10 @@
                 body: form_data
             });
 
-            if(response.status === 200){
-                window.location.reload();
-            }
-
         } catch(e) {
             console.error(e);
+        } finally {
+            window.location.reload();
         }
     }
 

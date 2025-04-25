@@ -1,5 +1,6 @@
 import { prisma } from '$lib/server/prisma.server';
 import { json } from '@sveltejs/kit';
+import { error } from 'console';
 
 export async function POST({ request, locals }) {
     try {
@@ -15,15 +16,17 @@ export async function POST({ request, locals }) {
 
         // Get new pfp data
         const image_file = data.get('image') as File;
-        let file_name: string | null = null;
-        let mime_type: string | null = null;
-        let size: number | null = null;
+
+        // check size of the pfp
+        if(image_file.size > 3145728){
+            return json(
+                {error: 'Image is too large'},
+                {status: 400}
+            )
+        }
 
         // Add pfp to database
         if (image_file && image_file.size > 0) {
-            file_name = image_file.name;
-            mime_type = image_file.type;
-            size = image_file.size;
         
             const array_buffer = await image_file.arrayBuffer();
             const buffer = Buffer.from(array_buffer); 
@@ -38,9 +41,9 @@ export async function POST({ request, locals }) {
             if (!pfp_exists) {
                 await prisma.userImages.create({
                     data: {
-                        file_name: file_name,
-                        mime_type: mime_type ?? undefined,
-                        size: size ?? undefined,
+                        file_name: image_file.name,
+                        mime_type: image_file.type ?? undefined,
+                        size: image_file.size ?? undefined,
                         binary_blob: buffer,
                         username: user.username
                     }
@@ -52,9 +55,9 @@ export async function POST({ request, locals }) {
                 await prisma.userImages.update({
                     where: { username: user.username },
                     data: {
-                        file_name: file_name,
-                        mime_type: mime_type ?? undefined,
-                        size: size ?? undefined,
+                        file_name: image_file.name,
+                        mime_type: image_file.type ?? undefined,
+                        size: image_file.size ?? undefined,
                         binary_blob: buffer,
                         username: user.username
                     }
