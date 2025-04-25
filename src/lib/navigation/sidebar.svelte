@@ -14,7 +14,7 @@
      // Function to check window size and update
      const check_window_size = () => {
         if (typeof window !== 'undefined') {
-            if (window.innerWidth < 1024) {
+            if (window.innerWidth <= 1024) {
                 sidebar_collapsed.set(true);
             } else {
                 sidebar_collapsed.set(false);

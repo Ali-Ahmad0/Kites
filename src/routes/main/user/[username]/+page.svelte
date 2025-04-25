@@ -39,7 +39,7 @@
             });
 
         } catch(e) {
-            console.error(e);
+            console.error('[KITES | ERROR]: ', e);
         } finally {
             window.location.reload();
         }
@@ -59,7 +59,7 @@
             is_deleting = true;
             await fetch('/api/user/delete', { method: 'POST'});
         } catch(e) {
-            console.error(e);
+            console.error('[KITES | ERROR]: ', e);
         } finally {
             is_deleting = false;
             window.location.href = '/';

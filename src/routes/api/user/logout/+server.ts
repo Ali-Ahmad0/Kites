@@ -17,7 +17,7 @@ export async function POST({ cookies, locals }) {
         return json({ success: true });
     
     } catch (error) {
-        console.error('Logout error:', error);
+        console.error('[KITES | ERROR]: ', error);
         return json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 }

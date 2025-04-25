@@ -9,7 +9,7 @@
 </script>
 
 <div class="post">
-        <a href='/main/forum_posts/{topic}/{post_id}'>
+    <a href='/main/forum_posts/{topic}/{post_id}'>
         <div class="header">
             {#if pfp}
                 <img src={pfp} alt="pfp" class="pfp">
@@ -21,9 +21,9 @@
         </div>
         <h3 class="title">{heading}</h3>
         <img src={image} alt="cover" class="cover">
-        </a>
-        <Engagement post_id={post_id} user_liked={user_liked} />
-    </div>    
+    </a>
+    <Engagement post_id={post_id} user_liked={user_liked} />
+</div>    
 
 
 <style>
@@ -36,7 +36,10 @@
         border-radius: 0.5rem;
         padding: 0.75rem;
         margin: 1rem 4rem 1rem 6rem;
-        max-width: 600px;
+
+        width: 35vw;
+        min-width: 500px;
+        max-width: 700px;
     }
     
     .header {

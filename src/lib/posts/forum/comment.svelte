@@ -20,7 +20,6 @@
     
     function toggle_dropdown() {
         show_dropdown = !show_dropdown;
-        console.log(show_dropdown);
     }
     
     function ask_delete_confirmation() {
@@ -45,7 +44,7 @@
             });
             
         } catch(e) {
-            console.error(e);
+            console.error('[KITES | ERROR]: ', e);
         } finally {
             is_deleting = false;
             show_confirm = false;
@@ -53,10 +52,9 @@
             window.location.reload();
         }
     }
-    
 </script>
 
-<div class="comment" id={`comment-${comment_data.id}`}>
+<div class="comment">
     <div class="comment-wrapper">
         {#if comment_data.author_pfp}
             <img class="comment-avatar" src={comment_data.author_pfp || "/placeholder.svg"} alt="avatar" />

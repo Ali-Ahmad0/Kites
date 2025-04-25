@@ -1,6 +1,5 @@
 import { prisma } from '$lib/server/prisma.server';
 import { json } from '@sveltejs/kit';
-import { error } from 'console';
 
 export async function POST({ request, locals }) {
     try {

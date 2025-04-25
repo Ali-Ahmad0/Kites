@@ -1,8 +1,8 @@
 import type { RequestEvent } from "@sveltejs/kit";
 
 export const load = async ({ locals }: RequestEvent) => {
-  return {
-    user: locals.user,
-    authenticated: locals.authenticated
-  };
+    return {
+        user: locals.user,
+        authenticated: locals.authenticated
+    };
 };
