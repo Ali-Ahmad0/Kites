@@ -93,9 +93,9 @@
                 </button>
                 <button>
                     <div class="icon-container">
-                        <Icon mode={folder} name="github" width={20} height={30} alt="github"/>
+                        <Icon mode={folder} name="verified" width={20} height={30} alt="verified"/>
                     </div>
-                    <span class:label-hidden={$sidebar_collapsed}>Github</span>
+                    <span class:label-hidden={$sidebar_collapsed}>Ranks</span>
                 </button>
             </div>
         </div>

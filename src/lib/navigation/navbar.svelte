@@ -29,16 +29,9 @@
     <nav>
         <ul class="navbar-links">
             <li>
-                <Tooltip text="About US">
-                    <button class="icon">
-                        <Icon mode = {folder} name = "about_us" width = 24 height = 24 alt = "about_us"/>
-                    </button>
-                </Tooltip>
-            </li>
-            <li>
-                <Tooltip text="Notifications">
+                <Tooltip text="Ranks">
                       <button class="icon">
-                        <Icon mode = {folder} name = "notification_bell" width=24 height=24 alt = "notification_bell"/>
+                        <Icon mode={folder} name="verified" width=24 height=24 alt="verified"/>
                     </button>        
                 </Tooltip>           
             </li>
@@ -46,6 +39,13 @@
                 <Tooltip text="Change Theme">
                     <button class="icon" onclick={() => { toggle_theme(); }}>
                         <Icon mode={folder} name="toggle_theme" width=24 height=24 alt = "toggle_theme" />
+                    </button>
+                </Tooltip>
+            </li>
+            <li>
+                <Tooltip text="Rules">
+                    <button class="icon">
+                        <Icon mode={folder} name="rules" width=24 height=24 alt="rules"/>
                     </button>
                 </Tooltip>
             </li>
