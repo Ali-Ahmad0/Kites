@@ -32,7 +32,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ post_id })
+                body: JSON.stringify({ post_id: post_id, author_name: username })
             });
         } catch(e) {
             console.error(e);
