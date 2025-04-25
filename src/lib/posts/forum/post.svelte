@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-    import { is_dark_mode } from "$lib";	
+    import { ForumComment, is_dark_mode } from "$lib";	
     import { Engagement } from "$lib";
     import { Icon } from "$lib";
     import { Tooltip } from "$lib";
@@ -118,22 +118,8 @@
         <Engagement post_id={post_id} user_liked={user_liked}/>
     </div>
 
-    {#each comments as comment_data}
-        <div class="comment">
-            <div class="comment-wrapper">
-                {#if comment_data.author_pfp}
-                    <img class="comment-avatar" src={comment_data.author_pfp || "/placeholder.svg"} alt="avatar" />
-                {:else}
-                    <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
-                {/if}
-                <div class="comment-content">
-                    <div class="comment-header">
-                        <span class="comment-author">{comment_data.author_name}</span>
-                    </div>
-                    <div class="comment-text">{comment_data.comment}</div>
-                </div>
-            </div>
-        </div>
+    {#each comments as comment_data (comment_data.id)}
+        <ForumComment {comment_data}/>
     {/each}
 
     {#if show_confirm}
@@ -210,6 +196,7 @@
     .post-options {
         position: relative;
     }
+    
     .more {
         background-color: transparent;
         border: none;
@@ -299,49 +286,6 @@
         border-radius: 0.5rem;
         object-fit: contain;
         align-self: center;
-    }
-
-    .comment {
-        padding: 1rem 0;
-        border-bottom: 1px solid var(--color-navigation-border);
-    }
-
-    .comment:last-child {
-        border-bottom: none;
-    }
-
-    .comment-wrapper {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .comment-avatar {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .comment-content {
-        flex: 1;
-    }
-
-    .comment-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .comment-author {
-        font-weight: 500;
-        color: var(--color-text-primary);
-    }
-
-    .comment-text {
-        color: var(--color-text-primary);
-        line-height: 1.5;
-        margin: 0;
     }
 
     /* Confirmation dialog styles */
