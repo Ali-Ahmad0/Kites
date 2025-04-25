@@ -21,7 +21,7 @@ export async function load({ params } : any) {
     
     const email = user.email;
 
-    const image = await prisma.userImages.findFirst({
+    const image = await prisma.userImages.findUnique({
         where: { username: username },
         select: {
             binary_blob: true,

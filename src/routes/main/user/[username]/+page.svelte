@@ -8,7 +8,6 @@
     let image: File | undefined = $state();
 
     async function change_pfp(event: Event) {
-
         const target = event.target as HTMLInputElement;
         if (target?.files && target.files.length > 0) {
             image = target.files[0]; 
@@ -47,47 +46,73 @@
 </script>
 
 <div class="container">
-    <div class="profile-card">
-        <div class="details">
-            <div class="pfp-container">
-                {#if data.my_pfp}
-                    <img src={data.my_pfp} alt="pfp" class="pfp">
-                {:else}
-                    <img class="pfp" src="/profile.jpg" alt="pfp">
-                {/if}
-                
-                {#if data.authenticated && data.user?.username === data.params_username}
-                    <label for="image" class="change-pfp-btn">Change</label>
-                    <input type="file" id="image" name="image" accept="image/*" onchange={change_pfp}>    
-                {/if}
-            </div>
-            <div class="user-info">
-                <h2 class="username">{data.params_username}</h2>
-                <h4 class="email-id">{data.params_email_id}</h4>
+    {#await data}
+        <div class="profile-card">
+            <div class="details">
+                <div class="pfp-container">
+                    <img src="/profile.jpg" alt="pfp" class="pfp">
+                    <h2 class="username">Loading...</h2>
+                    <h4 class="email-id">Loading...</h4>
+                </div>
             </div>
         </div>
-        
-        {#if data.authenticated && data.user?.username === data.params_username}
-            <div class="divider"></div>
-            <div class="buttons">
-                <button class="settings-button" onclick={() => goto('/main/user/settings')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                    Settings
-                </button>
-                <button class="logout-button" onclick={logout}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                        <polyline points="16 17 21 12 16 7"></polyline>
-                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                    Log Out
-                </button>
+    {:then data} 
+        <div class="profile-card">
+            <div class="details">
+
+                <div class="pfp-container">
+                    {#if data.authenticated && data.user?.username === data.params_username}
+                        <label for="image" class="pfp-label">
+                            {#if data.my_pfp}
+                                <img src={data.my_pfp} alt="pfp" class="pfp">
+                            {:else}
+                                <img src="/profile.jpg" alt="pfp" class="pfp">
+                            {/if}
+                            <div class="pfp-overlay">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                        </label>
+                        <input type="file" id="image" name="image" accept="image/*" onchange={change_pfp}>
+                    {:else}
+                        {#if data.my_pfp}
+                            <img src={data.my_pfp} alt="pfp" class="pfp">
+                        {:else}
+                            <img src="/profile.jpg" alt="pfp" class="pfp">
+                        {/if}
+                    {/if}
+                </div>
+                <div class="user-info">
+                    <h2 class="username">{data.params_username}</h2>
+                    <h4 class="email-id">{data.params_email_id}</h4>
+                </div>
             </div>
-        {/if}
-    </div>
+            
+            {#if data.authenticated && data.user?.username === data.params_username}
+                <div class="divider"></div>
+                <div class="buttons">
+                    <button class="settings-button" onclick={() => goto('/main/user/settings')}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Settings
+                    </button>
+                    <button class="logout-button" onclick={logout}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Log Out
+                    </button>
+                </div>
+            {/if}
+        </div>        
+    {/await}
+
 </div>
 
 <style>
@@ -135,10 +160,41 @@
         height: 6rem;
         
         border-radius: 50%;
-        border: solid 3px var(--color-blue-primary);
         
         object-fit: cover;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .pfp-label {
+        position: relative;
+        display: block;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+
+    .pfp-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 93%;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        color: white;
+    }
+
+    .pfp-overlay svg {
+        margin-bottom: 0.25rem;
+    }
+
+    .pfp-label:hover .pfp-overlay {
+        opacity: 1;
     }
 
     .user-info {
@@ -236,6 +292,10 @@
         transform: translateY(0);
     }
 
+    input[type="file"] {
+        display: none;
+    }
+
     @media (max-width: 500px) {
         .details {
             flex-direction: column;
@@ -248,35 +308,4 @@
             flex-direction: column;
         }
     }
-
-    .pfp-container {
-        position: relative;
-        flex-shrink: 0;
-    }
-
-    .change-pfp-btn {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translate(-50%, 80%);
-        
-        background-color: transparent;
-        color: white;
-
-        padding: 0.25rem 0.75rem;
-        font-size: 0.75rem;
-        border-radius: 0.5rem;
-
-        cursor: pointer;
-        transition: opacity 0.2s ease;
-    }
-
-    .change-pfp-btn:hover {
-        opacity: 0.6;
-    }
-
-    input[type="file"] {
-        display: none;
-    }
-
 </style>
