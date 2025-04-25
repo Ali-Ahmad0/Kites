@@ -1,5 +1,4 @@
 import { prisma } from '$lib/server/prisma.server.js';
-import { delete_session } from '$lib/server/session.server';
 import { json } from '@sveltejs/kit';
 
 export async function POST({ request, locals }) {
