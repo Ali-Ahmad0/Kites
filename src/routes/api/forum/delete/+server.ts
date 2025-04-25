@@ -9,7 +9,7 @@ export async function POST({ request, locals }) {
         const post_id = data.post_id;
         const author = data.author_name;
 
-        if(locals.user?.username !== author || !locals.user || !locals.authenticated){
+        if (locals.user?.username !== author || !locals.user || !locals.authenticated) {
             return json(
                 { error: 'Failed to delete post' },
                 { status: 401 }
@@ -23,13 +23,13 @@ export async function POST({ request, locals }) {
             }
         })
 
-        if(!result) {
+        if (!result) {
             return json(
-                { error: 'Failed to delete user' },
+                { error: 'Failed to delete post' },
                 { status: 400 }
             );
         }
-        
+
         return json({ success: true });
     
     } catch (e) {
