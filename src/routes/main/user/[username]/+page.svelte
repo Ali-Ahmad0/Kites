@@ -142,7 +142,7 @@
                 <div class="more-options">
                     <Tooltip text="More">
                         <button class="more" onclick={toggle_drowpdown}>
-                            <Icon mode={folder} name="more" width=24 height=24 alt="more" />
+                            <Icon mode={folder} name="more_h" width=24 height=24 alt="more" />
                         </button>
                     </Tooltip>
                     
