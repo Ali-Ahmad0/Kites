@@ -30,7 +30,7 @@ model UserImages {
   size          Int
   binary_blob   Bytes
   username      String @unique
-  user          Users  @relation(fields: [username], references: [username]) 
+  user          Users  @relation(fields: [username], references: [username], onDelete: Cascade) 
 }
 
 model Sessions {
@@ -41,7 +41,7 @@ model Sessions {
   session_expires DateTime @db.Date
   
   user_id         String   @db.ObjectId 
-  user            Users    @relation(fields: [user_id], references: [id]) 
+  user            Users    @relation(fields: [user_id], references: [id], onDelete: Cascade) 
 }
 
 model Otp {
@@ -63,7 +63,7 @@ model ForumPosts {
   likes       Int     @default(0)
 
   author_name String  
-  user        Users   @relation(fields: [author_name], references: [username])  
+  user        Users   @relation(fields: [author_name], references: [username], onDelete: Cascade)  
   
   user_likes     ForumLikes[]
   images         ForumImages[]
@@ -77,7 +77,7 @@ model ForumImages {
   size          Int
   binary_blob   Bytes
   post_id       String      @db.ObjectId @unique
-  post          ForumPosts  @relation(fields: [post_id], references: [id]) 
+  post          ForumPosts  @relation(fields: [post_id], references: [id], onDelete: Cascade) 
 }
 
 
@@ -87,8 +87,8 @@ model ForumLikes {
   user_id String  @db.ObjectId
   post_id String  @db.ObjectId
 
-  user    Users       @relation(fields: [user_id], references: [id])
-  post    ForumPosts  @relation(fields: [post_id], references: [id])
+  user    Users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  post    ForumPosts  @relation(fields: [post_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, post_id])
 }
@@ -100,8 +100,8 @@ model ForumComments {
   comment     String  
   author_name String 
 
-  post        ForumPosts  @relation(fields: [post_id], references: [id])
-  user        Users       @relation(fields: [author_name], references: [username])
+  post        ForumPosts  @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user        Users       @relation(fields: [author_name], references: [username], onDelete: Cascade)
 }
 
 model BlogPosts {

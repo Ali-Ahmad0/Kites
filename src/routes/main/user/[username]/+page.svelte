@@ -12,6 +12,7 @@
     
     let show_dropdown: boolean = $state(false);
     let show_confirm: boolean = $state(false);
+    let is_deleting: boolean = $state(false);
 
     let folder: string = $state("dark_mode_icons");
     $effect(() => {
@@ -51,6 +52,18 @@
     async function logout() {
         await fetch('/api/user/logout', { method: 'POST' });
         window.location.href = '/';
+    }
+
+    async function delete_account() {
+        try {
+            is_deleting = true;
+            await fetch('/api/user/delete', { method: 'POST'});
+        } catch(e) {
+            console.error(e);
+        } finally {
+            is_deleting = false;
+            window.location.href = '/';
+        }
     }
 
     function toggle_drowpdown() {
@@ -183,8 +196,8 @@
                     <button class="cancel-button" onclick={cancel_delete}>
                         Cancel
                     </button>
-                    <button class="delete-button">
-                        Delete
+                    <button class="delete-button" onclick={delete_account}>
+                        {is_deleting ? "Deleting..." : "Delete"}
                     </button>
                 </div>
             </div>
