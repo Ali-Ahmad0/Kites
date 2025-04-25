@@ -8,6 +8,10 @@
         comments, image
     } = $props();
 
+    let is_deleting : boolean = $state(false);
+    let show_dropdown: boolean = $state(false);
+    let show_confirm: boolean = $state(false);
+
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
   
@@ -15,6 +19,28 @@
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
+
+    // delete the post and all related data
+    async function delete_post() {
+        try {
+            is_deleting = true;
+            await fetch('/api/forum/delete', { method: 'POST'});
+        } catch(e) {
+            console.error(e);
+        } finally {
+            is_deleting = false;
+            window.location.href = '/';
+        }
+    }
+
+    function ask_delete_confirmation() {
+        show_dropdown = false;
+        show_confirm = true;
+    }
+
+    function cancel_delete() {
+        show_confirm = false;
+    }
 
 </script>
 
@@ -58,6 +84,7 @@
             </div>
         </div>
     {/each}
+
 </div>
 
 <style>

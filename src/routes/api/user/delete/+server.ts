@@ -1,7 +1,6 @@
 import { prisma } from '$lib/server/prisma.server.js';
 import { delete_session } from '$lib/server/session.server';
 import { json } from '@sveltejs/kit';
-import { error } from 'console';
 
 export async function POST({ cookies, locals }) {
     try {
@@ -26,7 +25,7 @@ export async function POST({ cookies, locals }) {
                 { status: 400 }
             );
         }
-        
+
         // Get the session ID from cookies
         const session = cookies.get('session');
     
