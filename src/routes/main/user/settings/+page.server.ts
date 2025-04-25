@@ -28,13 +28,6 @@ export const actions: Actions = {
             });
         }
 
-        if (username.length < 3) {
-            return fail(400, { 
-                usernameError: 'Username must be at least 3 characters',
-                usernameSuccess: false
-            });
-        }
-
         // Check if username exists
         const existingUser = await prisma.users.findUnique({
             where: { username }
