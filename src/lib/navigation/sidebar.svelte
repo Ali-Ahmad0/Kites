@@ -91,7 +91,7 @@
                     </div>
                     <span class:label-hidden={$sidebar_collapsed}>Rules</span>
                 </button>
-                <button>
+                <button onclick={() => goto('/main/ranks')}>
                     <div class="icon-container">
                         <Icon mode={folder} name="verified" width={20} height={30} alt="verified"/>
                     </div>

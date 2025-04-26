@@ -30,7 +30,7 @@
         <ul class="navbar-links">
             <li>
                 <Tooltip text="Ranks">
-                      <button class="icon">
+                      <button class="icon" onclick={() => goto('/main/ranks')}>
                         <Icon mode={folder} name="verified" width=24 height=24 alt="verified"/>
                     </button>        
                 </Tooltip>           

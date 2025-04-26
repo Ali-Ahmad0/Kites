@@ -14,10 +14,16 @@ export async function POST({ request, locals }) {
             );
         }
         
+        // Get picture for post
         const image_file = data.get('image') as File;
-        let file_name: string | null = null;
-        let mime_type: string | null = null;
-        let size: number | null = null;
+
+        // check size of picture
+        if(image_file.size > 5242880){
+            return json(
+                {error: 'Image is too large'},
+                {status: 400}
+            )
+        }
 
         let post = await prisma.forumPosts.create({
             data: {
@@ -31,18 +37,14 @@ export async function POST({ request, locals }) {
 
           // create the image if there was one
         if (image_file && image_file.size > 0) {
-            file_name = image_file.name;
-            mime_type = image_file.type;
-            size = image_file.size;
-        
             const array_buffer = await image_file.arrayBuffer();
             const buffer = Buffer.from(array_buffer); 
         
             await prisma.forumImages.create({
                 data: {
-                    file_name: file_name,
-                    mime_type: mime_type ?? undefined,
-                    size: size ?? undefined,
+                    file_name: image_file.name,
+                    mime_type: image_file.type ?? undefined,
+                    size: image_file.size ?? undefined,
                     binary_blob: buffer,
                     post_id: post.id
                 }
