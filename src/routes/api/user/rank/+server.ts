@@ -14,12 +14,15 @@ export async function POST({ request, locals }) {
             );
         }
 
-        // Create a new comment
-        await prisma.forumComments.create({
-            data: {
-                post_id: data.post_id,
-                comment: data.comment,
-                author_name: user.username
+        const rank = data.rank;
+        
+        // Update user's rank in the database
+        await prisma.users.update({
+            where: {
+                id: user.id
+            },
+            data: {          
+                rank: rank  
             }
         });
 

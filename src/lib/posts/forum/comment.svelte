@@ -43,7 +43,7 @@
                 body: JSON.stringify({ comment_id: comment_data.id, author_name: comment_data.author_name })
             });
             
-        } catch(e) {
+        } catch (e) {
             console.error('[KITES | ERROR]: ', e);
         } finally {
             is_deleting = false;

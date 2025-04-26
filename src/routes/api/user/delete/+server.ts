@@ -39,8 +39,7 @@ export async function POST({ cookies, locals }) {
         locals.authenticated = false;
         return json({ success: true });
     
-    } catch (error) {
-        console.error('Deletion error:', error);
-        return json({ success: false, error: 'Internal server error' }, { status: 500 });
+    } catch (e) {
+        return json({ error: `Internal server error: ${e}` }, { status: 500 });
   }
 }

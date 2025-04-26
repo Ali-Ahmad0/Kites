@@ -9,7 +9,7 @@ export async function load({ params } : any) {
         where: {
             username: username
         },
-        select: { id: true, email: true }
+        select: { id: true, email: true, rank: true }
     })
     
     // Throw a 404 error if the user does not exist
@@ -20,6 +20,7 @@ export async function load({ params } : any) {
     }
     
     const email = user.email;
+    const rank = user.rank;
 
     const image = await prisma.userImages.findUnique({
         where: { username: username },
@@ -40,6 +41,7 @@ export async function load({ params } : any) {
     return {
         params_username: username,
         params_email_id: email,
+        rank: rank,
         image: image_url
     };
 }

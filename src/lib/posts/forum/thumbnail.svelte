@@ -34,7 +34,7 @@
     .post {
         background-color: var(--color-background-secondary);
         border-radius: 0.5rem;
-        padding: 0.75rem;
+        padding: 0.75rem 1.5rem;
         margin: 1rem 4rem 1rem 6rem;
 
         width: 35vw;

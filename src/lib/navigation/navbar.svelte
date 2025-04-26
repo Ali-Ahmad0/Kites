@@ -38,7 +38,7 @@
             <li>
                 <Tooltip text="Change Theme">
                     <button class="icon" onclick={() => { toggle_theme(); }}>
-                        <Icon mode={folder} name="toggle_theme" width=24 height=24 alt = "toggle_theme" />
+                        <Icon mode={folder} name="toggle_theme" width=24 height=24 alt="toggle_theme" />
                     </button>
                 </Tooltip>
             </li>

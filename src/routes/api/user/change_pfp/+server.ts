@@ -66,6 +66,6 @@ export async function POST({ request, locals }) {
         
         return json({ success: true });
     } catch(e){
-        return json({ success: false, error: 'Internal server error' }, { status: 500 });
+        return json({ error: `Internal server error: ${e}` }, { status: 500 });
     }
 }

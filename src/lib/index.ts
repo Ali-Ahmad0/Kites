@@ -8,6 +8,7 @@ export { default as Navbar } from "./navigation/navbar.svelte";
 export { default as Sidebar} from "./navigation/sidebar.svelte";
 export { default as Featured} from "./posts/featured.svelte";
 
+export { default as RankCard } from "./rank/rank.svelte";
 export { default as LoginCard } from "./login/logincard.svelte";
 
 export { default as Icon } from "./navigation/icon.svelte";

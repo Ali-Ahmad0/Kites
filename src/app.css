@@ -47,6 +47,12 @@ button {
     cursor: pointer;
 }
 
+@media screen and (max-width: 1024px) {
+    html {
+        font-size: 15px !important;
+    }
+}
+
 @media screen and (max-width:  768px) {
     html {
         font-size: 14px !important;

@@ -3,7 +3,6 @@
     import { goto } from '$app/navigation';
     import { Icon } from '$lib';
     import { Tooltip } from '$lib';
-    
 
     const { data } = $props();
 
@@ -38,7 +37,7 @@
                 body: form_data
             });
 
-        } catch(e) {
+        } catch (e) {
             console.error('[KITES | ERROR]: ', e);
         } finally {
             window.location.reload();
@@ -58,7 +57,7 @@
         try {
             is_deleting = true;
             await fetch('/api/user/delete', { method: 'POST'});
-        } catch(e) {
+        } catch (e) {
             console.error('[KITES | ERROR]: ', e);
         } finally {
             is_deleting = false;
