@@ -133,7 +133,13 @@
                     {/if}
                 </div>
                 <div class="user-info">
-                    <h2 class="username">{data.params_username}</h2>
+                    <div class="username-container">
+                        <h2 class="username">{data.params_username}</h2>
+                        {#if data.rank !== 'default'}
+                            <Icon mode={undefined} name={data.rank} width=36 height=36 alt="verified"/>
+                        {/if}
+                        
+                    </div>
                     <h4 class="email-id">{data.params_email_id}</h4>
                 </div>
                 
@@ -291,6 +297,11 @@
         flex-direction: column;
         justify-content: center;
         flex-grow: 1;
+    }
+
+    .username-container{
+        display: flex;
+        gap: 0.5rem;
     }
 
     .username {
