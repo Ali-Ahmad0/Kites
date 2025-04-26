@@ -281,14 +281,11 @@
     }
 
     .post-image {
-        width: 100%;
-        max-height: 500px;
-        border-radius: 0.5rem;
-        object-fit: contain;
+        width: 80%;
+        border-radius: 2rem;
         align-self: center;
     }
 
-    /* Confirmation dialog styles */
     .confirm-dialog {
         position: fixed;
         top: 0;

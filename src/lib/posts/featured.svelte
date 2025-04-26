@@ -14,9 +14,9 @@
         top: 84px;
         right: 24px;
 
-        width: 15vw;
+        width: 20vw;
 
-        max-width: 300px;
+        max-width: 400px;
         min-width: 240px;
         
         height: 35vw;
@@ -49,7 +49,7 @@
         padding: 1rem;
     }
 
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 1200px) {
         .container {
             display: none;
         }

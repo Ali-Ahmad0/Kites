@@ -178,11 +178,15 @@
         display: flex;
         gap: 0.75rem;
         margin: 1rem 0;
+
+        flex-wrap: wrap;
     }
 
     .engagement-btn {
         display: flex;
         align-items: center;
+        flex: 1;
+        justify-content: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
         border-radius: 2rem;
@@ -192,6 +196,8 @@
         font-size: 0.85rem;
         font-weight: 500;
         cursor: pointer;
+
+
         transition: all 0.2s ease;
     }
 
@@ -336,16 +342,5 @@
     button.confirm:disabled {
         opacity: 0.6;
         cursor: not-allowed;
-    }
-
-    @media (max-width: 768px) {
-        .engagement {
-            flex-wrap: wrap;
-        }
-
-        .engagement-btn {
-            flex: 1;
-            justify-content: center;
-        }
     }
 </style>

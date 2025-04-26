@@ -37,9 +37,9 @@
         padding: 0.75rem 1.5rem;
         margin: 1rem 4rem 1rem 6rem;
 
-        width: 35vw;
-        min-width: 500px;
-        max-width: 700px;
+        width: 45vw;
+        min-width: 400px;
+        max-width: 900px;
     }
     
     .header {
