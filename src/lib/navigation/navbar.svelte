@@ -30,10 +30,14 @@
         <ul class="navbar-links">
             <li>
                 {#if page.data.authenticated}
-                    <div class="token-icon">
-                        <Icon mode={undefined} name="token" width=24 height=24 alt="token"/>  
-                        <span>{page.data.tokens}</span>  
-                    </div>
+                   
+                        <Tooltip text="tokens">
+                            <div class="token-icon">
+                                <Icon mode={undefined} name="token" width=24 height=24 alt="token"/>  
+                                <span>{page.data.tokens}</span>  
+                            </div>
+                        </Tooltip>
+                   
                 {/if}   
             </li>
             <li>
