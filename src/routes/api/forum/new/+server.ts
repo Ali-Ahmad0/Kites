@@ -50,33 +50,26 @@ export async function POST({ request, locals }) {
             });
         }
 
-        let token = await prisma.tokens.findUnique({
-            where: {
-                user_id: user.id
-            }
+        const tokens = await prisma.tokens.findUnique({
+            where: { user_id: user.id },
+            select: { id: true }
         });
 
-        if(!token){
+        // Create token record if not exists
+        if (!tokens) {
             await prisma.tokens.create({
-                data: {
-                    user_id: user.id
-                }
+                data: { user_id: user.id }
             });
         }
 
+        // Add 10 tokens for creating post
         await prisma.tokens.update({
-            where: {
-                user_id: user.id
-            },
+            where: { user_id: user.id },
 
-            data: {
-                tokens:{
-                    increment: 10
-                }
+            data: { 
+                tokens: { increment: 10 } 
             }
-        })
-
-        console.log("tokens added")
+        });
 
         return json({ success: true });         
     } catch (e) {

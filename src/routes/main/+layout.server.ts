@@ -20,8 +20,18 @@ export const load = async ({ locals }: RequestEvent) => {
             image_url = `data:${image.mime_type};base64,${base64}`;
         }
     }
+
+    // Get tokens for user
+    let token_data = null;
+    if (locals.user && locals.authenticated) {
+        token_data = await prisma.tokens.findUnique({
+            where: { user_id: locals.user.id },
+            select: { tokens: true }
+        });
+    }
   
     return {
-        my_pfp: image_url
+        my_pfp: image_url,
+        tokens: token_data ? token_data.tokens : 0
     };
 };

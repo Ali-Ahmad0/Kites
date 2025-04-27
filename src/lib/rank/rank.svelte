@@ -1,11 +1,16 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import { page } from "$app/state";
     import { Icon } from "$lib"
-    let { rank, price} = $props();
+    let { rank, price } = $props();
 
     let is_purchasing = $state(false);
 
     async function purchase_rank(rank: string) {
         try {
+            if (!page.data.authenticated) 
+                goto('/login/signin')
+
             is_purchasing = true
             
             await fetch('/api/user/rank', {
@@ -16,7 +21,7 @@
                 body: JSON.stringify({ rank: rank})
             });
 
-        } catch(e) {
+        } catch (e) {
             console.log('[KITES | ERROR]: ', e);
         } finally {
             is_purchasing = false;

@@ -29,12 +29,12 @@
     <nav>
         <ul class="navbar-links">
             <li>
-                <Tooltip text="Tokens">
+                {#if page.data.authenticated}
                     <div class="token-icon">
                         <Icon mode={undefined} name="token" width=24 height=24 alt="token"/>  
-                        <span>1000</span>  
-                    </div>   
-                </Tooltip>           
+                        <span>{page.data.tokens}</span>  
+                    </div>
+                {/if}   
             </li>
             <li>
                 <Tooltip text="Ranks">
