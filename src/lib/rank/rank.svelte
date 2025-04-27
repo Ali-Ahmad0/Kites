@@ -13,20 +13,20 @@
 
             is_purchasing = true
             
-            const resp = await fetch('/api/user/rank', {
+            const response = await fetch('/api/user/rank', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ rank: rank})
+                body: JSON.stringify({ rank: rank })
             });
 
-            const data = await resp.json();
-
-            if(resp.status === 200){
+            
+            if (response.status === 200) {
                 window.location.href = '/';
             }
-
+            
+            const data = await response.json();
             alert(data.error);
             
         } catch (e) {
@@ -36,7 +36,6 @@
         }
 
     }
-
 </script>
 
 <div class="card">
