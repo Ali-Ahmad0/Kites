@@ -31,6 +31,8 @@
             // Reverse status if error
             if (response.status !== 200) {
                 liked = !liked;
+                const data = await response.json();
+                alert(data.error);
             }
 
             if (response.status === 401) {

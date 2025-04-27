@@ -35,21 +35,28 @@
     async function delete_comment() {
         try {
             is_deleting = true;
-            await fetch('/api/forum/comment/delete', { 
+            const resp =  await fetch('/api/forum/comment/delete', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ comment_id: comment_data.id, author_name: comment_data.author_name })
             });
+
+            if (resp.status === 200) {
+                window.location.reload();
+            }
+
+            else {
+                const data = await resp.json();
+                alert(data.error);
+            }
             
         } catch (e) {
             console.error('[KITES | ERROR]: ', e);
         } finally {
             is_deleting = false;
             show_confirm = false;
-
-            window.location.reload();
         }
     }
 </script>

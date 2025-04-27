@@ -27,18 +27,27 @@
     async function delete_post() {
         try {
             is_deleting = true;
-            await fetch('/api/forum/delete', { 
+            const resp = await fetch('/api/forum/delete', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ post_id: post_id, author_name: username })
             });
+
+            if(resp.status === 200) {
+                window.location.href = '/';
+            }
+
+            else {
+                const data = await resp.json();
+                alert(data.error);
+            }
+
         } catch(e) {
             console.error(e);
         } finally {
             is_deleting = false;
-            window.location.href = '/';
         }
     }
 

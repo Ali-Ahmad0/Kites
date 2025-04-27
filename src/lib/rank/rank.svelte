@@ -26,8 +26,10 @@
                 window.location.href = '/';
             }
             
-            const data = await response.json();
-            alert(data.error);
+            else {
+                const data = await response.json();
+                alert(data.error);
+            }
             
         } catch (e) {
             console.log('[KITES | ERROR]: ', e);

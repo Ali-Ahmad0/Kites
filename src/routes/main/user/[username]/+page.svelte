@@ -37,10 +37,16 @@
                 body: form_data
             });
 
+            if (response.status === 200) {
+                window.location.reload();
+            }
+
+            else {
+                const data = await response.json();
+                alert(data.error);
+            }
         } catch (e) {
             console.error('[KITES | ERROR]: ', e);
-        } finally {
-            window.location.reload();
         }
     }
 
@@ -49,19 +55,37 @@
     })
     
     async function logout() {
-        await fetch('/api/user/logout', { method: 'POST' });
-        window.location.href = '/';
+        try {
+            const resp = await fetch('/api/user/logout', { method: 'POST' });
+            if (resp.status === 200) {
+                window.location.href = '/';
+            }
+
+            else {
+                const data = await resp.json();
+                alert(data.error);
+            }
+        } catch(e) {
+            console.error(e);
+        }
     }
 
     async function delete_account() {
         try {
             is_deleting = true;
-            await fetch('/api/user/delete', { method: 'POST'});
+            const resp = await fetch('/api/user/delete', { method: 'POST'});
+            if(resp.status === 200) {
+                window.location.href = '/';
+            }
+
+            else {
+                const data = await resp.json();
+                alert(data.error);
+            }
         } catch (e) {
             console.error('[KITES | ERROR]: ', e);
         } finally {
             is_deleting = false;
-            window.location.href = '/';
         }
     }
 
