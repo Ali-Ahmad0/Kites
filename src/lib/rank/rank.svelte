@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Icon } from "$lib"
-    let { rank } = $props();
+    let { rank, price} = $props();
 
     let is_purchasing = $state(false);
 
@@ -13,7 +13,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ rank: rank })
+                body: JSON.stringify({ rank: rank})
             });
 
         } catch(e) {
@@ -35,7 +35,8 @@
 
     <p>Purchase to become a {rank} user</p>
     <button class="purchase" onclick={() => purchase_rank(rank)}>
-        { is_purchasing ? "Please Wait..." : "Purchase" }
+        { is_purchasing ? "Please Wait..." : `Purchase - ${price}` }
+     
     </button>
 </div>
 

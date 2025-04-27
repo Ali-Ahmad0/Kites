@@ -3,9 +3,9 @@
 </script>
 
 <div class="content">
-    <RankCard rank="Bronze"/>
-    <RankCard rank="Silver"/>
-    <RankCard rank="Golden"/>
+    <RankCard rank="Bronze" price={1000}/>
+    <RankCard rank="Silver" price={3000}/>
+    <RankCard rank="Golden" price={5000}/>
 </div>
 
 <style>

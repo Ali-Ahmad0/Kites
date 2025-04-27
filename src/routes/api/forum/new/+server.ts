@@ -18,10 +18,10 @@ export async function POST({ request, locals }) {
         const image_file = data.get('image') as File;
 
         // check size of picture
-        if(image_file.size > 5242880){
+        if(image_file && image_file.size > 5242880){
             return json(
-                {error: 'Image is too large'},
-                {status: 400}
+                { error: 'Image is too large' },
+                { status: 400 }
             )
         }
 
@@ -30,13 +30,12 @@ export async function POST({ request, locals }) {
                 heading: data.get('heading') as string,
                 content: data.get('content') as string,
                 author_name: user.username,
-                topic: data.get('topic') as string,
-                likes: 0
+                topic: data.get('topic') as string
             }
         });
 
           // create the image if there was one
-        if (image_file && image_file.size > 0) {
+        if (image_file) {
             const array_buffer = await image_file.arrayBuffer();
             const buffer = Buffer.from(array_buffer); 
         
@@ -50,6 +49,34 @@ export async function POST({ request, locals }) {
                 }
             });
         }
+
+        let token = await prisma.tokens.findUnique({
+            where: {
+                user_id: user.id
+            }
+        });
+
+        if(!token){
+            await prisma.tokens.create({
+                data: {
+                    user_id: user.id
+                }
+            });
+        }
+
+        await prisma.tokens.update({
+            where: {
+                user_id: user.id
+            },
+
+            data: {
+                tokens:{
+                    increment: 10
+                }
+            }
+        })
+
+        console.log("tokens added")
 
         return json({ success: true });         
     } catch (e) {

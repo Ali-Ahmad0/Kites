@@ -21,6 +21,7 @@ model Users {
   forum_likes     ForumLikes[]
   profile_picture UserImages[]
   forum_comments  ForumComments[]
+  tokens          Tokens[]
 }
 
 model UserImages {
@@ -108,4 +109,11 @@ model BlogPosts {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   heading String
   content String
+}
+
+model Tokens {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  tokens   Int      @default(0)
+  user_id  String   @db.ObjectId @unique
+  user     Users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

@@ -29,6 +29,14 @@
     <nav>
         <ul class="navbar-links">
             <li>
+                <Tooltip text="Tokens">
+                    <div class="token-icon">
+                        <Icon mode={undefined} name="token" width=24 height=24 alt="token"/>  
+                        <span>1000</span>  
+                    </div>   
+                </Tooltip>           
+            </li>
+            <li>
                 <Tooltip text="Ranks">
                       <button class="icon" onclick={() => goto('/main/ranks')}>
                         <Icon mode={folder} name="verified" width=24 height=24 alt="verified"/>
@@ -166,6 +174,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .token-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.75rem;
+        margin-right: 0.5rem;
     }
 
 </style>
