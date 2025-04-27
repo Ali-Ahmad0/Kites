@@ -72,7 +72,6 @@
             }
 
             if (response.status !== 200) {
-                console.error('[KITES | ERROR]: Failed to create new post');
                 const data = await response.json();
                 alert(data.error);
             }

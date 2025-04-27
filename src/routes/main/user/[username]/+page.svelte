@@ -39,9 +39,7 @@
 
             if (response.status === 200) {
                 window.location.reload();
-            }
-
-            else {
+            } else {
                 const data = await response.json();
                 alert(data.error);
             }
@@ -57,11 +55,10 @@
     async function logout() {
         try {
             const resp = await fetch('/api/user/logout', { method: 'POST' });
+            
             if (resp.status === 200) {
                 window.location.href = '/';
-            }
-
-            else {
+            } else {
                 const data = await resp.json();
                 alert(data.error);
             }
@@ -74,11 +71,10 @@
         try {
             is_deleting = true;
             const resp = await fetch('/api/user/delete', { method: 'POST'});
+            
             if(resp.status === 200) {
                 window.location.href = '/';
-            }
-
-            else {
+            } else {
                 const data = await resp.json();
                 alert(data.error);
             }

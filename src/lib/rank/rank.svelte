@@ -21,12 +21,9 @@
                 body: JSON.stringify({ rank: rank })
             });
 
-            
             if (response.status === 200) {
                 window.location.href = '/';
-            }
-            
-            else {
+            } else {
                 const data = await response.json();
                 alert(data.error);
             }

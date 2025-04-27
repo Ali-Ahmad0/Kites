@@ -37,9 +37,7 @@
 
             if(resp.status === 200) {
                 window.location.href = '/';
-            }
-
-            else {
+            } else {
                 const data = await resp.json();
                 alert(data.error);
             }
