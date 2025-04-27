@@ -105,12 +105,6 @@ model ForumComments {
   user        Users       @relation(fields: [author_name], references: [username], onDelete: Cascade)
 }
 
-model BlogPosts {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  heading String
-  content String
-}
-
 model Tokens {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   tokens   Int      @default(0)

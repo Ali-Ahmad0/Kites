@@ -13,7 +13,7 @@
 
             is_purchasing = true
             
-            await fetch('/api/user/rank', {
+            const resp = await fetch('/api/user/rank', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -21,11 +21,18 @@
                 body: JSON.stringify({ rank: rank})
             });
 
+            const data = await resp.json();
+
+            if(resp.status === 200){
+                window.location.href = '/';
+            }
+
+            alert(data.error);
+            
         } catch (e) {
             console.log('[KITES | ERROR]: ', e);
         } finally {
             is_purchasing = false;
-            window.location.href = '/';
         }
 
     }
