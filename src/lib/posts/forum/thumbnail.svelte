@@ -20,7 +20,9 @@
             <span class="topic"><strong>{topic}</strong></span>
         </div>
         <h3 class="title">{heading}</h3>
-        <img src={image} alt="cover" class="cover">
+        {#if image}
+          <img src={image} alt="cover" class="cover">
+        {/if}
     </a>
     <Engagement post_id={post_id} user_liked={user_liked} />
 </div>    
