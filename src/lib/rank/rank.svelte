@@ -44,7 +44,7 @@
     </div>
 
     <p>Purchase to become a {rank} user</p>
-    <button class="purchase" onclick={() => purchase_rank(rank)}>
+    <button class="purchase" onclick={() => purchase_rank(rank)} disabled={is_purchasing}>
         { is_purchasing ? "Please Wait..." : `Purchase - ${price}` }
      
     </button>
@@ -131,5 +131,9 @@
     .purchase:hover {
         border-color: var(--color-blue-secondary);
         transform: translateY(-2px);
+    }
+
+    .purchase:disabled {
+        cursor: not-allowed;
     }
 </style>

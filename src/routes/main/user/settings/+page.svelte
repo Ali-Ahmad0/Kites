@@ -192,7 +192,7 @@
     transition: background 0.3s;
   }
 
-  .save-button:hover:not(:disabled) {
+  .save-button:hover {
     background: var(--color-blue-secondary);
   }
 
