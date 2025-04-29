@@ -25,6 +25,7 @@ export async function POST({ request, locals }) {
             )
         }
 
+        // remove malicious content before adding into the database
         let post = await prisma.forumPosts.create({
             data: {
                 heading: data.get('heading') as string,
@@ -63,7 +64,7 @@ export async function POST({ request, locals }) {
             });
         }
 
-        // Add 10 tokens for creating post
+        // Add 10 tokens for creating a discussion post
         await prisma.tokens.update({
             where: { user_id: user.id },
 
@@ -71,6 +72,15 @@ export async function POST({ request, locals }) {
                 tokens: { increment: 10 } 
             }
         });
+
+        // Add 30 tokens for creating a blog post
+        await prisma.tokens.update({
+            where: {user_id: user.id},
+
+            data: {   
+                tokens: { increment: 30 }
+            }
+        })
 
         return json({ success: true });         
     } catch (e) {

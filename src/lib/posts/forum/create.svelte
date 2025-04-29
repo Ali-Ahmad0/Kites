@@ -93,7 +93,6 @@
         }
     }
 
-
 </script>
 
 <div class="post-container">

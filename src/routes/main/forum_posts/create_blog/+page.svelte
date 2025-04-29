@@ -69,7 +69,9 @@
             image = undefined;
             show_modal = false;
 
-            window.location.reload();
+            // window.location.reload();
+            // redirect to home page
+            goto('/main/home');
 
         } catch (e) {
             console.error("[KITES | ERROR] Failed to create new blog post", e);
@@ -118,10 +120,6 @@
           <label for="content">Content</label>
           <textarea id="content" name="content" rows="5" bind:value={content_text} required></textarea>
         </div>
-
-        <!-- <div class="form-group">
-          <a href="/main/forum_posts/[topic}" class="create-forum-post">Create a discussion post</a>
-        </div> -->
         
         <div class="form-actions">
           <button type="button" class="cancel" onclick={toggle_modal}>

@@ -96,6 +96,7 @@ export async function load({ locals, params }: any) {
             content: post.content,
             author: post.author_name,
             topic: post.topic,
+            type: post.type,
             
             author_pfp: author_pfp_url,
             image: image_url,

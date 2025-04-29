@@ -4,6 +4,8 @@
     import { Engagement } from "$lib";
     import { Icon } from "$lib";
     import { Tooltip } from "$lib";
+    import { marked } from 'marked';
+    import DOMPurify from 'dompurify';
 
     const { 
         post_id, user_liked, pfp,
@@ -14,6 +16,14 @@
     let is_deleting : boolean = $state(false);
     let show_dropdown: boolean = $state(false);
     let show_confirm: boolean = $state(false);
+    let safeHtml: string = $state("");
+
+    async function processMarkdown() {
+        const html = await marked(content); // Wait for the promise to resolve
+        safeHtml = DOMPurify.sanitize(html); // Sanitize the resolved HTML
+    }
+
+    processMarkdown();
 
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
@@ -84,7 +94,7 @@
             <p class="user-name">{username}</p>
         </div>   
         <div class="right-section">
-            <p class="topic">{topic}</p>
+            <p class="topic">{topic} | {type}</p>
             
             {#if page.data.authenticated && page.data.user?.username === username}
                 <div class="post-options">
@@ -118,7 +128,7 @@
         
         {#if type === 'discussion'}
         <p class="content">
-            {content}
+            {@html safeHtml}
         </p>
         {#if image}
             <img src={image || "/placeholder.svg"} alt="" class="post-image">
@@ -129,7 +139,7 @@
                 <img src={image || "/placeholder.svg"} alt="" class="post-image">
             {/if}
             <p class="content">
-                {content}
+                {@html safeHtml}
             </p>
         {/if}
         <Engagement post_id={post_id} user_liked={user_liked}/>
