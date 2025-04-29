@@ -364,7 +364,7 @@
         border: 1px solid var(--color-navigation-border);
     }
     
-    .cancel-button:hover:not(:disabled) {
+    .cancel-button:hover {
         border-color: var(--color-blue-primary);
         color: var(--color-blue-primary);
     }
@@ -376,7 +376,7 @@
         border: none;
     }
     
-    .delete-button:hover:not(:disabled) {
+    .delete-button:hover {
         background-color: var(--color-red-dark, #c62828);
     }
 

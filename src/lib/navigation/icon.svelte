@@ -3,10 +3,9 @@
 </script>
 
 {#if mode}
-<img src={`/icons/${mode}/${name}.svg`} {width} {height} {alt} />
-
+    <img src={`/icons/${mode}/${name}.svg`} width={width} height={height} alt={alt} />
 {:else}
-<img src={`/icons/${name}.svg`} {width} {height} {alt} />
+    <img src={`/icons/${name}.svg`} width={width} height={height} alt={alt} />
 {/if}
 
 
