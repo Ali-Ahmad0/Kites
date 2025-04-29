@@ -8,7 +8,7 @@
     const { 
         post_id, user_liked, pfp,
         heading, username, content, topic,
-        comments, image,
+        comments, image, type
     } = $props();
 
     let is_deleting : boolean = $state(false);
@@ -116,11 +116,21 @@
     <div class="post">
         <h1 class="title">{heading}</h1>
         
+        {#if type === 'discussion'}
         <p class="content">
             {content}
         </p>
         {#if image}
             <img src={image || "/placeholder.svg"} alt="" class="post-image">
+        {/if}
+
+        {:else}
+            {#if image}
+                <img src={image || "/placeholder.svg"} alt="" class="post-image">
+            {/if}
+            <p class="content">
+                {content}
+            </p>
         {/if}
         <Engagement post_id={post_id} user_liked={user_liked}/>
     </div>

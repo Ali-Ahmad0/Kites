@@ -30,7 +30,8 @@ export async function POST({ request, locals }) {
                 heading: data.get('heading') as string,
                 content: data.get('content') as string,
                 author_name: user.username,
-                topic: data.get('topic') as string
+                topic: data.get('topic') as string,
+                type: data.get('type') as string
             }
         });
 

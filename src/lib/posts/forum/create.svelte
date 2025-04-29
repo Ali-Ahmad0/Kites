@@ -57,6 +57,7 @@
             form_data.append('heading', heading_text);
             form_data.append('content', content_text);
             form_data.append('topic', topic_chosen);
+            form_data.append('type', "discussion");
             if (image) {
                 form_data.append('image', image);
             }
@@ -91,6 +92,7 @@
             is_creating = false;
         }
     }
+
 
 </script>
 
@@ -156,6 +158,10 @@
                         <label for="image">Image</label>
                         <input type="file" id="image" name="image" onchange={handle_file_upload} accept="image/*">
                     </div>
+
+                    <div class="form-group">
+                        <a href="/main/forum_posts/create_blog" class="create-blog">Create a blog post</a>
+                    </div>
                     
                     <div class="form-actions">
                         <button type="button" class="cancel" onclick={toggle_modal}>
@@ -165,8 +171,7 @@
                         disabled={!heading_text.trim() || !topic_chosen.trim() || !content_text.trim() || is_creating}>
                             {is_creating ? 'Creating...' : 'Create Post'}
                         </button>
-                    </div>
-                    
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -357,4 +362,15 @@
         opacity: 0.6;
         cursor: not-allowed;
     }
+
+    .create-blog {
+        text-decoration: none;
+        color: var(--color-blue-primary);
+        transition: color 0.2s ease;
+    }
+
+    .create-blog:hover {
+        color: var(--color-blue-secondary);
+    }
+
 </style>

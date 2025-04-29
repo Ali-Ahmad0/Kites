@@ -62,6 +62,7 @@ model ForumPosts {
   content     String 
   topic       String
   likes       Int     @default(0)
+  type        String @default("discussion")
 
   author_name String  
   user        Users   @relation(fields: [author_name], references: [username], onDelete: Cascade)  
