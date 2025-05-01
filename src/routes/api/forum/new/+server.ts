@@ -65,23 +65,26 @@ export async function POST({ request, locals }) {
         }
 
         // Add 10 tokens for creating a discussion post
-        await prisma.tokens.update({
-            where: { user_id: user.id },
-
-            data: { 
-                tokens: { increment: 10 } 
-            }
-        });
+        if (data.get('type') === "discussion") {
+            await prisma.tokens.update({
+                where: { user_id: user.id },
+    
+                data: { 
+                    tokens: { increment: 10 } 
+                }
+            });
+        }
 
         // Add 30 tokens for creating a blog post
-        await prisma.tokens.update({
+        else {
+            await prisma.tokens.update({
             where: {user_id: user.id},
 
             data: {   
                 tokens: { increment: 30 }
             }
         })
-
+    }
         return json({ success: true });         
     } catch (e) {
         return json({ error: `Internal server error: ${e}` }, { status: 500 });

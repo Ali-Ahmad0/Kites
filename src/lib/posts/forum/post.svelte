@@ -8,13 +8,12 @@
     const { 
         post_id, user_liked, pfp,
         heading, username, content, topic,
-        comments, image, type
+        comments, image, type, user_id
     } = $props();
 
     let is_deleting : boolean = $state(false);
     let show_dropdown: boolean = $state(false);
     let show_confirm: boolean = $state(false);
-    let safeHtml: string = $state("");
 
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
@@ -33,7 +32,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ post_id: post_id, author_name: username })
+                body: JSON.stringify({ post_id: post_id, author_name: username, type: type, user_id: user_id })
             });
 
             if(resp.status === 200) {

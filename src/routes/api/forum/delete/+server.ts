@@ -7,6 +7,8 @@ export async function POST({ request, locals }) {
         const data = await request.json();
         const post_id = data.post_id;
         const author = data.author_name;
+        const post_type = data.type;
+        const author_id = data.user_id; 
 
         if (locals.user?.username !== author || !locals.user || !locals.authenticated) {
             return json(
@@ -27,6 +29,26 @@ export async function POST({ request, locals }) {
                 { error: 'Failed to delete post' },
                 { status: 400 }
             );
+        }
+
+        // decrement the tokens as well
+        if (post_type === "discussion") {
+
+            await prisma.tokens.update({
+                where: { user_id: author_id },
+    
+                data: { 
+                    tokens: { decrement: 10 } 
+                }
+            });
+        } else {
+            await prisma.tokens.update({
+                where: { user_id: author_id },
+    
+                data: { 
+                    tokens: { decrement: 30 } 
+                }
+            });
         }
 
         return json({ success: true });

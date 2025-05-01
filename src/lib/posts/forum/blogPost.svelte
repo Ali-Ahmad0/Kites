@@ -10,7 +10,7 @@
     const { 
         post_id, user_liked, pfp,
         heading, username, content, topic,
-        comments, image, type, published_date = new Date().toISOString()
+        comments, image, type, user_id
     } = $props();
 
     let is_deleting : boolean = $state(false);
@@ -35,7 +35,6 @@
 
     // delete the post and all related data
     async function delete_post() {
-        async function delete_post() {
         try {
             is_deleting = true;
             const resp = await fetch('/api/forum/delete', { 
@@ -43,7 +42,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ post_id: post_id, author_name: username })
+                body: JSON.stringify({ post_id: post_id, author_name: username, type: type, user_id: user_id })
             });
 
             if(resp.status === 200) {
@@ -58,7 +57,6 @@
         } finally {
             is_deleting = false;
         }
-      }
     }
 
     function ask_delete_confirmation() {
