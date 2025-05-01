@@ -16,14 +16,14 @@
     let is_deleting : boolean = $state(false);
     let show_dropdown: boolean = $state(false);
     let show_confirm: boolean = $state(false);
-    let safeHtml: string = $state("");
+    let safe_html: string = $state("");
 
-    async function processMarkdown() {
-        const html = await marked(content); // Wait for the promise to resolve
-        safeHtml = sanitizeHtml(html); // Sanitize the resolved HTML
+    async function process_markdown() {
+        const html = await marked(content); 
+        safe_html = sanitizeHtml(html); // Sanitize the resolved HTML
     }
     
-    processMarkdown();
+    process_markdown();
 
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
@@ -137,7 +137,7 @@
     {/if}
     
     <div class="blog-content">
-        {@html safeHtml}
+        {@html safe_html}
     </div>
     
     <div class="blog-engagement">

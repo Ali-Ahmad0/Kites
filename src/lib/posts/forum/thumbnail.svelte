@@ -3,7 +3,7 @@
 
     const { 
         post_id, user_liked, pfp, 
-        username, topic, heading, image
+        username, topic, heading, image, type
     } = $props();
 
 </script>
@@ -17,7 +17,7 @@
                 <img class="pfp" src="/profile.jpg" alt="pfp">
             {/if}
             <span class="username">{username}</span>
-            <span class="topic"><strong>{topic}</strong></span>
+            <span class="topic"><strong>{topic} | {type}</strong></span>
         </div>
         <h3 class="title">{heading}</h3>
         {#if image}

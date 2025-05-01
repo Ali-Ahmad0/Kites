@@ -156,11 +156,9 @@
                     <div class="form-group">
                         <label for="image">Image</label>
                         <input type="file" id="image" name="image" onchange={handle_file_upload} accept="image/*">
+                        <span class="file-hint">{image ? `Selected: ${image.name}` : 'No file selected'}</span>
                     </div>
 
-                    <div class="form-group">
-                        <a href="/main/forum_posts/create_blog" class="create-blog">Create a blog post</a>
-                    </div>
                     
                     <div class="form-actions">
                         <button type="button" class="cancel" onclick={toggle_modal}>
@@ -168,10 +166,22 @@
                         </button>
                         <button type="button" class="confirm" onclick={create_post}
                         disabled={!heading_text.trim() || !topic_chosen.trim() || !content_text.trim() || is_creating}>
-                            {is_creating ? 'Creating...' : 'Create Post'}
-                        </button>
-                    </div>                    
+                        {is_creating ? 'Creating...' : 'Create Post'}
+                    </button>
+                </div>                    
+                <div class="blog-link-container">
+                    <div class="divider">
+                        <span>or</span>
+                    </div>
+                    <a href="/main/forum_posts/create_blog" class="create-blog-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        Create a blog post instead
+                    </a>
                 </div>
+            </div>
             </div>
         </div>
     {/if}
@@ -184,160 +194,161 @@
     
     .add-button {
         position: fixed;
-        
         bottom: 2rem;
         right: 2rem;
-        
         width: 3.5rem;
         height: 3.5rem;
         border-radius: 50%;
-        
         background-color: var(--color-blue-primary);
         color: white;
-        
         border: none;
         display: flex;
         align-items: center;
         justify-content: center;
-        
         cursor: pointer;
-        
         transition: transform 0.2s, background-color 0.2s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 50;
     }
     
     .add-button:hover {
         transform: scale(1.075);
-        background-color: var(--color-blue-secondary)
+        background-color: var(--color-blue-secondary);
     }
     
     .modal-backdrop {
         position: fixed;
         top: 0;
         left: 0;
-        
         width: 100%;
         height: 100%;
-        
-        background-color: rgba(0, 0, 0, 0.5);
-        
+        background-color: rgba(0, 0, 0, 0.6);
         display: flex;
         align-items: center;
         justify-content: center;
-        
         z-index: 100;
+        backdrop-filter: blur(2px);
     }
     
     .modal-content {
         background-color: var(--color-background-secondary);
         border-radius: 1.5rem;
-        
         width: 90%;
-        
-        max-width: 500px;
+        max-width: 550px;
         max-height: 90vh;
-        
         overflow-y: auto;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     }
     
     .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        
-        padding: 1rem;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
     
     .modal-header h2 {
         margin: 0;
-        font-size: 1.25rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--color-text-primary);
     }
     
     .close-button {
         background: none;
         border: none;
-        
         cursor: pointer;
         color: var(--color-text-primary);
-        
         padding: 0.25rem;
         border-radius: 0.25rem;
-        
-        transition: color 0.2s;
+        transition: color 0.2s, background-color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .close-button:hover {
         color: var(--color-text-secondary);
+        background-color: rgba(0, 0, 0, 0.05);
     }
     
     .modal-body {
-        padding: 1rem;
+        padding: 1.5rem;
     }
     
     .form-group {
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
     }
     
     .form-group label {
         display: block;
         margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--color-text-primary);
     }
     
     .form-group input,
     .form-group textarea {
-        width: 95%;
-        padding: 0.25rem 0.75rem;
-        
+        width: 100%;
+        padding: 0.75rem 1rem;
         color: var(--color-text-secondary);
         background-color: var(--color-background-primary);
-        
-        border-radius: 0.25rem;
-        border-color: var(--color-blue-secondary);
-        
+        border-radius: 0.5rem;
+        border: 1.5px solid var(--color-blue-secondary);
         font-family: inherit;
         font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--color-blue-primary);
+        box-shadow: 0 0 0 3px rgba(var(--color-blue-primary-rgb, 0, 120, 212), 0.2);
     }
 
     .form-group select {
         width: 100%;
-        padding: 0.5rem 0.75rem;
+        padding: 0.75rem 1rem;
         color: var(--color-text-secondary);
         background-color: var(--color-background-primary);
-        border-radius: 0.25rem;
-        border-color: var(--color-blue-secondary);
+        border-radius: 0.5rem;
+        border: 1.5px solid var(--color-blue-secondary);
         font-family: inherit;
         font-size: 1rem;
         cursor: pointer;
-    }
-
-    .form-group select:focus {
-        outline: none;
-        border-color: var(--color-blue-primary);
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
+        transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .form-group textarea {
-        resize: none;
+        resize: vertical;
+        min-height: 120px;
     }
     
     .form-actions {
         display: flex;
-        
         justify-content: flex-end;
-        gap: 0.75rem;
-        
-        margin-top: 1.5rem;
-        margin-bottom: 1rem;
+        gap: 1rem;
+        margin-top: 2rem;
     }
     
     button.cancel, button.confirm {
         color: white;
-
         border: none;
-        border-radius: 0.25rem;
-
-        padding: 0.6rem 1.25rem;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.5rem;
         cursor: pointer;
-
-        transition: background-color 0.2s;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: background-color 0.2s, transform 0.1s;
     }
 
     button.cancel {
@@ -356,20 +367,93 @@
         background-color: var(--color-blue-secondary);
     }
 
+    button.cancel:active,
+    button.confirm:active {
+        transform: translateY(1px);
+    }
     
     button.confirm:disabled {
         opacity: 0.6;
         cursor: not-allowed;
     }
 
-    .create-blog {
+    /* Improved blog link styling */
+    .blog-link-container {
+        margin: 2rem 0;
+        text-align: center;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid var(--color-navigation-border);
+    }
+
+    .divider span {
+        padding: 0 1rem;
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+    }
+    
+    .create-blog-link {
         text-decoration: none;
         color: var(--color-blue-primary);
+    
         transition: color 0.2s ease;
     }
 
-    .create-blog:hover {
+    .create-blog-link:hover {
         color: var(--color-blue-secondary);
     }
 
+    .form-group input[type="file"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1.5px dashed var(--color-blue-secondary);
+        background-color: rgba(0, 0, 0, 0.03);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .form-group input[type="file"]:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        border-color: var(--color-blue-primary);
+    }
+
+    .form-group input[type="file"]:focus {
+        outline: none;
+        border-color: var(--color-blue-primary);
+        box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+    }
+
+    .file-hint {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .modal-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+            gap: 0.75rem;
+        }
+
+        button.cancel, button.confirm {
+            width: 100%;
+        }
+    }
 </style>
