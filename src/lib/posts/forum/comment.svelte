@@ -142,6 +142,7 @@
         height: 2.5rem;
         border-radius: 50%;
         object-fit: cover;
+        border: 2px solid var(--color-blue-primary, #3b82f6);
     }
 
     .comment-content {

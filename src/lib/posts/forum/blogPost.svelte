@@ -1,20 +1,29 @@
 <script lang="ts">
-	import { page } from "$app/state";
-    import { ForumComment, is_dark_mode } from "$lib";	
+    import { page } from "$app/state";
+    import { ForumComment,is_dark_mode } from "$lib";	
     import { Engagement } from "$lib";
     import { Icon } from "$lib";
     import { Tooltip } from "$lib";
+    import { marked } from 'marked';
+    import sanitizeHtml from 'sanitize-html';
 
     const { 
         post_id, user_liked, pfp,
         heading, username, content, topic,
-        comments, image, type
+        comments, image, type, published_date = new Date().toISOString()
     } = $props();
 
     let is_deleting : boolean = $state(false);
     let show_dropdown: boolean = $state(false);
     let show_confirm: boolean = $state(false);
     let safeHtml: string = $state("");
+
+    async function processMarkdown() {
+        const html = await marked(content); // Wait for the promise to resolve
+        safeHtml = sanitizeHtml(html); // Sanitize the resolved HTML
+    }
+    
+    processMarkdown();
 
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
@@ -26,6 +35,7 @@
 
     // delete the post and all related data
     async function delete_post() {
+        async function delete_post() {
         try {
             is_deleting = true;
             const resp = await fetch('/api/forum/delete', { 
@@ -48,6 +58,7 @@
         } finally {
             is_deleting = false;
         }
+      }
     }
 
     function ask_delete_confirmation() {
@@ -74,18 +85,25 @@
 
 <svelte:window on:click={handle_click_outside} />
 
-<div class="container">
-    <div class="details">
-        <div class="author">
-            {#if pfp}
-                <img src={pfp || "/placeholder.svg"} alt="pfp" class="pfp">
-            {:else}
-                <img class="pfp" src="/profile.jpg" alt="pfp">
-            {/if}
-            <p class="user-name">{username}</p>
-        </div>   
-        <div class="right-section">
-            <p class="topic">{topic} | {type}</p>
+<article class="blog-container">
+    <header class="blog-header">
+        <div class="blog-meta">
+            <div class="blog-topic">{topic} | {type} </div>
+        </div>
+        
+        <h1 class="blog-title">{heading}</h1>
+        
+        <div class="blog-author-container">
+            <div class="blog-author">
+                {#if pfp}
+                    <img src={pfp || "/placeholder.svg"} alt="{username}'s profile" class="blog-author-image">
+                {:else}
+                    <img class="blog-author-image" src="/profile.jpg" alt="{username}'s profile">
+                {/if}
+                <div class="blog-author-info">
+                    <p class="blog-author-name">{username}</p>
+                </div>
+            </div>   
             
             {#if page.data.authenticated && page.data.user?.username === username}
                 <div class="post-options">
@@ -112,31 +130,32 @@
                 </div>
             {/if}
         </div>
+    </header>
+    
+    {#if image}
+        <div class="blog-featured-image-container">
+            <img src={image || "/placeholder.svg"} alt="Featured image for {heading}" class="blog-featured-image">
+        </div>
+    {/if}
+    
+    <div class="blog-content">
+        {@html safeHtml}
     </div>
     
-    <div class="post">
-        <h1 class="title">{heading}</h1>
-        
-        <p class="content">
-            {content}
-        </p>
-        {#if image}
-            <img src={image || "/placeholder.svg"} alt="" class="post-image">
-        {/if}
-
+    <div class="blog-engagement">
         <Engagement post_id={post_id} user_liked={user_liked}/>
     </div>
-
-    <div class="comments-section">
-        <h2 class="comments-title">Comments</h2>
+    
+    <div class="blog-comments-section">
+        <h2 class="blog-comments-title">Comments</h2>
         {#if comments.length > 0}
-            <div class="comments">
+            <div class="blog-comments">
                 {#each comments as comment_data (comment_data.id)}
                     <ForumComment {comment_data}/>
                 {/each}
             </div>
         {:else}
-            <p class="no-comments">No comments yet. Be the first to share your thoughts!</p>
+            <p class="blog-no-comments">No comments yet. Be the first to share your thoughts!</p>
         {/if}
     </div>
 
@@ -160,37 +179,56 @@
             </div>
         </div>
     {/if}
-</div>
+</article>
 
 <style>
-    .container {
-        display: flex;
-        flex-direction: column;
-        max-width: 1000px;
+    .blog-container {
+        max-width: 800px;
         margin: 0 auto;
-        padding: 1.5rem;
-        background-color: var(--color-background-primary);
-        border-radius: 1rem;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        padding: 2rem 1.5rem;
+        color: var(--color-text-primary);
     }
 
-    .details {
+    .blog-header {
+        margin-bottom: 2rem;
+    }
+
+    .blog-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .blog-topic {
+        background-color: var(--color-background-secondary, #f5f5f5);
+        color: var(--color-text-secondary);
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-weight: 500;
+    }
+
+    .blog-title {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        margin: 0 0 1.5rem 0;
+        font-weight: 800;
+    }
+
+    .blog-author-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--color-navigation-border);
     }
 
-    .author {
-        text-decoration: none;
+    .blog-author {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 1rem;
     }
 
-    .pfp {
+    .blog-author-image {
         width: 3rem;
         height: 3rem;
         border-radius: 50%;
@@ -199,30 +237,141 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .user-name {
-        color: var(--color-text-primary);
+    .blog-author-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .blog-author-name {
         margin: 0;
         font-weight: 600;
         font-size: 1.1rem;
     }
 
-    .right-section {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+    .blog-featured-image-container {
+        margin: 2rem 0;
+        border-radius: 1rem;
+        overflow: hidden;
     }
 
-    .topic {
-        background-color: var(--color-background-secondary, #f5f5f5);
+    .blog-featured-image {
+        width: 100%;
+        max-height: 500px;
+        object-fit: cover;
+    }
+
+    .blog-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 3rem;
+    }
+
+    /* Style markdown content */
+    .blog-content :global(h1) {
+        font-size: 2rem;
+        margin: 2rem 0 1rem;
+    }
+
+    .blog-content :global(h2) {
+        font-size: 1.75rem;
+        margin: 1.75rem 0 1rem;
+    }
+
+    .blog-content :global(h3) {
+        font-size: 1.5rem;
+        margin: 1.5rem 0 1rem;
+    }
+
+    .blog-content :global(p) {
+        margin: 1.25rem 0;
+    }
+
+    .blog-content :global(ul), .blog-content :global(ol) {
+        margin: 1.25rem 0;
+        padding-left: 2rem;
+    }
+
+    .blog-content :global(li) {
+        margin: 0.5rem 0;
+    }
+
+    .blog-content :global(blockquote) {
+        border-left: 4px solid var(--color-blue-primary, #3b82f6);
+        padding-left: 1rem;
+        margin: 1.5rem 0;
+        font-style: italic;
         color: var(--color-text-secondary);
-        padding: 0.35rem 1rem;
-        border-radius: 2rem;
-        font-weight: 500;
-        font-size: 0.9rem;
-        letter-spacing: 0.02em;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
+    .blog-content :global(pre) {
+        background-color: var(--color-background-secondary, #f5f5f5);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
+
+    .blog-content :global(code) {
+        font-family: monospace;
+        background-color: var(--color-background-secondary, #f5f5f5);
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-size: 0.9em;
+    }
+
+    .blog-content :global(pre code) {
+        background-color: transparent;
+        padding: 0;
+    }
+
+    .blog-content :global(img) {
+        max-width: 100%;
+        border-radius: 0.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .blog-content :global(a) {
+        color: var(--color-blue-primary, #3b82f6);
+        text-decoration: none;
+    }
+
+    .blog-content :global(a:hover) {
+        text-decoration: underline;
+    }
+
+    .blog-content :global(hr) {
+        border: none;
+        border-top: 1px solid var(--color-navigation-border);
+        margin: 2rem 0;
+    }
+
+    .blog-engagement {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--color-navigation-border);
+    }
+
+    .blog-comments-section {
+        margin-top: 2rem;
+    }
+
+    .blog-comments-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .blog-comments {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .blog-no-comments {
+        color: var(--color-text-secondary);
+        font-style: italic;
+    }
+
+    /* Dropdown and confirmation dialog styles */
     .post-options {
         position: relative;
     }
@@ -231,13 +380,11 @@
         background-color: transparent;
         border: none;
         cursor: pointer;
-        transition: all 0.2s ease;
-        padding: 0.5rem;
-        border-radius: 50%;
+        transition: opacity 0.2s ease;
     }
 
     .more:hover {
-        background-color: var(--color-background-secondary, #f5f5f5);
+        opacity: 0.7;
     }
 
     .dropdown-menu {
@@ -245,34 +392,28 @@
         top: 100%;
         right: 0;
         z-index: 10;
-        min-width: 180px;
+        min-width: 160px;
         margin-top: 0.5rem;
         padding: 0.5rem;
         background-color: var(--color-background-primary);
         border: 1px solid var(--color-navigation-border);
         border-radius: 0.75rem;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .dropdown-item {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.5rem;
         width: 100%;
-        padding: 0.75rem 1rem;
+        padding: 0.75rem;
         font-size: 0.95rem;
         font-weight: 500;
         background-color: transparent;
         border: none;
         border-radius: 0.5rem;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: background-color 0.2s ease;
     }
 
     .delete-post {
@@ -281,70 +422,10 @@
 
     .delete-post:hover {
         background-color: rgba(229, 57, 53, 0.1);
-        transform: translateX(2px);
     }
 
     .delete-post svg {
         color: var(--color-red, #e53935);
-    }
-
-    .post {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        padding-bottom: 2rem;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid var(--color-navigation-border);
-    }
-
-    .title {
-        color: var(--color-text-primary);
-        margin: 0;
-        font-size: 1.75rem;
-        font-weight: 700;
-        line-height: 1.3;
-        letter-spacing: -0.01em;
-    }
-
-    .content {
-        color: var(--color-text-primary);
-        line-height: 1.7;
-        margin: 0;
-        font-size: 1.05rem;
-        white-space: pre-line;
-    }
-
-    .post-image {
-        width: 100%;
-        max-width: 800px;
-        border-radius: 1rem;
-        align-self: center;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-    }
-
-    .post-image:hover {
-        transform: scale(1.01);
-    }
-
-    .comments-section {
-        margin-top: 2rem;
-    }
-
-    .comments-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .comments {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .no-comments {
-        color: var(--color-text-secondary);
-        font-style: italic;
     }
 
     .confirm-dialog {
@@ -357,50 +438,41 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(4px);
-        animation: fadeIn 0.3s ease;
+        background-color: rgba(0, 0, 0, 0.5);
     }
 
     .confirm-content {
         width: 90%;
-        max-width: 420px;
-        padding: 2rem;
+        max-width: 400px;
+        padding: 1.5rem;
         background-color: var(--color-background-primary);
-        border-radius: 1.25rem;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        animation: scaleIn 0.3s ease;
-    }
-
-    @keyframes scaleIn {
-        from { opacity: 0; transform: scale(0.9); }
-        to { opacity: 1; transform: scale(1); }
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     .confirm-content h3 {
         margin-top: 0;
-        margin-bottom: 1rem;
-        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+        font-size: 1.25rem;
         font-weight: 600;
         color: var(--color-red, #e53935);
     }
 
     .confirm-content p {
-        margin-bottom: 2rem;
-        font-size: 1rem;
-        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
         color: var(--color-text-secondary);
     }
 
     .confirm-buttons {
         display: flex;
         justify-content: flex-end;
-        gap: 1rem;
+        gap: 0.75rem;
     }
 
     .cancel-button, .delete-button {
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
+        padding: 0.65rem 1.25rem;
+        font-size: 0.95rem;
         font-weight: 500;
         border-radius: 0.75rem;
         cursor: pointer;
@@ -414,70 +486,56 @@
     }
     
     .cancel-button:hover {
-        border-color: var(--color-blue-primary, #3b82f6);
-        color: var(--color-blue-primary, #3b82f6);
-        transform: translateY(-2px);
+        border-color: var(--color-blue-primary);
+        color: var(--color-blue-primary);
     }
 
     .delete-button {
         background-color: var(--color-red, #e53935);
         color: white;
         border: none;
-        box-shadow: 0 2px 8px rgba(229, 57, 53, 0.3);
     }
     
     .delete-button:hover {
         background-color: var(--color-red-dark, #c62828);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
     }
 
     .cancel-button:disabled, .delete-button:disabled {
         opacity: 0.6;
         cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
     }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
-        .container {
-            padding: 1rem;
-            border-radius: 0.75rem;
+        .blog-container {
+            padding: 1.5rem 1rem;
         }
         
-        .title {
-            font-size: 1.5rem;
+        .blog-title {
+            font-size: 2rem;
         }
         
-        .post-image {
+        .blog-content {
+            font-size: 1rem;
+        }
+        
+        .blog-featured-image {
             max-height: 350px;
-        }
-        
-        .confirm-content {
-            padding: 1.5rem;
         }
     }
     
     @media (max-width: 480px) {
-        .details {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
+        .blog-container {
+            padding: 1rem 0.75rem;
         }
         
-        .right-section {
-            width: 100%;
-            justify-content: space-between;
+        .blog-title {
+            font-size: 1.75rem;
         }
         
-        .confirm-buttons {
-            flex-direction: column;
-        }
-        
-        .cancel-button, .delete-button {
-            width: 100%;
-            text-align: center;
+        .blog-author-image {
+            width: 3rem;
+            height: 3rem;
         }
     }
 </style>

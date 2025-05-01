@@ -15,7 +15,8 @@ export { default as Icon } from "./navigation/icon.svelte";
 export { default as Tooltip } from "./navigation/tooltip.svelte";
 
 export { default as Thumbnail } from "./posts/forum/thumbnail.svelte";
-export { default as ForumPost } from "./posts/forum/post.svelte";
+export { default as DiscussionPost } from "./posts/forum/post.svelte";
 export { default as Engagement } from "./posts/forum/engagement.svelte";
 export { default as ForumComment} from "./posts/forum/comment.svelte";
 export { default as CreatePost } from "./posts/forum/create.svelte";
+export { default as BlogPost } from "./posts/forum/blogPost.svelte";
