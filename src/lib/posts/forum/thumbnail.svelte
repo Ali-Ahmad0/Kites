@@ -77,5 +77,12 @@
         border-radius: 1rem;
         border: 1px solid var(--color-text-primary);
     }
+
+    @media (max-width: 768px) {
+        .post {
+            width: 64vw;
+            min-width: 500px;
+        }
+    }
     
 </style>

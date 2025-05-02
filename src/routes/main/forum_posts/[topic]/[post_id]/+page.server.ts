@@ -12,7 +12,7 @@ export async function load({ locals, params }: any) {
             }
         });
 
-        if (!post){
+        if (!post) {
             throw error(
                 404, {
                 message:"Post not found"
@@ -97,7 +97,7 @@ export async function load({ locals, params }: any) {
             author: post.author_name,
             topic: post.topic,
             type: post.type,
-            user_id : user.id,
+            user_id : user ? user.id : null,
             
             author_pfp: author_pfp_url,
             image: image_url,
@@ -106,6 +106,6 @@ export async function load({ locals, params }: any) {
             comments: comments_with_pfps
         }
     } catch (e) {
-        throw error(500,`Database error: ${e}`);
+        throw error(500,`[KITES | ERROR]: ${e}`);
     }
 }

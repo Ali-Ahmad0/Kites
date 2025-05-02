@@ -60,4 +60,36 @@
         overflow-y: auto;
         padding: 1rem;
     }
+
+    @media (max-width: 1024px) {
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+
+            max-width: 800px;
+            width: 100%;
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .layout {
+            grid-template-columns: 0 1fr;
+
+            grid-template-areas:
+                "navbar navbar"
+                "content content"; 
+        }
+
+        .layout.collapsed .sidebar {
+            width: 0;
+        }
+
+        .sidebar {
+            grid-area: unset;
+        }
+    }
 </style>

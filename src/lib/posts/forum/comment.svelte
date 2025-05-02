@@ -3,6 +3,8 @@
     import { is_dark_mode } from "$lib";
     import { Icon } from "$lib"
     import { Tooltip } from "$lib";
+	import { marked } from "marked";
+    import sanitizeHtml from 'sanitize-html';
 
     let { comment_data } = $props();
     
@@ -10,8 +12,17 @@
     let show_confirm: boolean = $state(false);
     let is_deleting: boolean = $state(false);
     
+    let safe_html: string = $state("");
+
     // Dynamic icon folder based on dark mode
     let folder: string = $state("dark_mode_icons");
+
+    async function process_markdown() {
+        const html = await marked(comment_data.comment);
+        safe_html = sanitizeHtml(html);  
+    }
+
+    process_markdown();
   
     // Update folder on dark mode change
     $effect(() => {
@@ -96,7 +107,7 @@
                     </div>
                 {/if}
             </div>
-            <div class="comment-text">{comment_data.comment}</div>
+            <div class="comment-text">{@html safe_html}</div>
         </div>
     </div>
 </div>

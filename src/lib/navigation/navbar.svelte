@@ -25,7 +25,9 @@
     </div>
     </Tooltip>
 
-    <h2>KITES</h2>
+    <a class="title" href="/">
+        <h2>KITES</h2>
+    </a>
     <nav>
         <ul class="navbar-links">
             <li>
@@ -101,7 +103,10 @@
         transition: background-color 0.3s ease;
     }
     
-    h2 {
+    .title {
+        text-decoration: none;
+        color: var(--color-text-primary);
+        
         margin-right: auto;
     }
     

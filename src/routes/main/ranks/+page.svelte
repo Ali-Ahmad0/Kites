@@ -20,6 +20,8 @@
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
+        
+        overflow-x: hidden;
     }
 
     @media screen and (max-width: 1450px) {
@@ -33,6 +35,8 @@
         .content {
             grid-template-columns: 1fr;
             gap: 1.5rem;
+            width: 100%; 
+            box-sizing: border-box;
         }
     }
 </style>

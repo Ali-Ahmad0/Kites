@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { ForumComment,is_dark_mode } from "$lib";	
+    import { ForumComment, is_dark_mode } from "$lib";	
     import { Engagement } from "$lib";
     import { Icon } from "$lib";
     import { Tooltip } from "$lib";

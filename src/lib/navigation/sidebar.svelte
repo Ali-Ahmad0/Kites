@@ -181,4 +181,27 @@
     .sidebar.collapsed h4 {
         display: none;
     }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 4.5rem;  
+            height: calc(100vh - 4rem);
+
+            z-index: 100;
+            background: var(--color-background-primary);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar:not(.collapsed) {
+            transform: translateX(0);
+            width: 100%;
+            max-width: 240px;
+            padding: 1rem;
+        }
+    }
 </style>

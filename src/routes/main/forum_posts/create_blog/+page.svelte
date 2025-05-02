@@ -240,7 +240,10 @@
   @media screen and (max-width: 768px) {
       .content {
           padding: 1.5rem;
-          margin: 1rem;
+          margin: 2rem 1rem;
+
+          width: 64vw;
+          max-width: 540px;
 
           gap: 1.5rem;
       }
