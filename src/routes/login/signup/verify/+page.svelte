@@ -55,9 +55,20 @@
             }
         
         } catch (e) {
-            console.error('[KITES | ERROR]: ', e)
+            console.error('[KITES | ERROR]: ', e);
+            alert("Internal Server Error");
+
         } finally {
             is_loading = false;
+        }
+    }
+
+    async function resend() {
+        try {
+            const response = await fetch('/api/otp/resend', { method: "POST" });
+            
+        } catch(e) {
+
         }
     }
 
@@ -106,7 +117,7 @@
         
         <p class="resend">
             Didn't receive a code? 
-            <a href="/login/signup" class="other">Resend</a>
+            <button onclick={resend} class="other">Resend</button>
         </p>
     </div>
 </div>
@@ -271,8 +282,10 @@
 
     .other {
         color: var(--color-blue-primary);
+        background-color: transparent;
+        
+        border: none;        
         font-weight: bold;
-        text-decoration: none;
 
         transition: color 0.2s ease;
     }
