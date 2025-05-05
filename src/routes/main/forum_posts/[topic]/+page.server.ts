@@ -15,7 +15,8 @@ export async function load({ params, locals }: any) {
     
         // Return posts of that topic
         const posts = await prisma.forumPosts.findMany({
-            where: { topic: topic }
+            where: { topic: topic },
+            orderBy: { likes: 'desc' }
         });
     
        

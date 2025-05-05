@@ -235,7 +235,7 @@
     }
 
     .delete-comment {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .delete-comment:hover {
@@ -243,7 +243,7 @@
     }
 
     .delete-comment svg {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
     
     .confirm-dialog {
@@ -280,7 +280,7 @@
         font-size: 1.25rem;
         font-weight: 600;
         
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .confirm-content p {
@@ -323,14 +323,16 @@
     }
 
     .delete-button {
-        background-color: var(--color-red, #e53935);
+        background-color: var(--color-red-secondary);
         color: white;
         
         border: none;
     }
     
     .delete-button:hover {
-        background-color: var(--color-red-dark, #c62828);
+        background-color: var(--color-red-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
     }
 
     .cancel-button:disabled, .delete-button:disabled {

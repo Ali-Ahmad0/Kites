@@ -124,7 +124,8 @@
                 </div>
             </div>
         </div>
-    {:then data} 
+    {:then data}
+
         <div class="profile-card">
             <div class="details">
 
@@ -156,7 +157,9 @@
                     <div class="username-container">
                         <h2 class="username">{data.params_username}</h2>
                         {#if data.rank !== 'default'}
-                            <Icon mode={undefined} name={data.rank} width=36 height=36 alt="verified"/>
+                            <Tooltip text={data.rank}>
+                                <Icon mode={undefined} name={data.rank} width=36 height=36 alt="verified"/>
+                            </Tooltip>
                         {/if}
                         
                     </div>
@@ -399,7 +402,7 @@
     }
 
     .delete-account {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .delete-account:hover {
@@ -407,10 +410,9 @@
     }
 
     .delete-account svg {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
-    /* Confirmation dialog styles */
     .confirm-dialog {
         position: fixed;
         top: 0;
@@ -445,7 +447,7 @@
         font-size: 1.25rem;
         font-weight: 600;
         
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .confirm-content p {
@@ -488,14 +490,16 @@
     }
 
     .delete-button {
-        background-color: var(--color-red, #e53935);
+        background-color: var(--color-red-secondary);
         color: white;
         
         border: none;
     }
     
     .delete-button:hover {
-        background-color: var(--color-red-dark, #c62828);
+        background-color: var(--color-red-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
     }
 
     .divider {

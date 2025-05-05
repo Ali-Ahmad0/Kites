@@ -65,7 +65,7 @@ export async function POST({ request, locals }) {
         }
 
         // Add 10 tokens for creating a discussion post
-        if (data.get('type') === "discussion") {
+        if (data.get('type') === "Discussion") {
             await prisma.tokens.update({
                 where: { user_id: user.id },
     

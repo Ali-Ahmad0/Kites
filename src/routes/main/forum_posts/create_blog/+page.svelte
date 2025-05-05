@@ -30,7 +30,7 @@
             form_data.append('heading', heading_text);
             form_data.append('content', content_text);
             form_data.append('topic', topic_chosen);
-            form_data.append('type', "blog");
+            form_data.append('type', "Blog");
 
             if (image) {
                 form_data.append('image', image);

@@ -32,7 +32,7 @@ export async function POST({ request, locals }) {
         }
 
         // decrement the tokens as well
-        if (post_type === "discussion") {
+        if (post_type === "Discussion") {
 
             await prisma.tokens.update({
                 where: { user_id: author_id },

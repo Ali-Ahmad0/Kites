@@ -275,7 +275,7 @@
     }
 
     .delete-post {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .delete-post:hover {
@@ -284,7 +284,7 @@
     }
 
     .delete-post svg {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .post {
@@ -419,14 +419,14 @@
     }
 
     .delete-button {
-        background-color: var(--color-red, #e53935);
+        background-color: var(--color-red-secondary);
         color: white;
         border: none;
         box-shadow: 0 2px 8px rgba(229, 57, 53, 0.3);
     }
     
     .delete-button:hover {
-        background-color: var(--color-red-dark, #c62828);
+        background-color: var(--color-red-primary);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
     }

@@ -2,7 +2,9 @@ import { prisma } from '$lib/server/prisma.server';
 
 export async function load( { locals } ) {
     try {
-        const posts = await prisma.forumPosts.findMany({});
+        const posts = await prisma.forumPosts.findMany({
+            orderBy: { likes: 'desc' }
+        });
 
         const posts_with_images = await Promise.all(
             posts.map(async (post) => {
