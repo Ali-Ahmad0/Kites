@@ -20,13 +20,13 @@ export async function POST({ request, locals }) {
         // Handle deletion transaction
         await prisma.$transaction(async (t) => {
             // Delete the post
-            const deletion_result = await t.forumPosts.delete({
+            await t.forumPosts.delete({
                 where: { id: post_id }
             });
 
             // Decrement the tokens
             const decrement_value = post_type === "Discussion" ? 10 : 30;
-            const decrement_result = await t.tokens.update({
+            await t.tokens.update({
                 where: { user_id: author_id },
                 data: {
                     tokens: { decrement: decrement_value }
