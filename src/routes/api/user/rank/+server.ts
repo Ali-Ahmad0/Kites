@@ -18,12 +18,8 @@ export async function POST({ request, locals }) {
 
         // check if user has enough tokens
         const token_data = await prisma.tokens.findUnique({
-            where: {
-                user_id: user.id
-            },
-            select: {
-                tokens: true
-            }
+            where: { user_id: user.id },
+            select: { tokens: true }
         });
 
 
@@ -42,12 +38,8 @@ export async function POST({ request, locals }) {
         
         // Update user's rank in the database
         await prisma.users.update({
-            where: {
-                id: user.id
-            },
-            data: {          
-                rank: rank  
-            }
+            where: { id: user.id },
+            data: { rank: rank }
         });
 
         return json({ success: true });
