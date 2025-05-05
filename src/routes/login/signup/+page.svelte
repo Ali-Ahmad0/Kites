@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { LoginCard } from "$lib";
-    
+	import { SignupCard } from "$lib";
 	let { form } = $props();
 </script>
 
-<LoginCard signin = {false} form = {form} />
+<SignupCard form={form} />
