@@ -78,6 +78,10 @@ export async function POST({ request, locals }) {
 
             // Return ID of the created post
             return post;
+        },
+        {
+            maxWait: 10000,
+            timeout: 15000
         });
 
         return json({ success: true, post_id: result.id, topic: result.topic });
