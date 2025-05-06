@@ -1,146 +1,64 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-  import { page } from '$app/stores';
-  import { is_dark_mode } from '$lib';
-
-  // Form states
-  let newUsername = $state('');
-  
-  // Password change state
-  let currentPassword = $state('');
-  let newPassword = $state('');
-  let confirmPassword = $state('');
-  
-  // Theme management
-  let mode = $state("dark_mode_icons");
-  $effect(() => {
-    mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
-  });
-
-  // Clear form fields after successful submission
-  $effect(() => {
-    if ($page.form?.action === '?/updateUsername' && $page.status === 303) {
-      newUsername = '';
-    }
-    if ($page.form?.action === '?/changePassword' && $page.status === 303) {
-      currentPassword = '';
-      newPassword = '';
-      confirmPassword = '';
-    }
-  });
+  import { enhance } from "$app/forms";
+  let { data,form } = $props();
+  const user = data.user;
 </script>
 
 <div class="app-layout">
   <main class="content">
     <section class="settings-container">
       <h2>Account Settings</h2>
-      
-      <!-- Success Message (for both forms) -->
-      {#if $page.status === 303 && $page.url.pathname === '/user/settings'}
-        <p class="success-text">
-          {#if $page.form?.action === '?/updateUsername'}
-            Username updated successfully!
-          {:else if $page.form?.action === '?/changePassword'}
-            Password updated successfully!
-          {/if}
-        </p>
-      {/if}
 
       <!-- Username Update Form -->
       <form method="POST" action="?/updateUsername" use:enhance class="settings-form">
         <div class="form-group">
           <label for="currentUsername">Current Username</label>
-          <input 
-            type="text" 
-            id="currentUsername"
-            value={$page.data.user?.username} 
-            disabled
-            class="input-field"
-          />
+          <input type="text" id="currentUsername" name="currentUsername" value={data.user?.username ?? ''} disabled class="input-field" />
         </div>
 
         <div class="form-group">
-          <label for="newUsername">New Username</label>
-          <input
-            type="text"
-            id="newUsername"
-            name="username"
-            bind:value={newUsername}
-            class="input-field"
-          />
-          {#if $page.form?.action === '?/updateUsername' && $page.form?.data?.usernameError}
-            <p class="error-text">{$page.form.data.usernameError}</p>
+          <label for="username">New Username</label>
+          <input type="text" id="username" name="username" required class="input-field" />
+         
+          {#if form?.usernameError}
+            <span class="error-text">{form.usernameError}</span>
           {/if}
+          {#if form?.usernameSuccess}
+            <p class="success-text">Username updated!</p>
+          {/if}
+
         </div>
 
-        <button 
-          type="submit" 
-          class="save-button"
-          disabled={!newUsername.trim()}
-        >
-          Update Username
-        </button>
+        <button type="submit" class="save-button">Update Username</button>
       </form>
 
-      <!-- Password Change Form -->
       <div class="section-divider"></div>
-      
+
       <h3>Change Password</h3>
-      <form method="POST" action="?/changePassword" use:enhance class="settings-form" >
+      <form method="POST" action="?/changePassword" use:enhance class="settings-form">
         <div class="form-group">
           <label for="currentPassword">Current Password</label>
-          <input
-            type="password"
-            id="currentPassword"
-            name="currentPassword"
-            bind:value={currentPassword}
-            class="input-field"
-            required
-          />
+          <input type="password" id="currentPassword" name="currentPassword" class="input-field" required />
         </div>
 
         <div class="form-group">
           <label for="newPassword">New Password</label>
-          <input
-            type="password"
-            id="newPassword"
-            name="newPassword"
-            bind:value={newPassword}
-            class="input-field"
-            required
-            minlength="8"
-          />
+          <input type="password" id="newPassword" name="newPassword" class="input-field" required minlength="8" />
         </div>
 
         <div class="form-group">
           <label for="confirmPassword">Confirm New Password</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            bind:value={confirmPassword}
-            class="input-field"
-            required
-          />
+          <input type="password" id="confirmPassword" name="confirmPassword" class="input-field" required />
         </div>
 
-        {#if $page.form?.action === '?/changePassword' && $page.form?.data?.passwordError}
-          <p class="error-text">
-            {#if $page.form.data.passwordError === 'New passwords do not match'}
-                ✗ Passwords don't match. Please re-enter carefully.
-            {:else}
-                {$page.form.data.passwordError}
-            {/if}
-          </p>
+        {#if form?.passwordError}
+          <p class="error-text"> {form.passwordError} </p>
+        {/if}
+        {#if form?.passwordError} 
+          <p class="error-text"> {form.passwordError} </p>
         {/if}
 
-        <button 
-          type="submit" 
-          class="save-button"
-          disabled={!currentPassword || !newPassword || !confirmPassword}
-        >
-          Change Password
-        </button>
+        <button type="submit" class="save-button">Change Password</button>
       </form>
     </section>
   </main>
@@ -205,10 +123,15 @@
     color: var(--color-red-primary);
     font-size: 0.9rem;
   }
-
-  .success-text {
-    color: var(--color-blue-primary);
-    margin-bottom: 1.5rem;
-    text-align: center;
+  
+  @media (max-width: 600px) {
+  .settings-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 2rem 0rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    box-sizing: border-box !important;
   }
+}
 </style>

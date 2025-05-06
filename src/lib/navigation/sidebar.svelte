@@ -85,7 +85,7 @@
             </div>
             <div class="section">
                 <h4 class:label-hidden={$sidebar_collapsed}>More</h4>
-                <button>
+                <button onclick={() => goto('/main/rules')}>
                     <div class="icon-container">
                         <Icon mode={folder} name="rules" width={20} height={30} alt="rules"/>
                     </div>
