@@ -1,9 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { ForumComment, is_dark_mode } from "$lib";	
-    import { Engagement } from "$lib";
-    import { Icon } from "$lib";
-    import { Tooltip } from "$lib";
+    import { Engagement, Icon, Tooltip, ForumComment, is_dark_mode } from "$lib";	
     import { marked } from 'marked';
     import sanitizeHtml from 'sanitize-html';
 
@@ -37,7 +34,7 @@
     async function delete_post() {
         try {
             is_deleting = true;
-            const resp = await fetch('/api/forum/delete', { 
+            const response = await fetch('/api/forum/delete', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -45,10 +42,10 @@
                 body: JSON.stringify({ post_id: post_id, author_name: username, type: type, user_id: user_id })
             });
 
-            if(resp.status === 200) {
+            if(response.status === 200) {
                 window.location.href = '/';
             } else {
-                const data = await resp.json();
+                const data = await response.json();
                 alert(data.error);
             }
 

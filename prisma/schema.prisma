@@ -62,7 +62,7 @@ model ForumPosts {
   content     String 
   topic       String
   likes       Int     @default(0)
-  type        String @default("Discussion")
+  type        String  @default("Discussion")
 
   author_name String  
   user        Users   @relation(fields: [author_name], references: [username], onDelete: Cascade)  
@@ -73,7 +73,7 @@ model ForumPosts {
 }
 
 model ForumImages {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
   file_name     String
   mime_type     String
   size          Int
@@ -84,10 +84,10 @@ model ForumImages {
 
 
 model ForumLikes {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  id      String      @id @default(auto()) @map("_id") @db.ObjectId
 
-  user_id String  @db.ObjectId
-  post_id String  @db.ObjectId
+  user_id String      @db.ObjectId
+  post_id String      @db.ObjectId
 
   user    Users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   post    ForumPosts  @relation(fields: [post_id], references: [id], onDelete: Cascade)
@@ -96,8 +96,8 @@ model ForumLikes {
 }
 
 model ForumComments {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  post_id     String  @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  post_id     String      @db.ObjectId
   
   comment     String  
   author_name String 

@@ -76,9 +76,5 @@ export const actions : Actions = {
         } catch (e) {
             return fail(500, { success: false, message: "Internal server error" });
         }
-    },
-
-    google: async (event) => {
-        // Google signup logic here
-    },
+    }
 };

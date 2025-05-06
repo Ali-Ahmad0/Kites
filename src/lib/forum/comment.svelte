@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-    import { is_dark_mode } from "$lib";
-    import { Icon } from "$lib"
-    import { Tooltip } from "$lib";
+    import { Icon, Tooltip, is_dark_mode } from "$lib";
 	import { marked } from "marked";
     import sanitizeHtml from 'sanitize-html';
 

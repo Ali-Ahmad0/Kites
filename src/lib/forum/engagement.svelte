@@ -1,6 +1,5 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { error } from "@sveltejs/kit";
     import { fade, scale } from 'svelte/transition';
 
     const { post_id, user_liked } = $props();

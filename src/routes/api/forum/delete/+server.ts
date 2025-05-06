@@ -10,6 +10,7 @@ export async function POST({ request, locals }) {
         const post_type = data.type;
         const author_id = data.user_id; 
 
+        // Validate the user
         if (locals.user?.username !== author || !locals.user || !locals.authenticated) {
             return json(
                 { error: 'Failed to delete post' },

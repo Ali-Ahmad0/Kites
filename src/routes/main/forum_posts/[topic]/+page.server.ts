@@ -1,5 +1,4 @@
 import { fetch_posts } from "$lib/server/fetch.server";
-import { prisma } from "$lib/server/prisma.server";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params, locals }: any) {
