@@ -1,9 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { ForumComment, is_dark_mode } from "$lib";	
-    import { Engagement } from "$lib";
-    import { Icon } from "$lib";
-    import { Tooltip } from "$lib";
+    import { Engagement, Icon, Tooltip, ForumComment, is_dark_mode } from "$lib";	
     import { marked } from 'marked';
     import sanitizeHtml from 'sanitize-html';
 
@@ -37,7 +34,7 @@
     async function delete_post() {
         try {
             is_deleting = true;
-            const resp = await fetch('/api/forum/delete', { 
+            const response = await fetch('/api/forum/delete', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -45,10 +42,10 @@
                 body: JSON.stringify({ post_id: post_id, author_name: username, type: type, user_id: user_id })
             });
 
-            if(resp.status === 200) {
+            if(response.status === 200) {
                 window.location.href = '/';
             } else {
-                const data = await resp.json();
+                const data = await response.json();
                 alert(data.error);
             }
 
@@ -415,7 +412,7 @@
     }
 
     .delete-post {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .delete-post:hover {
@@ -423,16 +420,19 @@
     }
 
     .delete-post svg {
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .confirm-dialog {
         position: fixed;
+
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
+        
         z-index: 100;
+        
         display: flex;
         justify-content: center;
         align-items: center;
@@ -453,7 +453,7 @@
         margin-bottom: 0.75rem;
         font-size: 1.25rem;
         font-weight: 600;
-        color: var(--color-red, #e53935);
+        color: var(--color-red-secondary);
     }
 
     .confirm-content p {
@@ -489,13 +489,15 @@
     }
 
     .delete-button {
-        background-color: var(--color-red, #e53935);
+        background-color: var(--color-red-secondary);
         color: white;
         border: none;
     }
     
     .delete-button:hover {
-        background-color: var(--color-red-dark, #c62828);
+        background-color: var(--color-red-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
     }
 
     .cancel-button:disabled, .delete-button:disabled {

@@ -91,18 +91,13 @@ export async function load({ locals, params }: any) {
         }
         
         return {
-            post_id: post.id,
-            heading: post.heading,
-            content: post.content,
-            author: post.author_name,
-            topic: post.topic,
-            type: post.type,
-            user_id : user ? user.id : null,
+            post: post,
+            image: image_url,
+            
+            user_id : user ? user.id : null,  
+            user_liked: user_liked_bool,            
             
             author_pfp: author_pfp_url,
-            image: image_url,
-
-            user_liked: user_liked_bool,            
             comments: comments_with_pfps
         }
     } catch (e) {

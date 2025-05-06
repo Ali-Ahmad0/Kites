@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { Thumbnail, Featured, CreatePost } from "$lib";
+    import { Thumbnail, Featured } from "$lib";
 
     const { data } = $props();
-
     const posts: any = data.posts;
 </script>
 
@@ -12,5 +11,3 @@
 {/each}
 
 <Featured/>
-<CreatePost/>
-

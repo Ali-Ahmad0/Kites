@@ -30,7 +30,7 @@
             form_data.append('heading', heading_text);
             form_data.append('content', content_text);
             form_data.append('topic', topic_chosen);
-            form_data.append('type', "blog");
+            form_data.append('type', "Blog");
 
             if (image) {
                 form_data.append('image', image);
@@ -40,14 +40,14 @@
                 method: 'POST',
                 body: form_data 
             });
-
+            const data = await response.json();
+            
             if (response.status === 401) {
                 goto('/login/signin');
                 return;
             }
 
             if (response.status !== 200) {
-                const data = await response.json();
                 alert(data.error);
             }
 
@@ -56,6 +56,9 @@
             content_text = "";
             topic_chosen = "";
             image = undefined;
+
+            const url = `/main/forum_posts/${data.topic}/${data.post_id}`;
+            window.location.href = url;
 
         } catch (e) {
             console.error("[KITES | ERROR] Failed to create new blog post", e);
@@ -155,7 +158,6 @@
       box-shadow: 0 0 0 3px rgba(var(--color-blue-primary-rgb, 0, 120, 212), 0.2);
   }
 
-  /* New file input styling to match toggle-modal */
   .form-group input[type="file"] {
       width: 100%;
       padding: 0.5rem;

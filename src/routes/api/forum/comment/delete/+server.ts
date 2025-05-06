@@ -8,6 +8,7 @@ export async function POST({ request, locals }) {
         const comment_id = data.comment_id;
         const author = data.author_name;
 
+        // Validate user
         if (locals.user?.username !== author || !locals.user || !locals.authenticated) {
             return json(
                 { error: 'Failed to delete comment' },
@@ -15,7 +16,7 @@ export async function POST({ request, locals }) {
             );
         }
 
-        // delete the post
+        // Delete the comment
         const result = await prisma.forumComments.delete({
             where: {
                 id: comment_id
@@ -32,7 +33,6 @@ export async function POST({ request, locals }) {
         return json({ success: true });
     
     } catch (e) {
-        console.error('Deletion error:', e);
         return json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 }

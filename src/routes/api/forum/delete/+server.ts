@@ -10,6 +10,7 @@ export async function POST({ request, locals }) {
         const post_type = data.type;
         const author_id = data.user_id; 
 
+        // Validate the user
         if (locals.user?.username !== author || !locals.user || !locals.authenticated) {
             return json(
                 { error: 'Failed to delete post' },
@@ -17,39 +18,22 @@ export async function POST({ request, locals }) {
             );
         }
 
-        // delete the post
-        const result = await prisma.forumPosts.delete({
-            where: {
-                id: post_id
-            }
-        })
+        // Handle deletion transaction
+        await prisma.$transaction(async (t) => {
+            // Delete the post
+            await t.forumPosts.delete({
+                where: { id: post_id }
+            });
 
-        if (!result) {
-            return json(
-                { error: 'Failed to delete post' },
-                { status: 400 }
-            );
-        }
-
-        // decrement the tokens as well
-        if (post_type === "discussion") {
-
-            await prisma.tokens.update({
+            // Decrement the tokens
+            const decrement_value = post_type === "Discussion" ? 10 : 30;
+            await t.tokens.update({
                 where: { user_id: author_id },
-    
-                data: { 
-                    tokens: { decrement: 10 } 
+                data: {
+                    tokens: { decrement: decrement_value }
                 }
             });
-        } else {
-            await prisma.tokens.update({
-                where: { user_id: author_id },
-    
-                data: { 
-                    tokens: { decrement: 30 } 
-                }
-            });
-        }
+        });
 
         return json({ success: true });
     

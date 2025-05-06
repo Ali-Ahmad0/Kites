@@ -73,12 +73,8 @@ export const actions : Actions = {
             });
 
             return { success: true, message: "Login successful" };
-        } catch (error) {
+        } catch (e) {
             return fail(500, { success: false, message: "Internal server error" });
         }
-    },
-
-    google: async (event) => {
-        // Google signup logic here
-    },
+    }
 };

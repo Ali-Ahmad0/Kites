@@ -13,23 +13,26 @@ oauth_client.setCredentials({
     refresh_token: OAUTH_REFRESH_TOKEN
 })
 
-// Nodemailer transporter
-
 // Nodemailer transporter with OAuth2
 const create_transporter = async () => {
-    const access_token = await oauth_client.getAccessToken();
+    try {
+        const access_token = await oauth_client.getAccessToken();
 
-    return nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            type: 'OAuth2',
-            user: NODEMAILER_EMAIL_ID,
-            clientId: OAUTH_CLIENT_ID,
-            clientSecret: OAUTH_CLIENT_SECRET,
-            refreshToken: OAUTH_REFRESH_TOKEN,
-            accessToken: access_token.token || ''
-        }
-    });
+        return nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                type: 'OAuth2',
+                user: NODEMAILER_EMAIL_ID,
+                clientId: OAUTH_CLIENT_ID,
+                clientSecret: OAUTH_CLIENT_SECRET,
+                refreshToken: OAUTH_REFRESH_TOKEN,
+                accessToken: access_token.token || ''
+            }
+        });
+    
+    } catch (e) {
+        console.error('[KITES | ERROR]: Error getting access tokens', e);
+    }
 };
 
 const OTP_LENGTH = 6;
@@ -58,6 +61,10 @@ export async function generate_otp(email: string) {
     // Send OTP using nodemailer
     try {
         const transporter = await create_transporter();
+        if (!transporter) {
+            console.error('[KITES | ERROR]: Transporter is undefined');
+            return;
+        }
 
         const mail_options = {
             from: `"Kites" <${NODEMAILER_EMAIL_ID}>`,
