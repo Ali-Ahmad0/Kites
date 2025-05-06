@@ -32,7 +32,6 @@ export async function POST({ request, locals }) {
         return json({ success: true });
     
     } catch (e) {
-        console.error('Deletion error:', e);
         return json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 }

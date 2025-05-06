@@ -136,7 +136,7 @@ export const actions : Actions = {
             await generate_otp(email);
             
             return { success: true, message: "Sending OTP..." };
-        } catch (error) {
+        } catch (e) {
             return fail(500, { success: false, message: "Internal server error" });
         }
     }
