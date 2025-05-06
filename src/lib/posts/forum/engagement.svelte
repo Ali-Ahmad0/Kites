@@ -1,12 +1,12 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { error } from "@sveltejs/kit";
     import { fade, scale } from 'svelte/transition';
 
     const { post_id, user_liked } = $props();
 
     let liked = $state(user_liked);
     let show_modal = $state(false);
+    let show_share_div = $state(false);
     
     let comment_text = $state("");
     let is_submitting = $state(false);
@@ -49,6 +49,18 @@
             // Reset comment text when opening
             comment_text = "";
         }
+    }
+
+    function copy_to_clipboard() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                alert("URL copied to clipboard!");
+                show_share_div = false;
+            })
+            .catch(err => {
+                console.error('[KITES | ERROR]: Could not copy text: ', err);
+            });
     }
 
     // Close modal when clicking outside
@@ -120,7 +132,7 @@
         </svg>
         <span>Comment</span>
     </button>
-    <button class="engagement-btn share-btn">
+    <button class="engagement-btn share-btn" onclick={copy_to_clipboard}>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3"></circle>
             <circle cx="6" cy="12" r="3"></circle>
