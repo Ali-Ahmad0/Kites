@@ -66,6 +66,7 @@
                 method: 'POST',
                 body: form_data 
             });
+            const data = await response.json();
 
             if (response.status === 401) {
                 goto('/login/signin');
@@ -73,7 +74,6 @@
             }
 
             if (response.status !== 200) {
-                const data = await response.json();
                 alert(data.error);
             }
 
@@ -84,7 +84,8 @@
             image = undefined;
             show_modal = false;
 
-            window.location.reload();
+            const url = `/main/forum_posts/${data.topic}/${data.post_id}`
+            window.location.href = url;
 
         } catch (e) {
             console.error("[KITES | ERROR] Failed to create new post", e);
@@ -178,7 +179,9 @@
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                         </svg>
-                        Create a blog post instead
+                        <button onclick={() => show_modal = false}> 
+                            Create a blog post instead
+                        </button>
                     </a>
                 </div>
             </div>
@@ -377,7 +380,6 @@
         cursor: not-allowed;
     }
 
-    /* Improved blog link styling */
     .blog-link-container {
         margin: 2rem 0;
         text-align: center;
@@ -402,14 +404,19 @@
         font-size: 0.9rem;
     }
     
-    .create-blog-link {
+    .create-blog-link, .create-blog-link button {
         text-decoration: none;
+
         color: var(--color-blue-primary);
-    
+        border-color: transparent;
+        background-color: transparent;
+
+        font-size: 1rem;
+         
         transition: color 0.2s ease;
     }
 
-    .create-blog-link:hover {
+    .create-blog-link:hover, .create-blog-link button:hover {
         color: var(--color-blue-secondary);
     }
 

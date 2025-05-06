@@ -40,14 +40,14 @@
                 method: 'POST',
                 body: form_data 
             });
-
+            const data = await response.json();
+            
             if (response.status === 401) {
                 goto('/login/signin');
                 return;
             }
 
             if (response.status !== 200) {
-                const data = await response.json();
                 alert(data.error);
             }
 
@@ -56,6 +56,9 @@
             content_text = "";
             topic_chosen = "";
             image = undefined;
+
+            const url = `/main/forum_posts/${data.topic}/${data.post_id}`;
+            window.location.href = url;
 
         } catch (e) {
             console.error("[KITES | ERROR] Failed to create new blog post", e);

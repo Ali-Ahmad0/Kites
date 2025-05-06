@@ -1,8 +1,5 @@
 <script lang="ts">
-    import { Navbar } from "$lib";
-    import { Sidebar } from "$lib";
-    import { sidebar_collapsed } from "$lib";
-   
+    import { Navbar, Sidebar, CreatePost, sidebar_collapsed } from "$lib"
     let { data, children } = $props();
 </script>
 
@@ -15,6 +12,7 @@
     </div>
     <main class="content">
         {@render children()}
+        <CreatePost/>
     </main>
 </div>
 

@@ -26,7 +26,7 @@ export async function POST({ request, locals }) {
         }
 
         // Handle creation transaction
-        await prisma.$transaction(async (t) => {
+        const result = await prisma.$transaction(async (t) => {
             // Create the post
             const post = await t.forumPosts.create({
                 data: {
@@ -75,9 +75,12 @@ export async function POST({ request, locals }) {
                     tokens: { increment: increment_value }
                 }
             });
+
+            // Return ID of the created post
+            return post;
         });
 
-        return json({ success: true });
+        return json({ success: true, post_id: result.id, topic: result.topic });
 
     } catch (e) {
         return json({ error: `Internal server error: ${e}` }, { status: 500 });
