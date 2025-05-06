@@ -158,7 +158,6 @@
       box-shadow: 0 0 0 3px rgba(var(--color-blue-primary-rgb, 0, 120, 212), 0.2);
   }
 
-  /* New file input styling to match toggle-modal */
   .form-group input[type="file"] {
       width: 100%;
       padding: 0.5rem;
