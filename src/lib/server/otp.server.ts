@@ -1,32 +1,15 @@
-import { NODEMAILER_EMAIL_ID, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_REDIRECT_URI, OAUTH_REFRESH_TOKEN } from "$env/static/private";
+import { NODEMAILER_EMAIL_ID, NODEMAILER_APP_PASSWORD } from "$env/static/private";
 import { prisma } from "$lib/server/prisma.server";
-import { google } from "googleapis"
 import nodemailer from 'nodemailer'
-
-const oauth_client = new google.auth.OAuth2(
-    OAUTH_CLIENT_ID,
-    OAUTH_CLIENT_SECRET,
-    OAUTH_REDIRECT_URI
-);
-
-oauth_client.setCredentials({
-    refresh_token: OAUTH_REFRESH_TOKEN
-})
 
 // Nodemailer transporter with OAuth2
 const create_transporter = async () => {
     try {
-        const access_token = await oauth_client.getAccessToken();
-
         return nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                type: 'OAuth2',
                 user: NODEMAILER_EMAIL_ID,
-                clientId: OAUTH_CLIENT_ID,
-                clientSecret: OAUTH_CLIENT_SECRET,
-                refreshToken: OAUTH_REFRESH_TOKEN,
-                accessToken: access_token.token || ''
+                pass: NODEMAILER_APP_PASSWORD
             }
         });
     
