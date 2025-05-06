@@ -33,6 +33,10 @@ export async function POST({ request, locals }) {
                     tokens: { decrement: decrement_value }
                 }
             });
+        },
+        {
+            maxWait: 10000,
+            timeout: 15000
         });
 
         return json({ success: true });
