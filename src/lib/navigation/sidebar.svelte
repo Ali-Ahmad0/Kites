@@ -23,7 +23,7 @@
     };
 
     function goto_account() {
-        if (page.data.user === undefined) {
+        if (!page.data.user) {
             goto('/login/signin');
         }
 

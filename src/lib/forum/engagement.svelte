@@ -1,5 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+	import { page } from "$app/state";
     import { fade, scale } from 'svelte/transition';
 
     const { post_id, user_liked } = $props();
@@ -12,6 +13,11 @@
     let is_submitting = $state(false);
     
     async function handle_like_button() {
+        if (!page.data.authenticated) {
+            goto('/login/signin');
+            return;
+        }
+
         try {
             // Temporarily update like status
             liked = !liked;
@@ -33,10 +39,6 @@
                 liked = !liked;
                 const data = await response.json();
                 alert(data.error);
-            }
-
-            if (response.status === 401) {
-                goto('/login/signin');
             }
         } catch (e) {
             console.error('[KITES | ERROR]: ', e);
