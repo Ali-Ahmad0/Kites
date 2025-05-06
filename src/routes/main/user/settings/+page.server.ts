@@ -1,100 +1,76 @@
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import type { Actions } from './$types';
 import { prisma } from '$lib/server/prisma.server';
 import bcrypt from 'bcryptjs';
 
-export const load: PageServerLoad = async ({ locals }) => {
-    if (!locals.user) {
-        return { user: null };
-    }
-    return {
-        user: {
-            username: locals.user.username,
-            email: 'email' in locals.user ? locals.user.email : null
-        }
-    };
-};
-
 export const actions: Actions = {
-    updateUsername: async ({ request, locals }) => {
-      const data = await request.formData();
-      const username = data.get('username');
+    update_username: async ({ request, locals }) => {
+        if (!locals.user) 
+            throw redirect(303, '/login');
 
-      // Validation for username
-      if (!username || typeof username !== 'string') {
-        return fail(400, {
-          username: {
-            success: true,
-            usernameError: "Username is required.",
-          }
+        const data = await request.formData();
+        const username = data.get('username')?.toString();
+
+        // Validation for username
+        if (!username) {
+            return fail(400, {
+                username_error: "Username is required.",
+                success: false
+            });
+        }
+
+        // Check if username exists
+        const user = await prisma.users.findUnique({
+            where: { username }
         });
-      }
 
-      // Check if username exists
-      const existingUser = await prisma.users.findUnique({
-          where: { username }
-      });
+        if (user) {
+            return fail(400, { 
+                username_error: 'Username already taken',
+                success: false
+            });
+        }
 
-      if (existingUser) {
-          return fail(400, { 
-              action: 'updateUsername',
-              usernameError: 'Username already taken',
-              success: false
-          });
-      }
+        // Update username in database
+        await prisma.users.update({
+            where: { id: locals.user.id },
+            data: { username }
+        });
 
-      // Check if user is authenticated
-      if (!locals.user) {
-          return fail(400, { 
-              action: 'updateUsername',
-              usernameError: 'User is not authenticated',
-              success: false
-          });
-      }
-
-      // Update username in database
-      await prisma.users.update({
-          where: { id: locals.user.id },
-          data: { username }
-      });
-
-      // Return success response
-      return {
-          action: 'updateUsername',
-          usernameSuccess: true
-      };
+        // Return success response
+        return {
+            username_success: true
+        };
     },
 
-    changePassword: async ({ request, locals }) => {
+    change_password: async ({ request, locals }) => {
         if (!locals.user) 
             throw redirect(303, '/login');
         
-        const formData = await request.formData();
-        const currentPassword = formData.get('currentPassword')?.toString();
-        const newPassword = formData.get('newPassword')?.toString();
-        const confirmPassword = formData.get('confirmPassword')?.toString();
+        const data = await request.formData();
+
+        const current_password = data.get('current_password')?.toString();
+        const new_password = data.get('new_password')?.toString();
+        const confirm_password = data.get('confirm_password')?.toString();
 
         // Validation
-        if (!currentPassword || !newPassword || !confirmPassword) {
+        if (!current_password || !new_password || !confirm_password) {
             return fail(400, { 
-                action: 'changePassword',
-                passwordError: 'All fields are required',
+                password_error: 'All fields are required',
                 success: false
             });
         }
 
-        if (newPassword !== confirmPassword) {
+        if (new_password !== confirm_password) {
             return fail(400, { 
-                action: 'changePassword',
-                passwordError: 'New passwords do not match',
+                password_error: 'New passwords do not match',
                 success: false
             });
         }
 
-        if (newPassword.length < 8) {
+        if (new_password.length < 8) {
             return fail(400, { 
-                action: 'changePassword',
-                passwordError: 'Password must be at least 8 characters',
+                password_error: 'Password must be at least 8 characters',
                 success: false
             });
         }
@@ -104,26 +80,22 @@ export const actions: Actions = {
             where: { id: locals.user.id }
         });
 
-        if (!user || !await bcrypt.compare(currentPassword, user.password)) {
+        if (!user || !await bcrypt.compare(current_password, user.password)) {
             return fail(400, { 
-                action: 'changePassword',
-                passwordError: 'Current password is incorrect',
+                password_error: 'Current password is incorrect',
                 success: false
             });
         }
 
         // Update password in database
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const hashed_password = await bcrypt.hash(new_password, 10);
         await prisma.users.update({
             where: { id: locals.user.id },
             data: { 
-                password: hashedPassword
+                password: hashed_password
             }
         });
         
-        return {
-            action: 'changePassword',
-            success: true
-        };
+        return { password_success: true };
     }
 };
