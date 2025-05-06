@@ -8,10 +8,12 @@
 
     async function purchase_rank(rank: string) {
         try {
-            if (!page.data.authenticated) 
-                goto('/login/signin')
+            if (!page.data.authenticated) {
+                goto('/login/signin');
+                return;
+            }
 
-            is_purchasing = true
+            is_purchasing = true;
             
             const response = await fetch('/api/user/rank', {
                 method: 'POST',
