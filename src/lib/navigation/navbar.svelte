@@ -56,7 +56,7 @@
             </li>
             <li>
                 <Tooltip text="Rules">
-                    <button class="icon">
+                    <button class="icon" onclick={() => goto('/main/rules')}>
                         <Icon mode={folder} name="rules" width=24 height=24 alt="rules"/>
                     </button>
                 </Tooltip>
