@@ -36,10 +36,20 @@ export async function POST({ request, locals }) {
             );
         }
         
-        // Update user's rank in the database
-        await prisma.users.update({
-            where: { id: user.id },
-            data: { rank: rank }
+        await prisma.$transaction(async (t) => {
+            // Decrement tokens for the user
+            await t.tokens.update({
+                where: { user_id: user.id },
+                data: {
+                    tokens: { decrement: prices[rank] }
+                }
+            });
+            
+            // Update user's rank in the database
+            await t.users.update({
+                where: { id: user.id },
+                data: { rank: rank }
+            });
         });
 
         return json({ success: true });
