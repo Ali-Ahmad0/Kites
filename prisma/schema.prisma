@@ -17,11 +17,13 @@ model Users {
   rank        String   @default("default")
   
   sessions        Sessions[]
+  image           UserImages?
+
   forum_posts     ForumPosts[]
   forum_likes     ForumLikes[]
-  profile_picture UserImages[]
+
   forum_comments  ForumComments[]
-  tokens          Tokens[]
+  tokens          Tokens?
 }
 
 model UserImages {
@@ -65,10 +67,10 @@ model ForumPosts {
   type        String  @default("Discussion")
 
   author_name String  
-  user        Users   @relation(fields: [author_name], references: [username], onDelete: Cascade)  
+  author      Users   @relation(fields: [author_name], references: [username], onDelete: Cascade)  
   
   user_likes     ForumLikes[]
-  images         ForumImages[]
+  image          ForumImages?
   forum_comments ForumComments[] 
 }
 
@@ -79,7 +81,7 @@ model ForumImages {
   size          Int
   binary_blob   Bytes
   post_id       String      @db.ObjectId @unique
-  post   ForumPosts? @relation(fields: [post_id], references: [id]) // Make optional
+  post          ForumPosts  @relation(fields: [post_id], references: [id]) 
 }
 
 
@@ -103,7 +105,7 @@ model ForumComments {
   author_name String 
 
   post        ForumPosts  @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user        Users       @relation(fields: [author_name], references: [username], onDelete: Cascade)
+  author      Users       @relation(fields: [author_name], references: [username], onDelete: Cascade)
 }
 
 model Tokens {

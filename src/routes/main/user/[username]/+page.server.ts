@@ -6,10 +6,15 @@ export async function load({ params } : any) {
     const { username } = params;
     
     const user = await prisma.users.findUnique({
-        where: {
-            username: username
-        },
-        select: { id: true, email: true, rank: true }
+        where: { username: username },
+        select: {
+            username: true,
+            rank: true,
+            email: true,
+            image: {
+                select: { binary_blob: true, mime_type: true }
+            }
+        }
     })
     
     // Throw a 404 error if the user does not exist
@@ -21,20 +26,12 @@ export async function load({ params } : any) {
     
     const email = user.email;
     const rank = user.rank;
-
-    const image = await prisma.userImages.findUnique({
-        where: { username: username },
-        select: {
-            binary_blob: true,
-            mime_type: true
-        }
-    });
     
     let image_url = null;
-    if (image) {
+    if (user.image) {
         // Convert Prisma Bytes (Buffer) to base64
-        const base64 = Buffer.from(image.binary_blob).toString('base64');
-        image_url = `data:${image.mime_type};base64,${base64}`;
+        const base64 = Buffer.from(user.image.binary_blob).toString('base64');
+        image_url = `data:${user.image.mime_type};base64,${base64}`;
     }
     
     // Return username and email from parameters

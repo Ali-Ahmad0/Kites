@@ -1,140 +1,97 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "$lib/server/prisma.server";
 
-
-
-
-
-// Added new function to fetch featured posts
-export async function fetch_featured_posts(locals: any, limit = 5) {
+// Fetching featured posts
+export async function fetch_featured_posts() {
     const posts = await prisma.forumPosts.findMany({
-        take: limit,
+        take: 5,
         orderBy: { likes: 'desc' },
-        select: {
-            id: true,
-            heading: true,
-            likes: true,
-            author_name: true,
-            topic: true
-            // Only select what Featured component needs
+        include: {
+            // Get author profile picture
+            author: {
+                select: {
+                    image: {
+                        select: { binary_blob: true, mime_type: true }
+                    }
+                }
+            }
         }
     });
 
-    // Get author pfps (simplified version of your existing code)
-    const posts_with_pfps = await Promise.all(
+    // Attatch profile picture URL to the post
+    const processed_posts = await Promise.all(
         posts.map(async (post) => {
-            const author_pfp = await prisma.userImages.findUnique({
-                where: { username: post.author_name },
-                select: { binary_blob: true, mime_type: true }
-            });
+            const pfp = post.author.image;
 
             return {
                 ...post,
-                author_pfp: author_pfp 
-                    ? `data:${author_pfp.mime_type};base64,${Buffer.from(author_pfp.binary_blob).toString('base64')}`
+                author_pfp: pfp 
+                    ? `data:${pfp.mime_type};base64,${Buffer.from(pfp.binary_blob).toString('base64')}`
                     : null
             };
         })
     );
 
-    return posts_with_pfps;
+    return processed_posts;
 }
 
-
-
-
-
-
-
+// Fetch all posts
 export async function fetch_posts(locals: any, topic: string | undefined) {
-    let posts = null;
+    const user = locals.user;
 
-    // Filter posts by topic
-    if (topic) {
-        posts = await prisma.forumPosts.findMany({
-            where: { topic: topic },
-            orderBy: { likes: 'desc' }
-        }); 
-    }
+    let posts = await prisma.forumPosts.findMany({
+        where: topic ? { topic: topic } : {},
+        orderBy: { likes: 'desc' },
+        include: {
+            // Get cover image
+            image: {
+                select: { binary_blob: true, mime_type: true }
+            },
 
-    // Fetch all the posts
-    else {
-        posts = await prisma.forumPosts.findMany({
-            orderBy: { likes: 'desc' }
-        });
-    }
-
-    // Attatch cover images to the posts
-    const posts_with_images = await Promise.all(
-        posts.map(async (post) => {
-            const image = await prisma.forumImages.findUnique({
-                where: { post_id: post.id },
+            // Get author profile picture
+            author: {
                 select: {
-                    binary_blob: true,
-                    mime_type: true,
-                },
-            });
+                    image: {
+                        select: { binary_blob: true, mime_type: true }
+                    }
+                }
+            },
 
-            let image_url = null;
-            if (image) {
-                const base64 = Buffer.from(image.binary_blob).toString('base64');
-                image_url = `data:${image.mime_type};base64,${base64}`;
+            // Get user like status
+            user_likes: user ? {
+                where: { user_id: user.id },
+                select: { id: true }
+            } : false
+        }
+    });
+
+    // Attatch cover image, author pfp and like status to the posts
+    const processed_posts = await Promise.all(
+        posts.map(async (post) => {
+            const cover_image = post.image;
+            
+            // Get post cover image
+            let cover_url = null;
+            if (cover_image) {
+                const base64 = Buffer.from(cover_image.binary_blob).toString('base64');
+                cover_url = `data:${cover_image.mime_type};base64,${base64}`;
+            }
+            
+            // Get author pfp
+            const author_pfp = post.author.image;
+            let pfp_url = null;
+            if (author_pfp) {
+                const base64 = Buffer.from(author_pfp.binary_blob).toString('base64');
+                pfp_url = `data:${author_pfp.mime_type};base64,${base64}`;
             }
 
             return {
                 ...post,
-                image_url: image_url, // Attach image to post
+                image_url: cover_url,
+                author_pfp: pfp_url,
+                user_liked: post.user_likes ? post.user_likes.length > 0 : false
             };
         })
     );
-
-    // Attatch like status and author pfp for post
-    let like_status = [];
-    let author_pfps = [];
-
-    const user = locals.user;
-    for (const post of posts) {
-        // Check like status for current user
-        if (user) {
-            const user_liked = await prisma.forumLikes.findUnique({
-                where: {
-                    user_id_post_id: {
-                        user_id: user.id,
-                        post_id: post.id
-                    }
-                },
-                select: { id: true }
-            });
-
-            like_status.push(user_liked !== null)
-        } else {
-            like_status.push(false);
-        }
-
-        // Get author pfp for the post
-        const author_pfp = await prisma.userImages.findUnique({
-            where: { username: post.author_name },
-            select: {
-                binary_blob: true,
-                mime_type: true
-            }
-        });
-
-        let author_pfp_url = null;
-        if (author_pfp) {
-            const base64 = Buffer.from(author_pfp.binary_blob).toString('base64');
-            author_pfp_url = `data:${author_pfp.mime_type};base64,${base64}`;
-        }
-
-        author_pfps.push(author_pfp_url);
-    }
-
-    return {
-        posts: posts_with_images.map((post, index) => ({
-            ...post,
-            author_pfp: author_pfps[index], // Attatch pfp of author
-            user_liked: like_status[index] // Attach like status
-        }))
-    };
+    
+    return { posts: processed_posts };
 }

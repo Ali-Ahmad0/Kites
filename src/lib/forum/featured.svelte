@@ -1,13 +1,5 @@
 <script lang="ts">
-    export let posts: {
-        id: string;
-        heading: string;
-        likes: number;
-        author_name: string;
-        topic: string;
-        author_pfp: string | null;
-    }[] = [];
-    const defaultPfp = '/default.jpg'; 
+    const { posts } = $props();
 </script>
 
 <div class="container">
@@ -17,13 +9,15 @@
             {#each posts as post}
                 <div class="featured-post">
                     <img
-                        src={post.author_pfp || '/default.jpg'}
+                        src={post.author_pfp || '/profile.jpg'}
                         alt={post.author_name}
-                        on:error={(e) => { const target = e.target as HTMLImageElement; if (target) target.src = '/default.jpg'; }}
+                        onerror={(e) => { const target = e.target as HTMLImageElement; if (target) target.src = '/profile.jpg'; }}
                         class="author-pfp"
                     />
                     <div class="post-info">
-                        <h4>{post.heading}</h4>
+                        <a href="/main/forum_posts/{post.topic}/{post.id}">
+                            <h4>{post.heading}</h4>
+                        </a>
                         <span class="likes">❤️ {post.likes}</span>
                         <span class="topic">#{post.topic}</span>
                     </div>
@@ -53,6 +47,15 @@
     .post-info {
         flex: 1;
         overflow: hidden;
+    }
+
+    .post-info a {
+        text-decoration: none;
+        color: var(--color-text-primary);
+    }
+
+    .post-info a:hover {
+        text-decoration: underline;
     }
     
     .post-info h4 {

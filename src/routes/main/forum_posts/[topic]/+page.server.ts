@@ -12,16 +12,16 @@ export async function load({ params, locals }: any) {
             });
         }
     
-        // Get both regular posts AND featured posts in parallel
-        const [regularPosts, featuredPosts] = await Promise.all([
+        // Get both regular posts and featured posts
+        const [posts, featured_posts] = await Promise.all([
             fetch_posts(locals, topic),  
-            fetch_featured_posts(locals) 
+            fetch_featured_posts()
         ]);
     
         // Return combined result 
         return {
-            ...regularPosts,       
-            featured_posts: featuredPosts  
+            ...posts,       
+            featured_posts  
         };
     }
     catch (e) {
