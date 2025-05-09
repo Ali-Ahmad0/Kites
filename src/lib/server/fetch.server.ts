@@ -1,4 +1,51 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "$lib/server/prisma.server";
+
+
+
+
+
+// Added new function to fetch featured posts
+export async function fetch_featured_posts(locals: any, limit = 5) {
+    const posts = await prisma.forumPosts.findMany({
+        take: limit,
+        orderBy: { likes: 'desc' },
+        select: {
+            id: true,
+            heading: true,
+            likes: true,
+            author_name: true,
+            topic: true
+            // Only select what Featured component needs
+        }
+    });
+
+    // Get author pfps (simplified version of your existing code)
+    const posts_with_pfps = await Promise.all(
+        posts.map(async (post) => {
+            const author_pfp = await prisma.userImages.findUnique({
+                where: { username: post.author_name },
+                select: { binary_blob: true, mime_type: true }
+            });
+
+            return {
+                ...post,
+                author_pfp: author_pfp 
+                    ? `data:${author_pfp.mime_type};base64,${Buffer.from(author_pfp.binary_blob).toString('base64')}`
+                    : null
+            };
+        })
+    );
+
+    return posts_with_pfps;
+}
+
+
+
+
+
+
 
 export async function fetch_posts(locals: any, topic: string | undefined) {
     let posts = null;

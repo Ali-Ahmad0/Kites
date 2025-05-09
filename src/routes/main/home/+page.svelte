@@ -1,8 +1,8 @@
 <script lang="ts">
     import { Thumbnail, Featured } from "$lib";
-
+    
     const { data } = $props();
-    const posts: any = data.posts;
+    const { posts, featured_posts } = data;
 </script>
 
 {#each posts as post}
@@ -10,4 +10,4 @@
     topic={post.topic} heading={post.heading} user_liked={post.user_liked} image={post.image_url} type={post.type}/>
 {/each}
 
-<Featured/>
+<Featured posts={featured_posts} />

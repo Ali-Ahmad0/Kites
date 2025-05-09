@@ -2,6 +2,7 @@
 	import { Thumbnail, Featured } from '$lib';
 
     const { data } = $props();
+    const { posts, featured_posts } = data;
 </script>
 
 {#each data.posts as post }
@@ -9,4 +10,4 @@
     topic={post.topic} user_liked={post.user_liked} heading={post.heading} image={post.image_url} type={post.type}/>
 {/each}
 
-<Featured/>
+<Featured posts={featured_posts} />

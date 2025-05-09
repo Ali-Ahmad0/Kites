@@ -1,26 +1,34 @@
-import { fetch_posts } from "$lib/server/fetch.server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { fetch_posts, fetch_featured_posts } from "$lib/server/fetch.server";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params, locals }: any) {
     try {
         const { topic } = params;
 
-        // Check for valid topic
         if (!['Art', 'Science', 'Philosophy', 'Nature'].includes(topic)) {
-            throw error(
-                404, {
+            throw error(404, {
                 message: "Topic does not exist"
-            })
+            });
         }
     
-        const posts = await fetch_posts(locals, topic);
-        return posts;
-    }
-
-    catch (e) {
-        console.error("[KITES | ERROR]: Failed to fetch posts: ", error);
+        // Get both regular posts AND featured posts in parallel
+        const [regularPosts, featuredPosts] = await Promise.all([
+            fetch_posts(locals, topic),  
+            fetch_featured_posts(locals) 
+        ]);
+    
+        // Return combined result 
         return {
-            posts: [] 
+            ...regularPosts,       
+            featured_posts: featuredPosts  
+        };
+    }
+    catch (e) {
+        console.error("[KITES | ERROR]: Failed to fetch posts: ", e);
+        return {
+            posts: [],
+            featured_posts: [] 
         };
     }
 }
