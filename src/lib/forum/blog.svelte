@@ -138,7 +138,7 @@
     </div>
     
     <div class="blog-engagement">
-        <Engagement post_id={post_id} user_liked={user_liked}/>
+        <Engagement post_id={post_id} topic={topic} user_liked={user_liked}/>
     </div>
     
     <div class="blog-comments-section">
@@ -146,7 +146,7 @@
         {#if comments.length > 0}
             <div class="blog-comments">
                 {#each comments as comment_data (comment_data.id)}
-                    <ForumComment {comment_data}/>
+                    <ForumComment comment_data={comment_data}/>
                 {/each}
             </div>
         {:else}

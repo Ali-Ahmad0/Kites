@@ -24,7 +24,7 @@
           <img src={image} alt="cover" class="cover">
         {/if}
     </a>
-    <Engagement post_id={post_id} user_liked={user_liked} />
+    <Engagement post_id={post_id} topic={topic} user_liked={user_liked} />
 </div>    
 
 

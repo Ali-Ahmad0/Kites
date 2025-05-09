@@ -3,7 +3,7 @@
 	import { page } from "$app/state";
     import { fade, scale } from 'svelte/transition';
 
-    const { post_id, user_liked } = $props();
+    const { post_id, topic, user_liked } = $props();
 
     let liked = $state(user_liked);
     let show_modal = $state(false);
@@ -44,43 +44,20 @@
             console.error('[KITES | ERROR]: ', e);
         }
     }
-
+    
     function toggle_modal() {
+        if (!(page.data.user && page.data.authenticated)) {
+            goto('/login/signin');
+            return;
+        }
+        
         show_modal = !show_modal;
         if (show_modal) {
             // Reset comment text when opening
             comment_text = "";
         }
     }
-
-    function copy_to_clipboard() {
-        const url = window.location.href;
-        navigator.clipboard.writeText(url)
-            .then(() => {
-                alert("URL copied to clipboard!");
-                show_share_div = false;
-            })
-            .catch(err => {
-                console.error('[KITES | ERROR]: Could not copy text: ', err);
-            });
-    }
-
-    // Close modal when clicking outside
-    function handle_outside_click(event: MouseEvent) {
-        const target = event.target as HTMLElement;
-        if (target.classList.contains('modal-backdrop')) {
-            show_modal = false;
-        }
-    }
     
-    // Keyboard event handler for modal backdrop
-    function handle_backdrop_keydown(event: KeyboardEvent) {
-        // Close modal on Escape key
-        if (event.key === 'Escape') {
-            show_modal = false;
-        }
-    }
-
     async function submit_comment() {
         if (!comment_text.trim()) 
             return;
@@ -112,13 +89,42 @@
             comment_text = "";
             show_modal = false;
 
-            window.location.reload();
+            const url = `/main/forum_posts/${topic}/${post_id}`
+            window.location.href = url;
         } catch (e) {
             console.error('[KITES | ERROR]: Error submitting comment:', e);
         } finally {
             is_submitting = false;
         }
     }
+    function copy_to_clipboard() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url)
+            .then(() => {
+                alert("URL copied to clipboard!");
+                show_share_div = false;
+            })
+            .catch(err => {
+                console.error('[KITES | ERROR]: Could not copy text: ', err);
+            });
+        }
+        
+    // Close modal when clicking outside
+    function handle_outside_click(event: MouseEvent) {
+        const target = event.target as HTMLElement;
+        if (target.classList.contains('modal-backdrop')) {
+            show_modal = false;
+        }
+    }
+    
+    // Keyboard event handler for modal backdrop
+    function handle_backdrop_keydown(event: KeyboardEvent) {
+        // Close modal on Escape key
+        if (event.key === 'Escape') {
+            show_modal = false;
+        }
+    }
+
 </script>
 
 <div class="engagement">
