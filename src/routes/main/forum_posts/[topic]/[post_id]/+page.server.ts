@@ -31,6 +31,7 @@ export async function load({ locals, params }: any) {
 
                 // Get comment data
                 forum_comments: {
+                    take: 10,
                     include: {
                         author: {
                             select: {

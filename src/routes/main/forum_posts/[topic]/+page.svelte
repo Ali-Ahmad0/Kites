@@ -16,6 +16,7 @@
             return;
 
         try {
+            is_loading = true;
             current_page++;
             
             // Fetch the next page
