@@ -129,6 +129,7 @@
             <div class="comments">
                 {#each comments as comment_data (comment_data.id)}
                     <ForumComment comment_data={comment_data}/>
+                    
                 {/each}
             </div>
         {:else}

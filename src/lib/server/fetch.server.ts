@@ -35,12 +35,15 @@ export async function fetch_featured_posts() {
 }
 
 // Fetch all posts
-export async function fetch_posts(locals: any, topic: string | undefined) {
+export async function fetch_posts(locals: any, topic: string | undefined, page: number = 1) {
     const user = locals.user;
 
     let posts = await prisma.forumPosts.findMany({
         where: topic ? { topic: topic } : {},
         orderBy: { likes: 'desc' },
+        // Take 10 posts per page
+        skip: (page - 1) * 10,
+        take: 10,
         include: {
             // Get cover image
             image: {
