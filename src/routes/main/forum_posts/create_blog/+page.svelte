@@ -5,34 +5,22 @@
    // character limit configuration based on user type
    type RankType = 'default' | 'Bronze' | 'Silver' | 'Gold' | 'Admin';
     
-    const CHARACTER_LIMIT: Record<RankType, number> = {
-        'default': 1000,
+    const character_limits: Record<RankType, number> = {
+        'default': 1500,
         'Bronze': 2500,
-        'Silver': 3500,
-        'Gold': 5000,
+        'Silver': 5000,
+        'Gold': 8000,
         'Admin': 10000
     };
 
-    // Extract rank properly whether it's a string or an object
-    let userRankData = page.data.rank;
-    let userRank: string = '';
-    
-    // Handle different data formats
-    if (typeof userRankData === 'object' && userRankData !== null && 'rank' in userRankData) {
-        // If data comes as { rank: 'Bronze' }
-        userRank = userRankData.rank;
-    } else if (typeof userRankData === 'string') {
-        // If data comes as 'Bronze' directly
-        userRank = userRankData;
-    } else {
-        userRank = 'default';
-    }
+    // Get user rank
+    let user_rank: string = page.data.rank;
 
     // Now validate the rank
-    let rank: RankType = Object.keys(CHARACTER_LIMIT).includes(userRank) ? userRank as RankType : 'default';
+    let rank: RankType = Object.keys(character_limits).includes(user_rank) ? user_rank as RankType : 'default';
 
     // Define character limit reactively
-    let character_limit = CHARACTER_LIMIT[rank];
+    let character_limit = character_limits[rank];
       
     let heading_text = $state("");
     let content_text = $state("");

@@ -81,7 +81,7 @@ model ForumImages {
   size          Int
   binary_blob   Bytes
   post_id       String      @db.ObjectId @unique
-  post          ForumPosts  @relation(fields: [post_id], references: [id]) 
+  post          ForumPosts  @relation(fields: [post_id], references: [id], onDelete: Cascade) 
 }
 
 

@@ -1,7 +1,7 @@
 import { prisma } from "$lib/server/prisma.server";
 import type { RequestEvent } from "@sveltejs/kit";
 
-export const load = async ({ locals }: RequestEvent) => {
+export async function load({ locals }: RequestEvent) {
     // Get user profile picture URL
     let image_url = null
     
