@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/state";
     import { Icon, Tooltip, Engagement, ForumComment, is_dark_mode } from "$lib";	
+	import { onDestroy, onMount } from "svelte";
 
     const { 
         post_id, user_liked, pfp,
@@ -66,6 +67,63 @@
             show_dropdown = false;
         }
     }
+
+    // Comment pagination logic
+    let comments_data = $state(comments);
+    let current_page = $state(1);
+
+    let is_loading = $state(false);
+    let has_more_comments = $state(true);
+
+    async function load_more_comments() {
+        if (is_loading || !has_more_comments)
+            return;
+
+        try {
+            is_loading = true;
+            current_page++;
+
+            const response = await fetch(`/api/forum/comment/load?page=${current_page}&post_id=${post_id}`);
+            const new_data = await response.json();
+
+            if (new_data.comments_data && new_data.comments_data.length > 0) {
+                // Append new comments to existing ones
+                comments_data = [...comments_data, ...new_data.comments_data];
+            } else {
+                has_more_comments = false;
+            }
+        } catch (e) {
+            console.error('[KITES | ERROR]: Error loading more comments: ', e);
+        } finally {
+            is_loading = false;
+        }
+    }
+
+    let observer: IntersectionObserver | null;
+    let sentinel: HTMLDivElement;
+
+        
+    onMount(() => {
+        observer = new IntersectionObserver((entries) => {
+            // Load when reaching end of page
+            if (entries[0].isIntersecting && !is_loading) {
+                load_more_comments();
+            }
+        }, {
+            rootMargin: '100px'
+        });
+        
+        if (sentinel) {
+            observer.observe(sentinel);
+        }
+    });
+    
+    onDestroy(() => {
+        if (observer && sentinel) {
+            observer.unobserve(sentinel);
+            observer = null;
+        }
+    });
 </script>
 
 <svelte:window on:click={handle_click_outside} />
@@ -125,15 +183,17 @@
 
     <div class="comments-section">
         <h2 class="comments-title">Comments</h2>
-        {#if comments.length > 0}
+        {#if comments_data.length > 0}
             <div class="comments">
-                {#each comments as comment_data (comment_data.id)}
-                    <ForumComment comment_data={comment_data}/>
+                {#each comments_data as comment_data (comment_data.id)}
+                    <ForumComment comment_data={comment_data}/> 
                 {/each}
             </div>
         {:else}
             <p class="no-comments">No comments yet. Be the first to share your thoughts!</p>
         {/if}
+
+        <div bind:this={sentinel}></div>
     </div>
 
     {#if show_confirm}
