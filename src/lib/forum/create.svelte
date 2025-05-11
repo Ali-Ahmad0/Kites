@@ -3,15 +3,62 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
     
+    // character limit configuration based on user type
+    type RankType = 'default' | 'Bronze' | 'Silver' | 'Gold' | 'Admin';
+    
+    const CHARACTER_LIMIT: Record<RankType, number> = {
+        'default': 100,
+        'Bronze': 250,
+        'Silver': 350,
+        'Gold': 500,
+        'Admin': 1000
+    };
+
+    // Extract rank properly whether it's a string or an object
+    let userRankData = page.data.rank;
+    let userRank: string = '';
+    
+    // Handle different data formats
+    if (typeof userRankData === 'object' && userRankData !== null && 'rank' in userRankData) {
+        // If data comes as { rank: 'Bronze' }
+        userRank = userRankData.rank;
+    } else if (typeof userRankData === 'string') {
+        // If data comes as 'Bronze' directly
+        userRank = userRankData;
+    } else {
+        userRank = 'default';
+    }
+
+    // Now validate the rank
+    let rank: RankType = Object.keys(CHARACTER_LIMIT).includes(userRank) ? userRank as RankType : 'default';
+
+    // Define character limit reactively
+    let character_limit = CHARACTER_LIMIT[rank];
+
     // State for modal visibility
     let show_modal = $state(false);
-
     let heading_text = $state("");
     let content_text = $state("");
     let topic_chosen = $state("");
     let image: File | undefined = $state(undefined);
     let is_creating = $state(false);
+    let is_over_limit = $state(false);
+    let character_count = $state(0);
+
+    // Calculate character count and check if over limit
+    $effect(() => {
+        calculate_character_count();
+    });
     
+    // Calculate character count
+    function calculate_character_count() {
+        // Calculate characters without spaces
+        character_count = content_text.replace(/\s/g, '').length;
+        
+        // Check if over character limit
+        is_over_limit = character_count > character_limit;
+    }
+
     // Toggle modal visibility
     function toggle_modal() {
         // Redirect to login if needed
@@ -49,6 +96,9 @@
 
     async function create_post() {
         if (!heading_text.trim() || !topic_chosen.trim() || !content_text.trim()) return;
+
+        // Check if over the character limit
+        if (is_over_limit) return;
 
         try {
             is_creating = true;
@@ -152,6 +202,14 @@
                         <label for="content">Content</label>
                         <textarea id="content" name="content" rows="5" bind:value={content_text} required>
                         </textarea>
+                        <div class="character-count-container">
+                            <span class={is_over_limit ? "character-count over-limit" : "character-count"}>
+                                {character_count} / {character_limit} characters
+                                {#if is_over_limit}
+                                    <span class="limit-warning">(exceeds {rank} user limit)</span>
+                                {/if}
+                            </span>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -166,7 +224,7 @@
                             Cancel
                         </button>
                         <button type="button" class="confirm" onclick={create_post}
-                        disabled={!heading_text.trim() || !topic_chosen.trim() || !content_text.trim() || is_creating}>
+                        disabled={!heading_text.trim() || !topic_chosen.trim() || !content_text.trim() || is_creating || is_over_limit }>
                         {is_creating ? 'Creating...' : 'Create Post'}
                     </button>
                 </div>                    
@@ -462,5 +520,26 @@
         button.cancel, button.confirm {
             width: 100%;
         }
+    }
+
+    .character-count-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+    }
+    
+    .character-count {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+    }
+    
+    .over-limit {
+        color: var(--color-red-primary);
+        font-weight: 500;
+    }
+    
+    .limit-warning {
+        font-style: italic;
+        margin-left: 0.5rem;
     }
 </style>

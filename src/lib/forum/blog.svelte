@@ -98,7 +98,7 @@
                 <div class="blog-author-info">
                     <p class="blog-author-name">{username}</p>
                 </div>
-            </div>   
+            </div>  
             
             {#if page.data.authenticated && page.data.user?.username === username}
                 <div class="post-options">
