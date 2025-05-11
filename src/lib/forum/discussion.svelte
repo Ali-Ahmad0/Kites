@@ -141,7 +141,7 @@
         <div class="right-section">
             <p class="topic">{topic} | {type}</p>
             
-            {#if page.data.authenticated && page.data.user?.username === username}
+            {#if (page.data.authenticated && page.data.user?.username === username) || page.data.rank === "Admin"}
                 <div class="post-options">
                     <Tooltip text="More">
                         <button class="more" onclick={toggle_dropdown}>

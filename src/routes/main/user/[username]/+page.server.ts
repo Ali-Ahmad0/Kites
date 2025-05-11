@@ -38,7 +38,7 @@ export async function load({ params } : any) {
     return {
         params_username: username,
         params_email_id: email,
-        rank: rank,
+        user_rank: rank,
         image: image_url
     };
 }

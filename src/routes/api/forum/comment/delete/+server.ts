@@ -8,8 +8,20 @@ export async function POST({ request, locals }) {
         const comment_id = data.comment_id;
         const author = data.author_name;
 
-        // Validate user
-        if (locals.user?.username !== author || !locals.user || !locals.authenticated) {
+        if (!locals.user || !locals.authenticated) {
+            return json(
+                { error: 'Failed to delete comment' },
+                { status: 401 }
+            );
+        }
+
+        const user = await prisma.users.findUnique({
+            where: { id: locals.user.id },
+            select: { rank: true }
+        });
+
+        // Only admin or author can delete comment
+        if (locals.user?.username !== author && user?.rank !== 'Admin') {
             return json(
                 { error: 'Failed to delete comment' },
                 { status: 401 }
@@ -18,9 +30,7 @@ export async function POST({ request, locals }) {
 
         // Delete the comment
         const result = await prisma.forumComments.delete({
-            where: {
-                id: comment_id
-            }
+            where: { id: comment_id }
         })
 
         if (!result) {

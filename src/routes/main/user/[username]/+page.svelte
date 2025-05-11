@@ -70,7 +70,13 @@
     async function delete_account() {
         try {
             is_deleting = true;
-            const resp = await fetch('/api/user/delete', { method: 'POST'});
+            const resp = await fetch('/api/user/delete', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: data.params_username }) 
+            });
             
             if(resp.status === 200) {
                 window.location.href = '/';
@@ -156,9 +162,9 @@
                 <div class="user-info">
                     <div class="username-container">
                         <h2 class="username">{data.params_username}</h2>
-                        {#if data.rank !== 'default'}
-                            <Tooltip text={data.rank}>
-                                <Icon mode={undefined} name={data.rank} width=36 height=36 alt="verified"/>
+                        {#if data.user_rank !== 'default'}
+                            <Tooltip text={data.user_rank}>
+                                <Icon mode={undefined} name={data.user_rank} width=36 height=36 alt="verified"/>
                             </Tooltip>
                         {/if}
                         
@@ -166,7 +172,7 @@
                     <h4 class="email-id">{data.params_email_id}</h4>
                 </div>
                 
-                {#if data.authenticated && data.user?.username === data.params_username}
+                {#if (data.authenticated && data.user?.username === data.params_username) || data.rank === "Admin"}
                 <div class="more-options">
                     <Tooltip text="More">
                         <button class="more" onclick={toggle_drowpdown}>

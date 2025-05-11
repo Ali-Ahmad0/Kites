@@ -80,7 +80,7 @@
         <div class="comment-content">
             <div class="comment-header">
                 <span class="comment-author">{comment_data.author_name}</span>
-                {#if page.data.authenticated && comment_data.author_name === page.data.user?.username}
+                {#if (page.data.authenticated && comment_data.author_name === page.data.user?.username) || page.data.rank === "Admin"}
                     <div class="comment-options">
                         <Tooltip text="More">
                             <button class="more" onclick={toggle_dropdown}>

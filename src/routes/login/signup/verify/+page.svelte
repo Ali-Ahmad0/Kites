@@ -277,6 +277,7 @@
     .resend {
         text-align: center;
         margin-top: 1.5rem;
+        font-size: 1rem;
         color: var(--color-text-secondary);
     }
 

@@ -3,15 +3,26 @@ import { json } from '@sveltejs/kit';
 
 export async function POST({ request, locals }) {
     try {
-        
         const data = await request.json();
         const post_id = data.post_id;
         const author = data.author_name;
         const post_type = data.type;
-        const author_id = data.user_id; 
+        const author_id = data.user_id;
+        
+        if (!locals.user || !locals.authenticated) {
+            return json(
+                { error: 'Failed to delete comment' },
+                { status: 401 }
+            );
+        }
 
-        // Validate the user
-        if (locals.user?.username !== author || !locals.user || !locals.authenticated) {
+        const user = await prisma.users.findUnique({
+            where: { id: locals.user.id },
+            select: { rank: true }
+        });
+
+        // Only author or admin can delete post
+        if (locals.user?.username !== author && user?.rank !== 'Admin') {
             return json(
                 { error: 'Failed to delete post' },
                 { status: 401 }
@@ -43,5 +54,5 @@ export async function POST({ request, locals }) {
     
     } catch (e) {
         return json({ error: `Internal server error: ${e}` }, { status: 500 });
-  }
+    }
 }
