@@ -26,3 +26,5 @@ export { default as CreatePost } from "./forum/create.svelte";
 
 export { default as Loading } from "./loading/loading.svelte";
 export { default as LoadingMore } from "./loading/loading_more.svelte";
+
+export { default as Dashboard } from "./admin/dashboard.svelte";

@@ -1,9 +1,6 @@
 <script lang="ts">
-    import { is_dark_mode, Loading } from '$lib';
+    import { is_dark_mode, Loading, Icon, Tooltip, Dashboard } from '$lib';
     import { goto } from '$app/navigation';
-    import { Icon } from '$lib';
-    import { Tooltip } from '$lib';
-    import Dashboard from '$lib/admin/dashboard.svelte';
 
     const { data } = $props();
 
@@ -14,18 +11,6 @@
     let is_deleting: boolean = $state(false);
 
     let folder: string = $state("dark_mode_icons");
-
-
-
-    let active_tab = $state('overview');
-    const tabs = [
-        { id: 'overview', label: 'Overview' },
-        { id: 'users', label: 'Users' },
-        { id: 'content', label: 'Content' }
-    ]; 
-
-
-
 
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
@@ -219,6 +204,9 @@
                 </div>
             {/if}
         </div>        
+        {#if user_data.rank === "Admin" && data.rank === "Admin" && data.authenticated && data.user?.username === data.params_username}
+            <Dashboard admin_stats={user_data.admin_stats} />
+        {/if}
     {/await}
 
     {#if show_confirm}
@@ -239,15 +227,13 @@
     {/if}
 </div>
 
-{#if data.user_rank === 'admin' && data.authenticated && data.user?.username === data.params_username}
-    <Dashboard admin_stats={data.admin_stats} />
-{/if}
 
 <style>
     .container {
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         
         margin-top: 2rem;
         padding: 0 1rem;
@@ -258,7 +244,8 @@
         flex-direction: column;
         
         width: 100%;
-        max-width: 500px;
+        max-width: 720px;
+        box-sizing: border-box;
         
         padding: 2rem;
         
@@ -332,7 +319,7 @@
         flex-grow: 1;
     }
 
-    .username-container{
+    .username-container {
         display: flex;
         gap: 0.5rem;
     }
@@ -370,7 +357,6 @@
         opacity: 0.7;
     }
 
-    /* Dropdown menu styles */
     .dropdown-menu {
         position: absolute;
         top: 100%;
@@ -518,12 +504,12 @@
         
         background-color: var(--color-navigation-border);
         
-        margin: 1.5rem 0;
+        margin: 2rem 0;
     }
 
     .buttons {
         display: flex;
-        gap: 1rem;
+        gap: 2rem;
         width: 100%;
     }
 

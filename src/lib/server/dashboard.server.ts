@@ -1,4 +1,3 @@
-// src/lib/server/dashboard.server.ts
 import { prisma } from './prisma.server';
 
 export async function get_total_users() {
@@ -43,4 +42,17 @@ export async function get_posts_by_type() {
             }
         }
     });
+}
+
+export async function get_dashboard_data(user_rank: string) {
+    if (user_rank === 'Admin') {
+        return {
+            total_users: await get_total_users(),
+            users_by_rank: await get_users_by_rank(),
+            total_posts: await get_total_posts(),
+            posts_by_topic: await get_posts_by_topic(),
+            posts_by_type: await get_posts_by_type()
+        };
+    }
+    return null;
 }
