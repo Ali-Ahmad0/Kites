@@ -37,15 +37,13 @@ export async function POST({ request, locals }) {
             });
 
             // Decrement the tokens
-            if (locals.user?.username === author) {
-                const decrement_value = post_type === "Discussion" ? 10 : 30;
-                await t.tokens.update({
-                    where: { user_id: author_id },
-                    data: {
-                        tokens: { decrement: decrement_value }
-                    }
-                });
-            }
+            const decrement_value = post_type === "Discussion" ? 10 : 30;
+            await t.tokens.update({
+                where: { user_id: author_id },
+                data: {
+                    tokens: { decrement: decrement_value }
+                }
+            });
         },
         {
             maxWait: 10000,
