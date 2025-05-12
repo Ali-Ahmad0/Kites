@@ -33,6 +33,7 @@
     let is_over_limit = $state(false);
     let character_count = $state(0);
     let heading_too_large = $state(false);
+    let character_count_heading = $state(0);
 
     // Calculate character count and check if over limit
     $effect(() => {
@@ -47,8 +48,10 @@
         // Check if over character limit
         is_over_limit = character_count > character_limit;
 
+        character_count_heading = heading_text.replace(/\s/g, '').length;
+
         // Check if heading is too large
-        heading_too_large = (heading_text.replace(/\s/g, '').length) > 70;
+        heading_too_large = character_count_heading > 70;
     }
 
     // Toggle modal visibility
@@ -179,7 +182,7 @@
                         <input type="text" id="heading" name="heading" bind:value={heading_text} required>
                          <div class="character-count-container">
                             <span class={heading_too_large ? "character-count over-limit" : "character-count"}>
-                                {character_count} / 70 characters
+                                {character_count_heading} / 70 characters
                             </span>
                         </div>
                     </div>
