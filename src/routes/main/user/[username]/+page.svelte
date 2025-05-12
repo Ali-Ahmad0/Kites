@@ -3,6 +3,7 @@
     import { goto } from '$app/navigation';
     import { Icon } from '$lib';
     import { Tooltip } from '$lib';
+    import Dashboard from '$lib/admin/dashboard.svelte';
 
     const { data } = $props();
 
@@ -14,6 +15,19 @@
     let is_deleting: boolean = $state(false);
 
     let folder: string = $state("dark_mode_icons");
+
+
+
+    let active_tab = $state('overview');
+    const tabs = [
+        { id: 'overview', label: 'Overview' },
+        { id: 'users', label: 'Users' },
+        { id: 'content', label: 'Content' }
+    ]; 
+
+
+
+
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
@@ -115,6 +129,7 @@
     function cancel_delete() {
         show_confirm = false;
     }
+    
 </script>
 
 <svelte:window on:click={handle_outside_click} />
@@ -238,6 +253,10 @@
         </div>
     {/if}
 </div>
+
+{#if data.user_rank === 'admin' && data.authenticated && data.user?.username === data.params_username}
+    <Dashboard admin_stats={data.admin_stats} />
+{/if}
 
 <style>
     .container {

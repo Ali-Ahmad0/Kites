@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from '$lib/server/prisma.server';
 import { error } from '@sveltejs/kit';
+import { get_dashboard_data } from '$lib/helper/dashboard';
 
-export async function load({ params } : any) {
+export async function load({ params, locals } : any) {
     // Access username from route parameters
     const { username } = params;
     
@@ -34,11 +36,16 @@ export async function load({ params } : any) {
         image_url = `data:${user.image.mime_type};base64,${base64}`;
     }
     
+    const admin_stats = await get_dashboard_data(user.rank);
+
     // Return username and email from parameters
     return {
         params_username: username,
         params_email_id: email,
         user_rank: rank,
-        image: image_url
+        image: image_url,
+        authenticated: locals.authenticated,
+        user: locals.user,
+        admin_stats
     };
 }
