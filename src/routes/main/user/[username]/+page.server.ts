@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from '$lib/server/prisma.server';
 import { error } from '@sveltejs/kit';
+import { get_dashboard_data } from '$lib/server/dashboard.server';
 
-export async function load({ params } : any) {
+export async function load({ params }) {
     // Access username from route parameters
     const { username } = params;
-    
-    const streamed = (async () => { 
+
+    const streamed = (async () => {
         const user = await prisma.users.findUnique({
             where: { username: username },
             select: {
@@ -16,7 +18,7 @@ export async function load({ params } : any) {
                     select: { binary_blob: true, mime_type: true }
                 }
             }
-        })
+        });
         
         // Throw a 404 error if the user does not exist
         if (!user) {
@@ -34,16 +36,21 @@ export async function load({ params } : any) {
             const base64 = Buffer.from(user.image.binary_blob).toString('base64');
             image_url = `data:${user.image.mime_type};base64,${base64}`;
         }
+        
+        // Get admin dashboard stats
+        const dashboard_data = await get_dashboard_data(user.rank);
 
+        // Return profile page data
         return {
-            email: user.email,
-            rank: user.rank,
-            image: image_url
+            email: email,
+            rank: rank,
+            image: image_url,
+            admin_stats: dashboard_data
         };
     })();
-    // Return username and email from parameters
-    return {
+    
+    return { 
         params_username: username,
-        streamed
-    };
+        streamed 
+    }
 }

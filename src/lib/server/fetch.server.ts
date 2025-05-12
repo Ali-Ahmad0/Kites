@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
 import { prisma } from "$lib/server/prisma.server";
 
 // Fetching featured posts
