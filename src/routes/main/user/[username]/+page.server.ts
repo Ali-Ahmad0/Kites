@@ -17,7 +17,7 @@ export async function load({ params, locals } : any) {
                 select: { binary_blob: true, mime_type: true }
             }
         }
-    })
+    });
     
     // Throw a 404 error if the user does not exist
     if (!user) {

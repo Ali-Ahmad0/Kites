@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { is_dark_mode } from '$lib';
+    import { is_dark_mode, Loading } from '$lib';
     import { goto } from '$app/navigation';
     import { Icon } from '$lib';
     import { Tooltip } from '$lib';
@@ -7,7 +7,6 @@
 
     const { data } = $props();
 
-    let mode: string = $state("dark_mode_icons");
     let image: File | undefined = $state();
     
     let show_dropdown: boolean = $state(false);
@@ -61,10 +60,6 @@
             console.error('[KITES | ERROR]: ', e);
         }
     }
-
-    $effect(() => {
-        mode = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
-    })
     
     async function logout() {
         try {
@@ -135,26 +130,16 @@
 <svelte:window on:click={handle_outside_click} />
 
 <div class="container">
-    {#await data}
+    {#await data.streamed}
+        <Loading text="Loading user..."/>
+    {:then user_data}
         <div class="profile-card">
             <div class="details">
-                <div class="pfp-container">
-                    <img src="/profile.jpg" alt="pfp" class="pfp">
-                    <h2 class="username">Loading...</h2>
-                    <h4 class="email-id">Loading...</h4>
-                </div>
-            </div>
-        </div>
-    {:then data}
-
-        <div class="profile-card">
-            <div class="details">
-
                 <div class="pfp-container">
                     {#if data.authenticated && data.user?.username === data.params_username}
                         <label for="image" class="pfp-label">
-                            {#if data.image}
-                                <img src={data.image || "/placeholder.svg"} alt="pfp" class="pfp">
+                            {#if user_data.image}
+                                <img src={user_data.image || "/placeholder.svg"} alt="pfp" class="pfp">
                             {:else}
                                 <img src="/profile.jpg" alt="pfp" class="pfp">
                             {/if}
@@ -167,8 +152,8 @@
                         </label>
                         <input type="file" id="image" name="image" accept="image/*" onchange={change_pfp}>
                     {:else}
-                        {#if data.image}
-                            <img src={data.image || "/placeholder.svg"} alt="pfp" class="pfp">
+                        {#if user_data.image}
+                            <img src={user_data.image || "/placeholder.svg"} alt="pfp" class="pfp">
                         {:else}
                             <img src="/profile.jpg" alt="pfp" class="pfp">
                         {/if}
@@ -177,14 +162,14 @@
                 <div class="user-info">
                     <div class="username-container">
                         <h2 class="username">{data.params_username}</h2>
-                        {#if data.user_rank !== 'default'}
-                            <Tooltip text={data.user_rank}>
-                                <Icon mode={undefined} name={data.user_rank} width=36 height=36 alt="verified"/>
+                        {#if user_data.rank !== 'default'}
+                            <Tooltip text={user_data.rank}>
+                                <Icon mode={undefined} name={user_data.rank} width=36 height=36 alt="verified"/>
                             </Tooltip>
                         {/if}
                         
                     </div>
-                    <h4 class="email-id">{data.params_email_id}</h4>
+                    <h4 class="email-id">{user_data.email}</h4>
                 </div>
                 
                 {#if (data.authenticated && data.user?.username === data.params_username) || data.rank === "Admin"}

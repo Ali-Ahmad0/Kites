@@ -3,32 +3,34 @@ import { fetch_posts, fetch_featured_posts } from "$lib/server/fetch.server";
 import { error } from "@sveltejs/kit";
 
 export async function load({ params, locals }: any) {
-    try {
-        const { topic } = params;
+    const { topic } = params;
 
-        if (!['Art', 'Science', 'Philosophy', 'Nature'].includes(topic)) {
-            throw error(404, {
-                message: "Topic does not exist"
-            });
+    if (!['Art', 'Science', 'Philosophy', 'Nature'].includes(topic)) {
+        throw error(404, {
+            message: "Topic does not exist"
+        });
+    }
+
+    // Get both regular posts and featured posts
+    const streamed = (async () => {
+        try {
+            const [posts, featured_posts] = await Promise.all([
+                fetch_posts(locals, topic),
+                fetch_featured_posts()
+            ]);
+            
+            return {
+                ...posts,
+                featured_posts
+            };
+        } catch (e) {
+            console.error("[KITES | ERROR]: Failed to fetch posts: ", e);
+            return {
+                posts: [],
+                featured_posts: []
+            };
         }
+    })();
     
-        // Get both regular posts and featured posts
-        const [posts, featured_posts] = await Promise.all([
-            fetch_posts(locals, topic),  
-            fetch_featured_posts()
-        ]);
-    
-        // Return combined result 
-        return {
-            ...posts,       
-            featured_posts  
-        };
-    }
-    catch (e) {
-        console.error("[KITES | ERROR]: Failed to fetch posts: ", e);
-        return {
-            posts: [],
-            featured_posts: [] 
-        };
-    }
+    return { streamed };
 }

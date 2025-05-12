@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import { Engagement, Icon, Tooltip, ForumComment, is_dark_mode } from "$lib";	
+    import { Engagement, Icon, Tooltip, ForumComment, is_dark_mode, LoadingMore } from "$lib";	
     import { marked } from 'marked';
     import sanitizeHtml from 'sanitize-html';
 	import { onDestroy, onMount } from "svelte";
@@ -209,8 +209,11 @@
         {:else}
             <p class="blog-no-comments">No comments yet. Be the first to share your thoughts!</p>
         {/if}
-
-        <div bind:this={sentinel}></div>
+        <div bind:this={sentinel}>
+            {#if is_loading}
+                <LoadingMore/>
+            {/if}
+        </div>
     </div>
 
     {#if show_confirm}

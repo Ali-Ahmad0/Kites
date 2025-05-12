@@ -23,3 +23,6 @@ export { default as BlogPost } from "./forum/blog.svelte";
 export { default as Engagement } from "./forum/engagement.svelte";
 export { default as ForumComment} from "./forum/comment.svelte";
 export { default as CreatePost } from "./forum/create.svelte";
+
+export { default as Loading } from "./loading/loading.svelte";
+export { default as LoadingMore } from "./loading/loading_more.svelte";
