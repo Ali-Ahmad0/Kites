@@ -15,11 +15,13 @@
                         class="author-pfp"
                     />
                     <div class="post-info">
-                        <a href="/main/forum_posts/{post.topic}/{post.id}">
+                        <a href="/main/forum_posts/{post.topic}/{post.id}" class="post-link">
                             <h4>{post.heading}</h4>
                         </a>
                         <span class="likes">❤️ {post.likes}</span>
-                        <span class="topic">#{post.topic}</span>
+                        <a href="/main/forum_posts/{post.topic}" class="topic-link">
+                            <span class="topic">#{post.topic}</span>
+                        </a>
                     </div>
                 </div>
             {:else}
@@ -49,12 +51,19 @@
         overflow: hidden;
     }
 
-    .post-info a {
+    .post-link, .topic-link {
         text-decoration: none;
+    }
+    
+    .post-link {
         color: var(--color-text-primary);
     }
 
-    .post-info a:hover {
+    .topic-link {
+        color: var(--color-text-secondary);
+    }
+
+    .post-link:hover, .topic-link:hover {
         text-decoration: underline;
     }
     
