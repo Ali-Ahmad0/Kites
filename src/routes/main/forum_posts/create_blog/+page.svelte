@@ -112,7 +112,6 @@
             console.error("[KITES | ERROR] Failed to create new blog post", e);
         } finally {
             is_creating = false;
-            window.location.href = '/'
         }
     }
 </script>
