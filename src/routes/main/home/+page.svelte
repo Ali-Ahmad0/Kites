@@ -71,19 +71,27 @@
     });
 </script>
 
-{#await data.streamed}
-    <Loading text="Loading posts..."/>
-{:then posts_data} 
-    {#each posts as post}
-        <Thumbnail post_id={post.id} pfp={post.author_pfp} username={post.author_name} 
-        topic={post.topic} heading={post.heading} user_liked={post.user_liked} image={post.image_url} type={post.type}/>
-    {/each}
+<div class="content">
+    {#await data.streamed}
+        <Loading text="Loading posts..."/>
+    {:then posts_data} 
+        {#each posts as post}
+            <Thumbnail post_id={post.id} pfp={post.author_pfp} username={post.author_name} 
+            topic={post.topic} heading={post.heading} user_liked={post.user_liked} image={post.image_url} type={post.type}/>
+        {/each}
+            
+        <Featured posts={posts_data.featured_posts}/>
+    {/await}
     
     <div bind:this={sentinel}>
         {#if is_loading}
             <LoadingMore/>
         {/if}
     </div>
+</div>
 
-    <Featured posts={posts_data.featured_posts}/>
-{/await}
+<style>
+    .content {
+        width: fit-content;
+    }
+</style>
