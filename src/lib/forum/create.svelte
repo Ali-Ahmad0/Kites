@@ -48,7 +48,7 @@
         is_over_limit = character_count > character_limit;
 
         // Check if heading is too large
-        heading_too_large = (heading_text.replace(/\s/g, '').length) > 10;
+        heading_too_large = (heading_text.replace(/\s/g, '').length) > 70;
     }
 
     // Toggle modal visibility
@@ -90,7 +90,7 @@
         if (!heading_text.trim() || !topic_chosen.trim() || !content_text.trim()) return;
 
         // Check if over the character limit
-        if (is_over_limit) return;
+        if (is_over_limit || heading_too_large) return;
 
         try {
             is_creating = true;
@@ -179,7 +179,7 @@
                         <input type="text" id="heading" name="heading" bind:value={heading_text} required>
                          <div class="character-count-container">
                             <span class={heading_too_large ? "character-count over-limit" : "character-count"}>
-                                {character_count} / 10 characters
+                                {character_count} / 70 characters
                             </span>
                         </div>
                     </div>
@@ -221,7 +221,7 @@
                             Cancel
                         </button>
                         <button type="button" class="confirm" onclick={create_post}
-                        disabled={!heading_text.trim() || !topic_chosen.trim() || !content_text.trim() || is_creating || is_over_limit }>
+                        disabled={!heading_text.trim() || !topic_chosen.trim() || !content_text.trim() || is_creating || is_over_limit || heading_too_large }>
                         {is_creating ? 'Creating...' : 'Create Post'}
                     </button>
                 </div>                    
