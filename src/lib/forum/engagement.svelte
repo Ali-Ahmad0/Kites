@@ -99,8 +99,11 @@
 
     // need to fix this
     function copy_to_clipboard() {
-        const url = `/main/forum_posts/${topic}/${post_id}`;
-        navigator.clipboard.writeText(url)
+        // Create absolute URL to the specific post
+        const path = `/main/forum_posts/${topic}/${post_id}`;
+        const absoluteUrl = new URL(path, window.location.origin).toString();
+        
+        navigator.clipboard.writeText(absoluteUrl)
             .then(() => {
                 alert("URL copied to clipboard!");
             })
