@@ -7,6 +7,7 @@
     let posts : any = $state([]);
     let current_page = $state(1);
     
+    let is_initial_load = $state(true);
     let is_loading = $state(false);
     let has_more_posts = $state(true);
     
@@ -15,6 +16,11 @@
         if (data.streamed) {
             data.streamed.then(streamed_data => {
                 posts = streamed_data.posts;
+                
+                // Delay to prevent loading more posts at the same time as initial posts
+                setTimeout(() => { 
+                    is_initial_load = false; 
+                }, 500);
             });
         }
     });
@@ -71,19 +77,27 @@
     });
 </script>
 
-{#await data.streamed}
-    <Loading text="Loading posts..."/>
-{:then posts_data} 
-    {#each posts as post}
-        <Thumbnail post_id={post.id} pfp={post.author_pfp} username={post.author_name} 
-        topic={post.topic} heading={post.heading} user_liked={post.user_liked} image={post.image_url} type={post.type}/>
-    {/each}
+<div class:content-loaded={!is_initial_load}>
+    {#await data.streamed}
+        <Loading text="Loading posts..."/>
+    {:then posts_data} 
+        {#each posts as post}
+            <Thumbnail post_id={post.id} pfp={post.author_pfp} username={post.author_name} 
+            topic={post.topic} heading={post.heading} user_liked={post.user_liked} image={post.image_url} type={post.type}/>
+        {/each}
+            
+        <Featured posts={posts_data.featured_posts}/>
+    {/await}
     
     <div bind:this={sentinel}>
-        {#if is_loading}
+        {#if is_loading && !is_initial_load}
             <LoadingMore/>
         {/if}
     </div>
+</div>
 
-    <Featured posts={posts_data.featured_posts}/>
-{/await}
+<style>
+    .content-loaded {
+        width: fit-content;
+    }
+</style>
