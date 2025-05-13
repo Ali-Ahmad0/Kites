@@ -100,9 +100,9 @@
     function copy_to_clipboard() {
         // Create absolute URL to the specific post
         const path = `/main/forum_posts/${topic}/${post_id}`;
-        const absoluteUrl = new URL(path, window.location.origin).toString();
+        const absolute_url = new URL(path, window.location.origin).toString();
         
-        navigator.clipboard.writeText(absoluteUrl)
+        navigator.clipboard.writeText(absolute_url)
             .then(() => {
                 alert("URL copied to clipboard!");
             })
