@@ -7,7 +7,6 @@
 
     let liked = $state(user_liked);
     let show_modal = $state(false);
-    let show_share_div = $state(false);
     
     let comment_text = $state("");
     let is_submitting = $state(false);
@@ -97,17 +96,18 @@
             is_submitting = false;
         }
     }
+
+    // need to fix this
     function copy_to_clipboard() {
-        const url = window.location.href;
+        const url = `/main/forum_posts/${topic}/${post_id}`;
         navigator.clipboard.writeText(url)
             .then(() => {
                 alert("URL copied to clipboard!");
-                show_share_div = false;
             })
             .catch(err => {
                 console.error('[KITES | ERROR]: Could not copy text: ', err);
             });
-        }
+    }
         
     // Close modal when clicking outside
     function handle_outside_click(event: MouseEvent) {
