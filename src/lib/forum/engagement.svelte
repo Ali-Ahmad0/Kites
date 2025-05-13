@@ -97,7 +97,6 @@
         }
     }
 
-    // need to fix this
     function copy_to_clipboard() {
         // Create absolute URL to the specific post
         const path = `/main/forum_posts/${topic}/${post_id}`;
