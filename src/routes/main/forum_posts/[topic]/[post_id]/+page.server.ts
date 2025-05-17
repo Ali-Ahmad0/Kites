@@ -5,9 +5,19 @@ export async function load({ locals, params }) {
     const { post_id } = params;
     const user = locals.user;
 
-    try {
-        const streamed = (async () => {
-            // Find the post from URL parameters
+    // Check post existence
+    const post = await prisma.forumPosts.findUnique({
+        where: { id: post_id },
+        select: { id: true }
+    });
+
+    if (!post) {
+        throw error(404, 'Post not found')
+    }
+
+    const streamed = (async () => {
+        try {            
+            // Fetch all the post data
             const post = await prisma.forumPosts.findUnique({
                 where: { id: post_id },
                 include: {
@@ -47,10 +57,7 @@ export async function load({ locals, params }) {
             });
     
             if (!post) {
-                throw error(
-                    404, {
-                    message:"Post not found"
-                });
+                return {};
             };
     
             // Attatch author pfp url to comment
@@ -81,10 +88,10 @@ export async function load({ locals, params }) {
                 
                 comments: comments_with_pfps
             }
-        })();
-        
-        return { streamed };
-    } catch (e) {
-        throw error(500,`[KITES | ERROR]: ${e}`);
-    }
+        } catch (e) {
+            console.log('[KITES | ERROR]: ', e);
+        }
+    })();
+    
+    return { streamed };
 }

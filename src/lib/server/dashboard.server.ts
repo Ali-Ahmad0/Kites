@@ -44,7 +44,7 @@ export async function get_posts_by_type() {
     });
 }
 
-export async function get_dashboard_data(user_rank: string) {
+export async function get_dashboard_data(user_rank: string | undefined) {
     if (user_rank === 'Admin') {
         return {
             total_users: await get_total_users(),

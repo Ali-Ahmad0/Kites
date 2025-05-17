@@ -1,6 +1,7 @@
 <script lang="ts">
     import { is_dark_mode, Loading, Icon, Tooltip, Dashboard } from '$lib';
     import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 
     const { data } = $props();
 
@@ -69,7 +70,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username: data.params_username }) 
+                body: JSON.stringify({ username: page.params.username }) 
             });
             
             if(resp.status === 200) {
@@ -121,10 +122,10 @@
         <div class="profile-card">
             <div class="details">
                 <div class="pfp-container">
-                    {#if data.authenticated && data.user?.username === data.params_username}
+                    {#if data.authenticated && data.user?.username === page.params.username}
                         <label for="image" class="pfp-label">
-                            {#if user_data.image}
-                                <img src={user_data.image || "/placeholder.svg"} alt="pfp" class="pfp">
+                            {#if user_data?.image}
+                                <img src={user_data?.image || "/placeholder.svg"} alt="pfp" class="pfp">
                             {:else}
                                 <img src="/profile.jpg" alt="pfp" class="pfp">
                             {/if}
@@ -137,8 +138,8 @@
                         </label>
                         <input type="file" id="image" name="image" accept="image/*" onchange={change_pfp}>
                     {:else}
-                        {#if user_data.image}
-                            <img src={user_data.image || "/placeholder.svg"} alt="pfp" class="pfp">
+                        {#if user_data?.image}
+                            <img src={user_data?.image || "/placeholder.svg"} alt="pfp" class="pfp">
                         {:else}
                             <img src="/profile.jpg" alt="pfp" class="pfp">
                         {/if}
@@ -146,18 +147,18 @@
                 </div>
                 <div class="user-info">
                     <div class="username-container">
-                        <h2 class="username">{data.params_username}</h2>
-                        {#if user_data.rank !== 'default'}
-                            <Tooltip text={user_data.rank}>
-                                <Icon mode={undefined} name={user_data.rank} width=36 height=36 alt="verified"/>
+                        <h2 class="username">{page.params.username}</h2>
+                        {#if user_data?.rank !== 'default'}
+                            <Tooltip text={user_data?.rank}>
+                                <Icon mode={undefined} name={user_data?.rank} width=36 height=36 alt="verified"/>
                             </Tooltip>
                         {/if}
                         
                     </div>
-                    <h4 class="email-id">{user_data.email}</h4>
+                    <h4 class="email-id">{user_data?.email}</h4>
                 </div>
                 
-                {#if (data.authenticated && data.user?.username === data.params_username) || data.rank === "Admin"}
+                {#if (data.authenticated && data.user?.username === page.params.username) || data.rank === "Admin"}
                 <div class="more-options">
                     <Tooltip text="More">
                         <button class="more" onclick={toggle_drowpdown}>
@@ -183,7 +184,7 @@
                 {/if}
             </div>
             
-            {#if data.authenticated && data.user?.username === data.params_username}
+            {#if data.authenticated && data.user?.username === page.params.username}
                 <div class="divider"></div>
                 <div class="buttons">
                     <button class="settings-button" onclick={() => goto('/main/user/settings')}>
@@ -204,8 +205,8 @@
                 </div>
             {/if}
         </div>        
-        {#if user_data.rank === "Admin" && data.rank === "Admin" && data.authenticated && data.user?.username === data.params_username}
-            <Dashboard admin_stats={user_data.admin_stats} />
+        {#if user_data?.rank === "Admin" && data.rank === "Admin" && data.authenticated && data.user?.username === page.params.username}
+            <Dashboard admin_stats={user_data?.admin_stats} />
         {/if}
     {/await}
 
