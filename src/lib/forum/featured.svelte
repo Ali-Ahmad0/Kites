@@ -35,7 +35,7 @@
     .featured-post {
         display: flex;
         gap: 10px;
-        padding: 8px 0;
+        padding: 8px 8px;
         border-bottom: 1px solid var(--color-navigation-border);
     }
     
@@ -98,9 +98,9 @@
         max-width: 400px;
         min-width: 240px;
         
-        height: 35vw;
+        height: 27vw;
         
-        max-height: 400px;
+        max-height: 420px;
         min-height: 320px;
         
         padding: 20px 10px;

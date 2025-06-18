@@ -2,8 +2,14 @@
 	import { Engagement } from "$lib";
 
     const { 
-        post_id, user_liked, pfp, 
-        username, topic, heading, image, type
+        post_id, 
+        user_liked, 
+        pfp, 
+        username, 
+        topic, 
+        heading, 
+        image, 
+        type
     } = $props();
 
 </script>

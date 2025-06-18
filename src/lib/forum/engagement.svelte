@@ -3,7 +3,11 @@
 	import { page } from "$app/state";
     import { fade, scale } from 'svelte/transition';
 
-    const { post_id, topic, user_liked } = $props();
+    const { 
+        post_id, 
+        topic, 
+        user_liked 
+    } = $props();
 
     let liked = $state(user_liked);
     let show_modal = $state(false);

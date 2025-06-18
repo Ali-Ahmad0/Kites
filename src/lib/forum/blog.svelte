@@ -6,9 +6,17 @@
 	import { onDestroy, onMount } from "svelte";
 
     const { 
-        post_id, user_liked, pfp,
-        heading, username, content, topic,
-        comments, image, type, user_id
+        post_id, 
+        user_liked, 
+        pfp,
+        heading, 
+        username, 
+        content, 
+        topic,
+        comments, 
+        image, 
+        type, 
+        user_id
     } = $props();
 
     let is_deleting : boolean = $state(false);

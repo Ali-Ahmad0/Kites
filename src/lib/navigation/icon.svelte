@@ -1,5 +1,5 @@
 <script>
-    let { mode, name, width, height, alt = ""} = $props()
+    let { mode, name, width, height, alt = "" } = $props()
 </script>
 
 {#if mode}
@@ -7,6 +7,3 @@
 {:else}
     <img src={`/icons/${name}.svg`} width={width} height={height} alt={alt} />
 {/if}
-
-
-  
