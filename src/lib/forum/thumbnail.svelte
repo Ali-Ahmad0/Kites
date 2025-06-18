@@ -1,4 +1,5 @@
 <script>
+	import { goto } from "$app/navigation";
 	import { Engagement } from "$lib";
 
     const { 
@@ -15,16 +16,20 @@
 </script>
 
 <div class="post">
+    <div class="header">
+        {#if pfp}
+        <button class="pfp-button" onclick={() => goto(`/main/user/${username}`)}>
+            <img src={pfp} alt="pfp" class="pfp">
+        </button>
+        {:else}
+        <button class="pfp-button" onclick={() => goto(`/main/user/${username}`)}>
+            <img class="pfp" src="/profile.jpg" alt="pfp">
+        </button>
+        {/if}
+        <span class="username">{username}</span>
+        <span class="topic"><strong>{topic} | {type}</strong></span>
+    </div>
     <a href='/main/forum_posts/{topic}/{post_id}'>
-        <div class="header">
-            {#if pfp}
-                <img src={pfp} alt="pfp" class="pfp">
-            {:else}
-                <img class="pfp" src="/profile.jpg" alt="pfp">
-            {/if}
-            <span class="username">{username}</span>
-            <span class="topic"><strong>{topic} | {type}</strong></span>
-        </div>
         <h3 class="title">{heading}</h3>
         {#if image}
           <img src={image} alt="cover" class="cover">
@@ -32,7 +37,6 @@
     </a>
     <Engagement post_id={post_id} topic={topic} user_liked={user_liked} />
 </div>    
-
 
 <style>
     a {
@@ -55,11 +59,22 @@
         align-items: center;
     }
 
+    .pfp-button {
+        padding: 0;
+        margin: 0;
+
+        background: transparent;
+        border: none;
+        
+        cursor: pointer;
+    }
+
     .pfp {
         border-radius: 50%;
-        width: 1.25rem;
-        height: 1.25rem;
-        margin-right: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+        margin-right: 0.75rem;
+        margin-top: 0.25rem;
     }
     
     .username, .topic {

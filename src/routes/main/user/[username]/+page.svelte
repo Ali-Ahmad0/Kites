@@ -7,11 +7,11 @@
 
     let image: File | undefined = $state();
     
-    let show_dropdown: boolean = $state(false);
-    let show_confirm: boolean = $state(false);
-    let is_deleting: boolean = $state(false);
+    let show_dropdown = $state(false);
+    let show_confirm = $state(false);
+    let is_deleting = $state(false);
 
-    let folder: string = $state("dark_mode_icons");
+    let folder = $state("dark_mode_icons");
 
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";

@@ -2,6 +2,8 @@
 	import { page } from "$app/state";
     import { Icon, Tooltip, Engagement, ForumComment, is_dark_mode, LoadingMore } from "$lib";	
 	import { onDestroy, onMount } from "svelte";
+	import sanitizeHtml from "sanitize-html";
+	import { goto } from "$app/navigation";
 
     const { 
         post_id, 
@@ -17,13 +19,35 @@
         user_id
     } = $props();
 
-    let is_deleting : boolean = $state(false);
-    let show_dropdown: boolean = $state(false);
-    let show_confirm: boolean = $state(false);
+    let is_deleting = $state(false);
+    let show_dropdown = $state(false);
+    let show_confirm = $state(false);
+
+    let safe_html = $state("");
 
     // Dynamic icon folder based on dark mode
-    let folder: string = $state("dark_mode_icons");
-  
+    let folder = $state("dark_mode_icons");
+
+    // Comment pagination logic
+    let comments_data = $state(comments);
+    let current_page = $state(1);
+
+    let is_loading = $state(false);
+    let has_more_comments = $state(true);
+    
+    // Remove HTML tags from content
+    async function process_content() {
+        try {
+            safe_html = sanitizeHtml(content);
+        } catch (error) {
+            console.error('[KITES | ERROR]: Error processing html:', error);
+        }
+    }
+
+    $effect(() => {
+        process_content();
+    })
+
     // Update folder on dark mode change
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
@@ -76,12 +100,6 @@
         }
     }
 
-    // Comment pagination logic
-    let comments_data = $state(comments);
-    let current_page = $state(1);
-
-    let is_loading = $state(false);
-    let has_more_comments = $state(true);
 
     async function load_more_comments() {
         if (is_loading || !has_more_comments)
@@ -135,14 +153,21 @@
 </script>
 
 <svelte:window on:click={handle_click_outside} />
+<svelte:head>
+    <title>{heading}</title>
+</svelte:head>
 
 <div class="container">
     <div class="details">
         <div class="author">
             {#if pfp}
-                <img src={pfp || "/placeholder.svg"} alt="pfp" class="pfp">
+                <button class="pfp-button" onclick={() => goto(`/main/user/${username}`)}>
+                    <img src={pfp || "/placeholder.svg"} alt="pfp" class="pfp">
+                </button>
             {:else}
-                <img class="pfp" src="/profile.jpg" alt="pfp">
+                <button class="pfp-button" onclick={() => goto(`/main/user/${username}`)}>
+                    <img class="pfp" src="/profile.jpg" alt="pfp">
+                </button>
             {/if}
             <p class="user-name">{username}</p>
         </div>   
@@ -180,7 +205,7 @@
         <h1 class="title">{heading}</h1>
         
         <p class="content">
-            {content}
+            {safe_html}
         </p>
         {#if image}
             <img src={image || "/placeholder.svg"} alt="" class="post-image">
@@ -256,6 +281,16 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
+    }
+
+    .pfp-button {
+        padding: 0;
+        margin: 0;
+
+        background: transparent;
+        border: none;
+        
+        cursor: pointer;
     }
 
     .pfp {

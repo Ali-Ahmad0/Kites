@@ -1,26 +1,32 @@
 <script lang="ts">
-	import { page } from "$app/state";
+	import { goto } from "$app/navigation";
+import { page } from "$app/state";
     import { Icon, Tooltip, is_dark_mode } from "$lib";
-	import { marked } from "marked";
     import sanitizeHtml from 'sanitize-html';
 
     let { comment_data } = $props();
     
-    let show_dropdown: boolean = $state(false);
-    let show_confirm: boolean = $state(false);
-    let is_deleting: boolean = $state(false);
+    let show_dropdown = $state(false);
+    let show_confirm = $state(false);
+    let is_deleting = $state(false);
     
-    let safe_html: string = $state("");
+    let safe_html = $state("");
 
     // Dynamic icon folder based on dark mode
-    let folder: string = $state("dark_mode_icons");
+    let folder = $state("dark_mode_icons");
 
-    async function process_markdown() {
-        const html = await marked(comment_data.comment);
-        safe_html = sanitizeHtml(html);  
+    // Remove HTML tags from content
+    async function process_content() {
+        try {
+            safe_html = sanitizeHtml(comment_data.comment);
+        } catch (error) {
+            console.error('[KITES | ERROR]: Error processing html:', error);
+        }
     }
 
-    process_markdown();
+    $effect(() => {
+        process_content();
+    });
   
     // Update folder on dark mode change
     $effect(() => {
@@ -73,9 +79,13 @@
 <div class="comment">
     <div class="comment-wrapper">
         {#if comment_data.author_pfp}
-            <img class="comment-avatar" src={comment_data.author_pfp || "/placeholder.svg"} alt="avatar" />
+            <button class="pfp-button" onclick={() => goto(`/main/user/${comment_data.author_name}`)}>
+                <img class="comment-avatar" src={comment_data.author_pfp || "/placeholder.svg"} alt="avatar" />
+            </button>
         {:else}
-            <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
+            <button class="pfp-button" onclick={() => goto(`/main/user/${comment_data.author_name}`)}>
+                <img class="comment-avatar" src="/profile.jpg" alt="avatar" />
+            </button>
         {/if}
         <div class="comment-content">
             <div class="comment-header">
@@ -144,6 +154,16 @@
     .comment-wrapper {
         display: flex;
         gap: 1rem;
+    }
+
+    .pfp-button {
+        padding: 0;
+        margin: 0;
+
+        background: transparent;
+        border: none;
+        
+        cursor: pointer;
     }
 
     .comment-avatar {

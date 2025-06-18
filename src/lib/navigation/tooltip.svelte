@@ -2,10 +2,10 @@
     import { onDestroy } from 'svelte';
 
     let { children, text } = $props();    
-    let delay: number = 400;
+    let delay = 400;
 
     // Internal state
-    let show_tooltip: boolean = $state(false);
+    let show_tooltip = $state(false);
     let tooltip_timeout: ReturnType<typeof setTimeout> | null = null;
     let tooltip_element: HTMLDivElement | undefined = $state(undefined)
     

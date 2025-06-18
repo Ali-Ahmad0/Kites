@@ -5,7 +5,7 @@
     import { onMount } from 'svelte';
     import { is_dark_mode } from '$lib';
     
-    let folder: string = $state("dark_mode_icons");
+    let folder = $state("dark_mode_icons");
     
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";

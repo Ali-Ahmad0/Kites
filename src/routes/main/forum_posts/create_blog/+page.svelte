@@ -14,7 +14,7 @@
     };
 
     // Get user rank
-    let user_rank: string = page.data.rank;
+    let user_rank = page.data.rank;
 
     // Now validate the rank
     let rank: RankType = Object.keys(character_limits).includes(user_rank) ? user_rank as RankType : 'default';

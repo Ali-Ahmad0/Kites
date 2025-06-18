@@ -4,7 +4,7 @@
 	import { goto } from "$app/navigation";
 
     let { image } = $props();
-    let folder: string = $state("dark_mode_icons");
+    let folder = $state("dark_mode_icons");
 
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
@@ -69,7 +69,7 @@
                     {#if image}
                         <img src={image} alt="pfp" class="pfp">
                     {:else}
-                        <img class="pfp" src="/profile.jpg" alt="pfp">
+                        <img src="/profile.jpg" alt="pfp" class="pfp">
                     {/if}
                 </button>       
         </Tooltip>

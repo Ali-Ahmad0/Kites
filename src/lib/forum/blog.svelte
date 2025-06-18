@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
     import { page } from "$app/state";
     import { Engagement, Icon, Tooltip, ForumComment, is_dark_mode, LoadingMore } from "$lib";	
     import { marked } from 'marked';
@@ -19,27 +20,49 @@
         user_id
     } = $props();
 
-    let is_deleting : boolean = $state(false);
-    let show_dropdown: boolean = $state(false);
-    let show_confirm: boolean = $state(false);
-    let safe_html: string = $state("");
+    let is_deleting = $state(false);
+    let show_dropdown = $state(false);
+    let show_confirm = $state(false);
 
+    let safe_html = $state("");
+    let folder = $state("dark_mode_icons");
+    
+    let comments_data = $state(comments);
+    
+    let current_page = $state(1);
+    let is_loading = $state(false);
+    let has_more_comments = $state(true);
+
+    // Process markdown with enhanced security
     async function process_markdown() {
-        const html = await marked(content); 
-        safe_html = sanitizeHtml(html); // Sanitize the resolved HTML
+        try {
+            const html = await marked(content);
+
+            // Sanitize the generated HTML
+            safe_html = sanitizeHtml(html, {
+                allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre'],
+                allowedAttributes: {
+                    'a': ['href', 'target'],
+                    'img': ['src', 'alt', 'width', 'height']
+                }
+            });
+            
+        } catch (error) {
+            console.error('[KITES | ERROR]: Failed to process markdown:', error);
+            safe_html = sanitizeHtml(content);
+        }
     }
     
-    process_markdown();
+    $effect(() => {
+        process_markdown();
+    });
 
-    // Dynamic icon folder based on dark mode
-    let folder: string = $state("dark_mode_icons");
-  
     // Update folder on dark mode change
     $effect(() => {
         folder = $is_dark_mode ? "dark_mode_icons" : "light_mode_icons";
     });
 
-    // delete the post and all related data
+    // Delete post functionality
     async function delete_post() {
         try {
             is_deleting = true;
@@ -48,7 +71,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ post_id: post_id, author_name: username, type: type, user_id: user_id })
+                body: JSON.stringify({ post_id, author_name: username, type, user_id })
             });
 
             if(response.status === 200) {
@@ -58,8 +81,9 @@
                 alert(data.error);
             }
 
-        } catch(e) {
-            console.error(e);
+        } catch(error) {
+            console.error('[BLOG | ERROR]: Delete failed:', error);
+            alert('Failed to delete post. Please try again.');
         } finally {
             is_deleting = false;
         }
@@ -86,44 +110,42 @@
         }
     }
 
-        // Comment pagination logic
-    let comments_data = $state(comments);
-    let current_page = $state(1);
-
-    let is_loading = $state(false);
-    let has_more_comments = $state(true);
-
+    // Enhanced comment pagination
     async function load_more_comments() {
-        if (is_loading || !has_more_comments)
-            return;
+        if (is_loading || !has_more_comments) return;
 
         try {
             is_loading = true;
             current_page++;
 
             const response = await fetch(`/api/forum/comment/load?page=${current_page}&post_id=${post_id}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
             const new_data = await response.json();
 
             if (new_data.comments_data && new_data.comments_data.length > 0) {
-                // Append new comments to existing ones
                 comments_data = [...comments_data, ...new_data.comments_data];   
             } else {
                 has_more_comments = false;
             }
-        } catch (e) {
-            console.error('[KITES | ERROR]: Error loading more comments: ', e);
+        } catch (error) {
+            console.error('[BLOG | ERROR]: Error loading more comments:', error);
+            current_page--;
         } finally {
             is_loading = false;
         }
     }
 
-    let observer: IntersectionObserver | null;
+    // Intersection Observer for infinite scroll
+    let observer: IntersectionObserver | null = null;
     let sentinel: HTMLDivElement;
         
     onMount(() => {
         observer = new IntersectionObserver((entries) => {
-            // Load when reaching end of page
-            if (entries[0].isIntersecting && !is_loading) {
+            if (entries[0].isIntersecting && !is_loading && has_more_comments) {
                 load_more_comments();
             }
         }, {
@@ -136,19 +158,25 @@
     });
     
     onDestroy(() => {
-        if (observer && sentinel) {
-            observer.unobserve(sentinel);
+        if (observer) {
+            if (sentinel) {
+                observer.unobserve(sentinel);
+            }
+            observer.disconnect();
             observer = null;
         }
     });
 </script>
 
 <svelte:window on:click={handle_click_outside} />
+<svelte:head>
+    <title>{heading}</title>
+</svelte:head>
 
 <article class="blog-container">
     <header class="blog-header">
         <div class="blog-meta">
-            <div class="blog-topic">{topic} | {type} </div>
+            <div class="blog-topic">{topic} | {type}</div>
         </div>
         
         <h1 class="blog-title">{heading}</h1>
@@ -156,9 +184,13 @@
         <div class="blog-author-container">
             <div class="blog-author">
                 {#if pfp}
-                    <img src={pfp || "/placeholder.svg"} alt="{username}'s profile" class="blog-author-image">
+                    <button class="pfp-button" onclick={() => goto(`/main/user/${username}`)}>
+                        <img src={pfp || "/placeholder.svg"} alt="{username}'s profile" class="blog-author-image">
+                    </button>
                 {:else}
-                    <img class="blog-author-image" src="/profile.jpg" alt="{username}'s profile">
+                    <button class="pfp-button" onclick={() => goto(`/main/user/${username}`)}>
+                        <img class="blog-author-image" src="/profile.jpg" alt="{username}'s profile">
+                    </button>
                 {/if}
                 <div class="blog-author-info">
                     <p class="blog-author-name">{username}</p>
@@ -167,16 +199,16 @@
             
             {#if (page.data.authenticated && page.data.user?.username === username) || page.data.rank === "Admin"}
                 <div class="post-options">
-                    <Tooltip text="More">
-                        <button class="more" onclick={toggle_dropdown}>
+                    <Tooltip text="More options">
+                        <button class="more" onclick={toggle_dropdown} aria-label="Post options" aria-expanded={show_dropdown}>
                             <Icon mode={folder} name="more_v" width=24 height=24 alt="more" />
                         </button>
                     </Tooltip>
                     
                     {#if show_dropdown}
-                        <div class="dropdown-menu">
-                            <button class="dropdown-item delete-post" onclick={ask_delete_confirmation}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="dropdown-menu" role="menu" aria-label="Post actions">
+                            <button class="dropdown-item delete-post" onclick={ask_delete_confirmation} role="menuitem">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M3 6h18"></path>
                                     <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
                                     <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
@@ -225,10 +257,10 @@
     </div>
 
     {#if show_confirm}
-        <div class="confirm-dialog">
+        <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-title" aria-describedby="delete-description">
             <div class="confirm-content">
-                <h3>Delete Post?</h3>
-                <p>This action cannot be undone. Your post and all comments will be permanently deleted.</p>
+                <h3 id="delete-title">Delete Post?</h3>
+                <p id="delete-description">This action cannot be undone. Your post and all comments will be permanently deleted.</p>
                 <div class="confirm-buttons">
                     <button class="cancel-button" onclick={cancel_delete} disabled={is_deleting}>
                         Cancel
@@ -291,6 +323,16 @@
         display: flex;
         align-items: center;
         gap: 1rem;
+    }
+
+    .pfp-button {
+        padding: 0;
+        margin: 0;
+
+        background: transparent;
+        border: none;
+        
+        cursor: pointer;
     }
 
     .blog-author-image {
@@ -495,14 +537,11 @@
 
     .confirm-dialog {
         position: fixed;
-
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        
         z-index: 100;
-        
         display: flex;
         justify-content: center;
         align-items: center;

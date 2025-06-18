@@ -3,8 +3,8 @@
 
     let otp_input: Array<number> = $state([]);
 
-    let error_message: string = $state('');
-    let is_loading: boolean = $state(false);
+    let error_message = $state('');
+    let is_loading = $state(false);
 
     // Handle OTP input auto-focus
     function handle_input(e: Event, nextId?: string) {

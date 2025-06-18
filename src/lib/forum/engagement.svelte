@@ -213,19 +213,23 @@
     .engagement-btn {
         display: flex;
         align-items: center;
-        flex: 1;
         justify-content: center;
+
+        flex: 1;
         gap: 0.5rem;
+
         padding: 0.5rem 1rem;
         border-radius: 2rem;
-        background: transparent;
         border: none;
+
+        background: transparent;
         color: var(--color-text-secondary);
+
         font-size: 0.85rem;
         font-weight: 500;
+
         cursor: pointer;
-
-
+        
         transition: all 0.2s ease;
     }
 
