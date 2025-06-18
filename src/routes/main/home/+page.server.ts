@@ -1,4 +1,5 @@
 import { fetch_posts, fetch_featured_posts } from '$lib/server/fetch.server.js';
+import { error } from '@sveltejs/kit';
 
 export async function load({ locals }) {
     const streamed = (async () => {
@@ -14,10 +15,7 @@ export async function load({ locals }) {
             };
         } catch (e) {
             console.error("[KITES | ERROR]: Failed to fetch posts: ", e);
-            return {
-                posts: [],
-                featured_posts: []
-            };
+            throw error(500, { message: "Internal Server Error" });
         }
     })();
     

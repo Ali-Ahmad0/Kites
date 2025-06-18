@@ -37,6 +37,4 @@
     {:else}
         <div>Post not found or invalid data</div>
     {/if}
-{:catch error}
-    <div>Error loading post: {error.message}</div>
 {/await}

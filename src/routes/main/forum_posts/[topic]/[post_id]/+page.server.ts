@@ -12,7 +12,7 @@ export async function load({ locals, params }) {
     });
 
     if (!post) {
-        throw error(404, 'Post not found')
+        throw error(404, { message: "Post not found" });
     }
 
     const streamed = (async () => {
@@ -90,7 +90,7 @@ export async function load({ locals, params }) {
             }
         } catch (e) {
             console.log('[KITES | ERROR]: ', e);
-            throw error(500, 'Internal Server Error');
+            throw error(500, { message: "Internal Server Error" });
         }
     })();
     

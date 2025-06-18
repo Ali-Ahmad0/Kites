@@ -122,8 +122,8 @@
                     type={post.type}
                 />
             {/each}
-        </div>
-           
+        </div>        
+
         <Featured posts={posts_data.featured_posts}/>
     {/await}
    

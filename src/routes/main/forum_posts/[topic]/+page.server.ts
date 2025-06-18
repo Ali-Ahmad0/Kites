@@ -6,9 +6,7 @@ export async function load({ params, locals }: any) {
     const { topic } = params;
 
     if (!['Art', 'Science', 'Philosophy', 'Nature'].includes(topic)) {
-        throw error(404, {
-            message: "Topic does not exist"
-        });
+        throw error(404, { message: "Topic does not exist" });
     }
 
     // Get both regular posts and featured posts
@@ -25,10 +23,7 @@ export async function load({ params, locals }: any) {
             };
         } catch (e) {
             console.error("[KITES | ERROR]: Failed to fetch posts: ", e);
-            return {
-                posts: [],
-                featured_posts: []
-            };
+            throw error(500, { message: "Internal Server Error" });
         }
     })();
     

@@ -58,6 +58,7 @@ export async function load({ params }) {
             };
         } catch (e) {
             console.error('[KITES | ERROR]: ', e);
+            throw error(500, { message: "Internal Server Error" });
         }
     })();
     
