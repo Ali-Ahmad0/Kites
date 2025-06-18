@@ -70,7 +70,7 @@ export async function load({ locals, params }) {
             
             const cover_image = post.image;
             const author_pfp = post.author.image;
-    
+
             return {
                 // Remove duplicate comment data
                 post: { ...post, forum_comments: undefined },
@@ -90,6 +90,7 @@ export async function load({ locals, params }) {
             }
         } catch (e) {
             console.log('[KITES | ERROR]: ', e);
+            throw error(500, 'Internal Server Error');
         }
     })();
     

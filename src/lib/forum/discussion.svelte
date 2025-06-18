@@ -226,7 +226,7 @@
     .container {
         display: flex;
         flex-direction: column;
-        max-width: 1000px;
+        max-width: 900px;
         margin: 0 auto;
         padding: 1.5rem;
         background-color: var(--color-background-primary);
@@ -376,7 +376,6 @@
 
     .post-image {
         width: 100%;
-        max-width: 800px;
         border-radius: 1rem;
         align-self: center;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
