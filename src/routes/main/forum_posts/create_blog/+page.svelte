@@ -250,13 +250,15 @@
     .content {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1.25rem;
         
         max-width: 1000px;
+        height: fit-content;
+
         margin: auto;
-        padding: 1rem;
+        padding-bottom: 2rem;
         
-        border-radius: 1rem;
+        border-bottom: 1px solid var(--color-navigation-border);
     }
 
     h1 {
