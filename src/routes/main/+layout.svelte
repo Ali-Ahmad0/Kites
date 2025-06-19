@@ -3,6 +3,10 @@
     let { data, children } = $props();
 </script>
 
+<svelte:head>
+    <title>Kites</title>
+</svelte:head>
+
 <div class="layout" class:collapsed={$sidebar_collapsed}>
     <div class="navbar">
         <Navbar image={data.my_pfp} />
