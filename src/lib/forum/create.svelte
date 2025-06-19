@@ -253,8 +253,8 @@
                                     <polyline points="21,15 16,10 5,21"/>
                                 </svg>
                                 <input type="file" id="image" name="image" onchange={handle_file_upload} accept="image/*" style="display: none;">
+                                <span>Add image</span>
                             </label>
-                            <span>Add image</span>
                         </div>
                         <button 
                             type="button" 
@@ -272,6 +272,7 @@
                             <span>{image.name}</span>
                             <button onclick={() => image = undefined} class="remove-file">×</button>
                         </div>
+                        <span class="image-size">{(image.size / 1024 / 1024).toFixed(2)} MB</span>
                     {/if}
                 </div>
             </div>
@@ -537,8 +538,7 @@
     }
 
     .media-options span {
-        margin-top: 0.55rem;
-        margin-left: 0.2rem;
+        margin-left: 0.5rem;
     }
 
     span {
@@ -594,15 +594,23 @@
         font-size: 0.8rem;
     }
 
+    .image-size {
+        margin: 0 0.5rem;
+    }
+
     .remove-file {
         background: none;
         border: none;
         color: #999;
+        
         cursor: pointer;
+        
         font-size: 18px;
         padding: 0;
+
         width: 20px;
         height: 20px;
+        
         display: flex;
         align-items: center;
         justify-content: center;
