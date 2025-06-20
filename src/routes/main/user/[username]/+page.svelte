@@ -272,8 +272,8 @@
     }
 
     .pfp {
-        width: 6rem;
-        height: 6rem;
+        width: 6.25rem;
+        height: 6.25rem;
         
         border-radius: 50%;
         
@@ -292,15 +292,19 @@
         position: absolute;
         top: 0;
         left: 0;
+        
         width: 100%;
-        height: 93%;
+        height: 94%;
+        
         border-radius: 50%;
         background-color: rgba(0, 0, 0, 0.5);
         display: flex;
+        
         flex-direction: column;
         justify-content: center;
         align-items: center;
         opacity: 0;
+
         transition: opacity 0.2s ease;
         color: white;
     }

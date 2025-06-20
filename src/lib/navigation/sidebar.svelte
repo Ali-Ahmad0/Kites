@@ -107,7 +107,9 @@
     .sidebar {
         width: 11.5rem;
         height: calc(100vh - 8rem);
+        
         padding: 1rem 0;
+        
         transition: width 0.3s ease;
     }
     
@@ -116,6 +118,8 @@
         background-color: var(--color-background-primary);
         
         padding: 0.7rem 2rem;
+        margin: 0.25rem 0;
+
         font-size: 1rem;
         width: 100%;
         
