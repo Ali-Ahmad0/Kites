@@ -110,9 +110,12 @@
     function cancel_delete() {
         show_confirm = false;
     }
-    
+
 </script>
 
+<svelte:head>
+    <title>Kites | {page.params.username}</title>
+</svelte:head>
 <svelte:window on:click={handle_outside_click} />
 
 <div class="container">
@@ -245,7 +248,7 @@
         flex-direction: column;
         
         width: 100%;
-        max-width: 720px;
+        max-width: 640px;
         box-sizing: border-box;
         
         padding: 2rem;
@@ -581,14 +584,22 @@
     @media (max-width: 500px) {
         .details {
             flex-direction: column;
-            text-align: center;
+            gap: 0.5rem;
+        }
 
-            gap: 1rem;
+        .username-container, .email-id {
+            align-self: center;
+            margin: 0;
+        }
+
+        .divider { 
+            margin-top: 0;
         }
 
         .more-options {
-            align-self: flex-end;
-            margin-top: 1rem;
+            position: relative;
+            top: -175px;
+            left: 140px;
         }
 
         .dropdown-menu {

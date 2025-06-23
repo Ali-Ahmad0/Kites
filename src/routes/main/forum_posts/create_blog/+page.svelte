@@ -142,6 +142,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>Create Blog Post</title>
+</svelte:head>
+
 <div class="content">
     <h1>Create a blog post</h1>
     <div class="form-group">

@@ -2,6 +2,10 @@
 	import { RankCard } from "$lib";
 </script>
 
+<svelte:head>
+    <title>Kites | Premium</title>
+</svelte:head>
+
 <div class="content">
     <RankCard rank="Bronze" price={1000}/>
     <RankCard rank="Silver" price={3000}/>

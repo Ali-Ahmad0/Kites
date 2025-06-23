@@ -51,7 +51,7 @@
                         Home Page
                     </span>
                 </button>
-                <button class:active={page.url.pathname === `/main/user/${page.data.user.username}`} onclick={goto_account}>
+                <button class:active={page.url.pathname === `/main/user/${page.data.user?.username}`} onclick={goto_account}>
                     <div class="icon-container">
                         <Icon mode={folder} name="account" width={20} height={30} alt="account"/>
                     </div>

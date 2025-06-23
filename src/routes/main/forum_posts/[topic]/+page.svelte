@@ -105,6 +105,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Kites | {page.params.topic}</title>
+</svelte:head>
+
 <div class="posts-container" class:content-loaded={!is_initial_load}>
     {#await data.streamed}
         <Loading text="Loading posts..."/>

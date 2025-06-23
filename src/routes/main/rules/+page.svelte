@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>Kites | Rules</title>
+</svelte:head>
+
 <div class="rules-page">
     <h1>Kites Community Rules</h1>
     <p class="introduction">Welcome to the Kites Community! These rules are in place to ensure a positive and respectful environment for everyone. Please take a moment to read them carefully.</p>
