@@ -3,37 +3,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --color-background-primary: #09090b;
-    --color-background-secondary: #161618;
+    --color-background-primary: #0a0a0f;
+    --color-background-secondary: #1a1a24;
     
-    --color-blue-primary: #3b82f8;
-    --color-blue-secondary: #4db5ff;
+    --color-blue-primary: #2563eb;
+    --color-blue-secondary: #3b82f6;
     
-    --color-red-primary: #f73b3b;
-    --color-red-secondary: #ff5e4f;
+    --color-red-primary: #dc2626;
+    --color-red-secondary: #ef4444;
 
-    --color-text-primary: #ffffff;
-    --color-text-secondary: #8a9599;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
     --color-text-button: #ffffff;
 
-    --color-navigation-border: rgba(255, 255, 255, 0.2);
+    --color-navigation-border: rgba(148, 163, 184, 0.2);
 }
 
 .light {
-    --color-background-primary: #ffffff;
-    --color-background-secondary: #f4f4f4;
+    --color-background-primary: #fefefe;
+    --color-background-secondary: #f1f5f9;
     
-    --color-blue-primary: #3b82f8;
-    --color-blue-secondary: #4db5ff;
+    --color-blue-primary: #2563eb;
+    --color-blue-secondary: #3b82f6;
 
-    --color-red-primary: #f73b3b;
-    --color-red-secondary: #ff5e4f;
+    --color-red-primary: #dc2626;
+    --color-red-secondary: #ef4444;
 
-    --color-text-primary: #09090b;
-    --color-text-secondary: #565658;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #64748b;
     --color-text-button: #ffffff;
 
-    --color-navigation-border: rgba(0, 0, 0, 0.2);
+    --color-navigation-border: rgba(100, 116, 139, 0.2);
 }
 
 body {
