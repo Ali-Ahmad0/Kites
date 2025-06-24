@@ -249,6 +249,7 @@
         
         width: 100%;
         max-width: 640px;
+        min-width: 360px;
         box-sizing: border-box;
         
         padding: 2rem;

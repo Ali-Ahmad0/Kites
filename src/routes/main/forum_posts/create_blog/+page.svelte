@@ -143,7 +143,7 @@
 </script>
 
 <svelte:head>
-    <title>Create Blog Post</title>
+    <title>Create a Blog Post</title>
 </svelte:head>
 
 <div class="content">
