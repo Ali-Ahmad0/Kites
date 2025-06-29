@@ -186,14 +186,11 @@
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="cancel" onclick={toggle_modal}>
-                        Cancel
-                    </button>
                     <button 
                         type="button" class="confirm" onclick={submit_comment} 
                         disabled={!comment_text.trim() || is_submitting}
                     >
-                        {is_submitting ? 'Posting...' : 'Post Comment'}
+                        {is_submitting ? 'Posting...' : 'Post'}
                     </button>
                 </div>
             </div>
@@ -250,7 +247,6 @@
         color: #10b981;
     }
 
-    /* Modal styles */
     .modal-backdrop {
         position: fixed;
         top: 0;
@@ -269,7 +265,7 @@
     }
     
     .modal-content {
-        background-color: var(--color-background-secondary, white);
+        background-color: var(--color-background-secondary);
         border-radius: 1.5rem;
         
         width: 90%;
@@ -298,7 +294,7 @@
         border: none;
         
         cursor: pointer;
-        color: var(--color-text-primary, #333);
+        color: var(--color-text-primary);
         
         padding: 0.25rem;
         border-radius: 0.25rem;
@@ -307,7 +303,7 @@
     }
     
     .close-button:hover {
-        color: var(--color-text-secondary, #666);
+        color: var(--color-text-secondary);
     }
     
     .modal-body {
@@ -319,18 +315,25 @@
     }
     
     .form-group textarea {
-        width: 95%;
-        padding: 0.5rem 0.75rem;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        border: none;
         
-        color: var(--color-text-secondary, #666);
-        background-color: var(--color-background-primary, #f9f9f9);
-        
-        border-radius: 0.25rem;
-        border-color: var(--color-blue-secondary, #3b82f6);
-        
+        color: var(--color-text-secondary);
+        background-color: var(--color-background-primary);
+
         font-family: inherit;
         font-size: 1rem;
+
+        transition: all 0.2s ease;
+        box-sizing: border-box;
         resize: none;
+    }
+
+    .form-group textarea:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     }
     
     .form-actions {
@@ -343,32 +346,22 @@
         margin-bottom: 1rem;
     }
     
-    button.cancel, button.confirm {
+    button.confirm {
+        background-color: var(--color-blue-primary);
         color: white;
 
         border: none;
-        border-radius: 0.25rem;
+        border-radius: 1rem;
 
-        padding: 0.6rem 1.25rem;
+        padding: 0.5rem 2rem;
+        font-weight: 600;
+
         cursor: pointer;
-
-        transition: background-color 0.2s;
-    }
-
-    button.cancel {
-        background-color: var(--color-red-primary, #ef4444);
-    }
-
-    button.confirm {
-        background-color: var(--color-blue-primary, #2563eb);
+        transition: all 0.2s ease;
     }
     
-    button.cancel:hover {
-        background-color: var(--color-red-secondary, #dc2626);
-    }
-      
     button.confirm:hover {
-        background-color: var(--color-blue-secondary, #1d4ed8);
+        background-color: var(--color-blue-secondary);
     }
     
     button.confirm:disabled {
