@@ -18,14 +18,15 @@
 <header>
 
     <Tooltip text="Sidebar">
-    <div class="icon-wrapper">
-        <button onclick={toggle_sidebar} class="sidebar-button">
-            ☰
-        </button>
-    </div>
+        <div class="icon-wrapper">
+            <button onclick={toggle_sidebar} class="sidebar-button">
+                ☰
+            </button>
+        </div>
     </Tooltip>
 
     <a class="title" href="/">
+        <Icon mode={folder} name="logo" width=32 height=32 alt="logo"/>
         <h2>KITES</h2>
     </a>
     <nav>
@@ -104,10 +105,19 @@
     }
     
     .title {
+        display: flex;
+        gap: 0.5rem;
+        
         text-decoration: none;
         color: var(--color-text-primary);
+
+        align-items: center;
         
         margin-right: auto;
+    }
+
+    .title h2 {
+        margin: 0;
     }
     
     .navbar-links {
